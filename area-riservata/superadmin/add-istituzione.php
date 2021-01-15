@@ -64,7 +64,7 @@
 
         $istituzione = insert_new_istituzione($dbMD, $uuidIstituzione, $login, $password, $istituzioneNome, $istituzioneIndirizzo, $istituzioneTelefono, $istituzioneNomeContatto, $istituzioneNote, $istituzioneUrl, $idRegione, $istituzionePiva, $altaRisoluzione);
 
-        if(!$istituzione){
+        if($istituzione == 0){
 
             $error = insert_new_istituzione_check_errors($dbMD);
 
@@ -77,164 +77,166 @@
 
             $gestore = insert_new_user($dbMD, $uuidUtente, $login, $password, $cognome, $nome, $codiceFiscale, $email, $admin, $superadmin, $ipAutorizzati, $uuidIstituzione);
 
-            if ((isset($_POST['tesiNomeDatasource']) && $_POST['tesiNomeDatasource'] != '')||(isset($_POST['journalNomeDatasource']) && $_POST['journalNomeDatasource'] != '')) {
+            if($gestore == 1){
+                if ((isset($_POST['tesiNomeDatasource']) && $_POST['tesiNomeDatasource'] != '')||(isset($_POST['journalNomeDatasource']) && $_POST['journalNomeDatasource'] != '')) {
 
-                if(isset($_POST['tesiNomeDatasource']) && $_POST['tesiNomeDatasource'] != ''){
+                    if(isset($_POST['tesiNomeDatasource']) && $_POST['tesiNomeDatasource'] != ''){
 
-                    $tesiNomeDatasource = $_POST['tesiNomeDatasource'];
-                    $servizioAbilitato  = 'td';
+                        $tesiNomeDatasource = $_POST['tesiNomeDatasource'];
+                        $servizioAbilitato  = 'td';
 
-                    if (isset($_POST['tesiUrlOai']) && $_POST['tesiUrlOai'] != '') {
-                        $tesiUrlOai = $_POST['tesiUrlOai'];
-                    }
-                    if (isset($_POST['tesiContatti']) && $_POST['tesiContatti'] != '') {
-                    $tesiContatti = $_POST['tesiContatti'];
-                    }
-                    if (isset($_POST['tesiFormatMetadati']) && $_POST['tesiFormatMetadati'] != '') {
-                    $tesiFormatMetadati = $_POST['tesiFormatMetadati'];
-                    }
-                    if (isset($_POST['tesiSetMetadati']) && $_POST['tesiSetMetadati'] != '') {
-                    $tesiSetMetadati = $_POST['tesiSetMetadati'];
-                    }
-                    if (isset($_POST['tesiUtenzaEmbargo']) && $_POST['tesiUtenzaEmbargo'] != '') {
-                    $tesiUtenzaEmbargo = $_POST['tesiUtenzaEmbargo'];
-                    }
-                    if (isset($_POST['tesiPwdEmbargo']) && $_POST['tesiPwdEmbargo'] != '') {
-                    $tesiPwdEmbargo = $_POST['tesiPwdEmbargo'];
-                    }
-                    if (isset($_POST['tesiUserApiNBN']) && $_POST['tesiUserApiNBN'] != '') {
-                    $tesiUserApiNBN = $_POST['tesiUserApiNBN'];
-                    }
-                    if (isset($_POST['tesiPwdApiNBN']) && $_POST['tesiPwdApiNBN'] != '') {
-                    $tesiPwdApiNBN = $_POST['tesiPwdApiNBN'];
-                    }
-                    if (isset($_POST['tesiIpApiNBN']) && $_POST['tesiIpApiNBN'] != '') {
-                    $tesiIpApiNBN = $_POST['tesiIpApiNBN'];
-                    }
+                        if (isset($_POST['tesiUrlOai']) && $_POST['tesiUrlOai'] != '') {
+                            $tesiUrlOai = $_POST['tesiUrlOai'];
+                        }
+                        if (isset($_POST['tesiContatti']) && $_POST['tesiContatti'] != '') {
+                        $tesiContatti = $_POST['tesiContatti'];
+                        }
+                        if (isset($_POST['tesiFormatMetadati']) && $_POST['tesiFormatMetadati'] != '') {
+                        $tesiFormatMetadati = $_POST['tesiFormatMetadati'];
+                        }
+                        if (isset($_POST['tesiSetMetadati']) && $_POST['tesiSetMetadati'] != '') {
+                        $tesiSetMetadati = $_POST['tesiSetMetadati'];
+                        }
+                        if (isset($_POST['tesiUtenzaEmbargo']) && $_POST['tesiUtenzaEmbargo'] != '') {
+                        $tesiUtenzaEmbargo = $_POST['tesiUtenzaEmbargo'];
+                        }
+                        if (isset($_POST['tesiPwdEmbargo']) && $_POST['tesiPwdEmbargo'] != '') {
+                        $tesiPwdEmbargo = $_POST['tesiPwdEmbargo'];
+                        }
+                        if (isset($_POST['tesiUserApiNBN']) && $_POST['tesiUserApiNBN'] != '') {
+                        $tesiUserApiNBN = $_POST['tesiUserApiNBN'];
+                        }
+                        if (isset($_POST['tesiPwdApiNBN']) && $_POST['tesiPwdApiNBN'] != '') {
+                        $tesiPwdApiNBN = $_POST['tesiPwdApiNBN'];
+                        }
+                        if (isset($_POST['tesiIpApiNBN']) && $_POST['tesiIpApiNBN'] != '') {
+                        $tesiIpApiNBN = $_POST['tesiIpApiNBN'];
+                        }
 
-                    //INSERT INTO MD
-                    if (empty($tesiServizioAttivo)) {
-                        $insertServizio     = insert_into_md_servizi($dbMD, $uuidIstituzione, $servizioAbilitato);
-                    }
-                
-                    //INSERT INTO NBN
-                    $checkSubnamespace      = check_istituzione_exist_nbn_subnamespace($dbNBN, $login, $istituzioneNome);
-                
-                    if($checkSubnamespace == 0){
-                        $insertSubnamespace     = insert_into_nbn_subnamespace($dbNBN, $login, $istituzioneNome);
-                    }
+                        //INSERT INTO MD
+                        if (empty($tesiServizioAttivo)) {
+                            $insertServizio     = insert_into_md_servizi($dbMD, $uuidIstituzione, $servizioAbilitato);
+                        }
                     
-                    $subnamespaceID         = retrieve_id_subnamespace_for_istituzione($dbNBN, $login, $istituzioneNome);
-                    $checkDatasource        = check_datasource_into_nbn($dbNBN, $tesiNomeDatasource, $tesiUrlOai);
-                
-                    if($checkDatasource == 0){
-                        $insertDatasource     = insert_into_nbn_datasource($dbNBN, $tesiNomeDatasource, $tesiUrlOai, $subnamespaceID, 'td');
-                    } else {
-                        $alertTesi = 'Nome datasource e url datasource già presenti';
-                    }
-                
-                    $idDatasource           = retrieve_id_datasource_for_istituzione($dbNBN, $tesiNomeDatasource, $subnamespaceID, $tesiUrlOai);
-                    $insertAgent            = insert_into_nbn_agent($dbNBN, $tesiNomeDatasource, $tesiUrlOai, $tesiUserApiNBN, $tesiPwdApiNBN, $tesiIpApiNBN, $idDatasource, $subnamespaceID, $servizioAbilitato);
-                
-                    //INSERT INTO HARVEST
-                
-                    $insertAnagrafe         = insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $login, $tesiUrlOai, $tesiContatti, $tesiFormatMetadati, $tesiSetMetadati, $tesiUtenzaEmbargo, $tesiPwdEmbargo, $servizioAbilitato);
-                
-                    if ($insertAnagrafe == 1) {
-                
-                        $journalUserApiNBN    = '';
-                        $journalPwdApiNBN     = '';
-                
-                        send_notice_nbn_email_to_admin($dbMD, $tesiUserApiNBN, $tesiPwdApiNBN, $journalUserApiNBN, $journalPwdApiNBN);
-
-                        //echo "<script>window.location.href = 'http://localhost/local/area-riservata/superadmin/add-istituzione'</script>";
-                        echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/superadmin/add-istituzione'</script>";
-
-                    }
-                }
-
-                if(isset($_POST['journalNomeDatasource']) && $_POST['journalNomeDatasource'] != ''){
-
-                    $journalNomeDatasource  = $_POST['journalNomeDatasource'];
-                    $servizioAbilitato      = 'ej';
-                    $journalUtenzaEmbargo   = '';
-                    $journalPwdEmbargo      = '';
-
-                    if (isset($_POST['journalUrlOai']) && $_POST['journalUrlOai'] != '') {
-                        $journalUrlOai = $_POST['journalUrlOai'];
-                    }
-                    if (isset($_POST['journalContatti']) && $_POST['journalContatti'] != '') {
-                        $journalContatti = $_POST['journalContatti'];
-                    }
-                    if (isset($_POST['journalFormatMetadati']) && $_POST['journalFormatMetadati'] != '') {
-                        $journalFormatMetadati = $_POST['journalFormatMetadati'];
-                    }
-                    if (isset($_POST['journalSetMetadati']) && $_POST['journalSetMetadati'] != '') {
-                        $journalSetMetadati = $_POST['journalSetMetadati'];
-                    }
-                    if (isset($_POST['journalUserApiNBN']) && $_POST['journalUserApiNBN'] != '') {
-                        $journalUserApiNBN = $_POST['journalUserApiNBN'];
-                    }
-                    if (isset($_POST['journalPwdApiNBN']) && $_POST['journalPwdApiNBN'] != '') {
-                        $journalPwdApiNBN = $_POST['journalPwdApiNBN'];
-                    }
-                    if (isset($_POST['journalIpApiNBN']) && $_POST['journalIpApiNBN'] != '') {
-                        $journalIpApiNBN = $_POST['journalIpApiNBN'];
-                    }
-
-                    if (empty($journalServizioAttivo)) {
-
-                        $insertServizio = insert_into_md_servizi($dbMD, $uuidIstituzione, $servizioAbilitato);
-
-                    }
-                  
-                    //INSERT INTO NBN
-                    $checkSubnamespace = check_istituzione_exist_nbn_subnamespace($dbNBN, $login, $istituzioneNome);
-                  
-                    if($checkSubnamespace == 0){
-                  
-                        $insertSubnamespace = insert_into_nbn_subnamespace($dbNBN, $login, $istituzioneNome);
-                  
-                    }
-                  
-                    $subnamespaceID         = retrieve_id_subnamespace_for_istituzione($dbNBN, $login, $istituzioneNome);
-                    $checkDatasource        = check_datasource_into_nbn($dbNBN, $journalNomeDatasource, $journalUrlOai);
-                  
-                    if($checkDatasource == 0){
-                  
-                        $insertDatasource = insert_into_nbn_datasource($dbNBN, $journalNomeDatasource, $journalUrlOai, $subnamespaceID, 'ej');
-                  
-                    } else {
-                  
-                        $alertJournal = 'Nome datasource e url datasource già presenti';
+                        //INSERT INTO NBN
+                        $checkSubnamespace      = check_istituzione_exist_nbn_subnamespace($dbNBN, $login, $istituzioneNome);
+                    
+                        if($checkSubnamespace == 0){
+                            $insertSubnamespace     = insert_into_nbn_subnamespace($dbNBN, $login, $istituzioneNome);
+                        }
                         
-                    }
-                  
-                    $idDatasource = retrieve_id_datasource_for_istituzione($dbNBN, $journalNomeDatasource, $subnamespaceID, $journalUrlOai);
-                  
-                    $insertAgent = insert_into_nbn_agent($dbNBN, $journalNomeDatasource, $journalUrlOai, $journalUserApiNBN, $journalPwdApiNBN, $journalIpApiNBN, $idDatasource, $subnamespaceID, $servizioAbilitato);
-                  
-                  
-                    //INSERT INTO HARVEST
-                  
-                    $insertAnagrafe = insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $login, $journalUrlOai, $journalContatti, $journalFormatMetadati, $journalSetMetadati, $journalUtenzaEmbargo, $journalPwdEmbargo, $servizioAbilitato);
-                  
-                    if ($insertAnagrafe == 1) {
-                  
-                        $tesiUserApiNBN = '';
-                        $tesiPwdApiNBN  = '';
-                  
-                        $mail = send_notice_nbn_email_to_admin($dbMD, $tesiUserApiNBN, $tesiPwdApiNBN, $journalUserApiNBN, $journalPwdApiNBN);
+                        $subnamespaceID         = retrieve_id_subnamespace_for_istituzione($dbNBN, $login, $istituzioneNome);
+                        $checkDatasource        = check_datasource_into_nbn($dbNBN, $tesiNomeDatasource, $tesiUrlOai);
+                    
+                        if($checkDatasource == 0){
+                            $insertDatasource     = insert_into_nbn_datasource($dbNBN, $tesiNomeDatasource, $tesiUrlOai, $subnamespaceID, 'td');
+                        } else {
+                            $alertTesi = 'Nome datasource e url datasource già presenti';
+                        }
+                    
+                        $idDatasource           = retrieve_id_datasource_for_istituzione($dbNBN, $tesiNomeDatasource, $subnamespaceID, $tesiUrlOai);
+                        $insertAgent            = insert_into_nbn_agent($dbNBN, $tesiNomeDatasource, $tesiUrlOai, $tesiUserApiNBN, $tesiPwdApiNBN, $tesiIpApiNBN, $idDatasource, $subnamespaceID, $servizioAbilitato);
+                    
+                        //INSERT INTO HARVEST
+                    
+                        $insertAnagrafe         = insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $login, $tesiUrlOai, $tesiContatti, $tesiFormatMetadati, $tesiSetMetadati, $tesiUtenzaEmbargo, $tesiPwdEmbargo, $servizioAbilitato);
+                    
+                        if ($insertAnagrafe == 1) {
+                    
+                            $journalUserApiNBN    = '';
+                            $journalPwdApiNBN     = '';
+                    
+                            send_notice_nbn_email_to_admin($dbMD, $tesiUserApiNBN, $tesiPwdApiNBN, $journalUserApiNBN, $journalPwdApiNBN);
 
-                        //echo "<script>window.location.href = 'http://localhost/local/area-riservata/superadmin/add-istituzione'</script>";
-                        echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/superadmin/add-istituzione'</script>";
+                            //echo "<script>window.location.href = 'http://localhost/local/area-riservata/superadmin/add-istituzione'</script>";
+                            echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/superadmin/add-istituzione'</script>";
+
+                        }
                     }
 
+                    if(isset($_POST['journalNomeDatasource']) && $_POST['journalNomeDatasource'] != ''){
+
+                        $journalNomeDatasource  = $_POST['journalNomeDatasource'];
+                        $servizioAbilitato      = 'ej';
+                        $journalUtenzaEmbargo   = '';
+                        $journalPwdEmbargo      = '';
+
+                        if (isset($_POST['journalUrlOai']) && $_POST['journalUrlOai'] != '') {
+                            $journalUrlOai = $_POST['journalUrlOai'];
+                        }
+                        if (isset($_POST['journalContatti']) && $_POST['journalContatti'] != '') {
+                            $journalContatti = $_POST['journalContatti'];
+                        }
+                        if (isset($_POST['journalFormatMetadati']) && $_POST['journalFormatMetadati'] != '') {
+                            $journalFormatMetadati = $_POST['journalFormatMetadati'];
+                        }
+                        if (isset($_POST['journalSetMetadati']) && $_POST['journalSetMetadati'] != '') {
+                            $journalSetMetadati = $_POST['journalSetMetadati'];
+                        }
+                        if (isset($_POST['journalUserApiNBN']) && $_POST['journalUserApiNBN'] != '') {
+                            $journalUserApiNBN = $_POST['journalUserApiNBN'];
+                        }
+                        if (isset($_POST['journalPwdApiNBN']) && $_POST['journalPwdApiNBN'] != '') {
+                            $journalPwdApiNBN = $_POST['journalPwdApiNBN'];
+                        }
+                        if (isset($_POST['journalIpApiNBN']) && $_POST['journalIpApiNBN'] != '') {
+                            $journalIpApiNBN = $_POST['journalIpApiNBN'];
+                        }
+
+                        if (empty($journalServizioAttivo)) {
+
+                            $insertServizio = insert_into_md_servizi($dbMD, $uuidIstituzione, $servizioAbilitato);
+
+                        }
+                    
+                        //INSERT INTO NBN
+                        $checkSubnamespace = check_istituzione_exist_nbn_subnamespace($dbNBN, $login, $istituzioneNome);
+                    
+                        if($checkSubnamespace == 0){
+                    
+                            $insertSubnamespace = insert_into_nbn_subnamespace($dbNBN, $login, $istituzioneNome);
+                    
+                        }
+                    
+                        $subnamespaceID         = retrieve_id_subnamespace_for_istituzione($dbNBN, $login, $istituzioneNome);
+                        $checkDatasource        = check_datasource_into_nbn($dbNBN, $journalNomeDatasource, $journalUrlOai);
+                    
+                        if($checkDatasource == 0){
+                    
+                            $insertDatasource = insert_into_nbn_datasource($dbNBN, $journalNomeDatasource, $journalUrlOai, $subnamespaceID, 'ej');
+                    
+                        } else {
+                    
+                            $alertJournal = 'Nome datasource e url datasource già presenti';
+                            
+                        }
+                    
+                        $idDatasource = retrieve_id_datasource_for_istituzione($dbNBN, $journalNomeDatasource, $subnamespaceID, $journalUrlOai);
+                    
+                        $insertAgent = insert_into_nbn_agent($dbNBN, $journalNomeDatasource, $journalUrlOai, $journalUserApiNBN, $journalPwdApiNBN, $journalIpApiNBN, $idDatasource, $subnamespaceID, $servizioAbilitato);
+                    
+                    
+                        //INSERT INTO HARVEST
+                    
+                        $insertAnagrafe = insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $login, $journalUrlOai, $journalContatti, $journalFormatMetadati, $journalSetMetadati, $journalUtenzaEmbargo, $journalPwdEmbargo, $servizioAbilitato);
+                    
+                        if ($insertAnagrafe == 1) {
+                    
+                            $tesiUserApiNBN = '';
+                            $tesiPwdApiNBN  = '';
+                    
+                            $mail = send_notice_nbn_email_to_admin($dbMD, $tesiUserApiNBN, $tesiPwdApiNBN, $journalUserApiNBN, $journalPwdApiNBN);
+
+                            echo "<script>window.location.href = 'http://localhost/local/area-riservata/superadmin/add-istituzione'</script>";
+                            //echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/superadmin/add-istituzione'</script>";
+                        }
+
+                    }
+
+                } else {
+                    echo "<script>window.location.href = 'http://localhost/local/area-riservata/superadmin/add-istituzione'</script>";
+                    //echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/superadmin/add-istituzione'</script>";
                 }
-
-            } else {
-                //echo "<script>window.location.href = 'http://localhost/local/area-riservata/superadmin/add-istituzione'</script>";
-                echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/superadmin/add-istituzione'</script>";
             }
             
 

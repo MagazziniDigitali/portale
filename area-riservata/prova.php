@@ -24,10 +24,30 @@
 
   //aggiungere a /superadmin/add-istituzione:
   //due form, uno per l'iscrizione a TD e uno per EJ
+  
+  $dbHarvest      = connect_to_harvest();
+  $dbNBN          = connect_to_nbn();
 
-  $insertSoftwareC = insert_new_software_config($dbMD, '07bcadfa-bd1e-49f2-a022-18cc57b72189-AG', 'password', 'piva');
+  $uuidUtente         = generate_uuid($dbMD);
+  $admin              = 0;
+  $superadmin         = 0;
+  $ipAutorizzati      = '*.*.*.*';
 
-  echo $insertSoftwareC;
+  $gestore = insert_new_user($dbMD, $uuidUtente, 'ciaologin', 'ciaopassword', 'ciaocognome', 'ciaonome', 'ciaocodiceFiscale', 'ciaoemail', $admin, $superadmin, $ipAutorizzati, 'aa40fed9-4fa1-11eb-ae2d-000c29e2d309');
+
+  var_dump($gestore);
+  echo '<br> echo: ' . $gestore . '<br>';
+
+  var_dump($uuidUtente);
+  echo '<br> echo: ' . $uuidUtente;
+
+  if($gestore == 1) {
+    echo '<br><br>YEEEEEEEES';
+  } elseif ($gestore == 0) {
+    echo '<br><br>NAGG A MARO';
+  }
+
+  get_header();
 ?>
 
 <?php
