@@ -103,7 +103,7 @@
       $json = json_encode($jsonArray);
   
       $stripped_filename = pathinfo($target, PATHINFO_FILENAME);
-      $json_file = $stripped_filename . '.pdf.metadata';
+      $json_file = $stripped_filename . '.' . pathinfo($target)['extension'] . '.metadata';
       $json_target = $target_temp_name . '/' . $json_file;
   
       file_put_contents($json_target, $json);
