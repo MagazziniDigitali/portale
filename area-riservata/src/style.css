@@ -1,0 +1,69 @@
+.selectSignup {
+    background: #fff;
+    border-radius: 0;
+    border: solid #c1c1c1 0.1rem;
+    box-shadow: none;
+    display: block;
+    font-size: 1.6rem;
+    letter-spacing: -0.015em;
+    margin: 0;
+    max-width: 100%;
+    padding: 1.5rem 1.8rem;
+    width: 100%;
+}
+
+.btnAcceptSub {
+    color: #fff !important;
+    background-color: #28a745 !important;
+    border-color: #28a745 !important;
+}
+
+.btnAcceptSub:hover {
+    color: #fff;
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.btnRejectSub {
+    color: #dc3545 !important;
+    background-color: transparent !important;
+    border: solid 1px #dc3545 !important;
+}
+
+.btnRejectSub:hover {
+    color: #fff !important;
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
+/* ACCORDION RICHIESTE SIGNUP */
+
+#accordionRichiesteSignup button.btn {
+    width: 100%;
+    text-align: left;
+    text-transform: none;
+}
+
+#accordionRichiesteSignup .card-header{
+    border-bottom: none;
+} 
+
+#accordionRichiesteSignup .card-body {
+    border-top: 1px solid rgba(0,0,0,.125);
+}
+
+/* ACCORDION MOSTRA UTENTI */
+
+#showUsers button.btn {
+    width: 100%;
+    text-align: left;
+    text-transform: none;
+}
+
+#showUsers .card-header{
+    border-bottom: none;
+} 
+
+#showUsers .card-body {
+    border-top: 1px solid rgba(0,0,0,.125);
+}

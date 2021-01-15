@@ -1,0 +1,96 @@
+/*
+Theme Name: Twenty Twenty Child
+Text Domain: twentytwenty
+Version: 1.5
+Requires at least: 4.7
+Requires PHP: 5.2.4
+Description: Our default theme for 2020 is designed to take full advantage of the flexibility of the block editor. Organizations and businesses have the ability to create dynamic landing pages with endless layouts using the group and column blocks. The centered content column and fine-tuned typography also makes it perfect for traditional blogs. Complete editor styles give you a good idea of what your content will look like, even before you publish. You can give your site a personal touch by changing the background colors and the accent color in the Customizer. The colors of all elements on your site are automatically calculated based on the colors you pick, ensuring a high, accessible color contrast for your visitors.
+Tags: blog, one-column, custom-background, custom-colors, custom-logo, custom-menu, editor-style, featured-images, footer-widgets, full-width-template, rtl-language-support, sticky-post, theme-options, threaded-comments, translation-ready, block-styles, wide-blocks, accessibility-ready
+Author: the WordPress team
+Author URI: https://wordpress.org/
+Theme URI: https://wordpress.org/themes/twentytwenty/
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
+All files, unless otherwise stated, are released under the GNU General Public
+License version 2.0 (http://www.gnu.org/licenses/gpl-2.0.html)
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned
+with others.
+*/
+
+/* NAVBAR */
+
+#menu-item-38 {
+    margin: 0.4rem 0 0 2.5rem;
+}
+
+.btn-outline-primary {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 22px;
+}
+
+.btn-outline-primary:hover {
+    color: white !important;
+}
+
+#menu-item-C02 p {
+    width: 100% !important;
+    font-size: 16px;
+    margin: 0;
+}
+
+#menu-item-C02 .dropdown-item:hover {
+    color: rgb(34, 103, 255);
+    background-color: transparent;
+}
+
+/* FOOTER */
+
+#site-footer .section-inner {
+    display: block;
+}
+
+.loghiFooter {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media only screen and (max-width: 425px) {
+    .loghiFooter {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+header#site-header {
+    background-color: white;
+}
+
+.singular .entry-header {
+    padding: 3rem 0;
+
+}
+
+header#homeHeader {
+    color: white;
+    background-position: center !important;
+    background-size: cover !important;
+    height: auto;
+    opacity: 0.8;
+    background: black;
+    overflow: hidden;
+    background: #000000;
+    background: -webkit-linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4)), url(biblioteca_nazionale_centrale_firenze.jpg);
+    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4)), url(biblioteca_nazionale_centrale_firenze.jpg);
+}
+
+header#homeHeader.entry-header.has-text-align-center.header-footer-group{
+    padding: 8rem 0 !important;
+}
+
+.entry-content > *:not(.alignwide):not(.alignfull):not(.alignleft):not(.alignright):not(.is-style-wide) {
+    max-width: 70%;
+}

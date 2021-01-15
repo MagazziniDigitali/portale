@@ -1,0 +1,136 @@
+////// GENERALS:
+
+[ ] Far funzionare il submit di modifica per il form di iscrizione alle tesi
+[ ] Attendere che aggiungano su nbn.agente la colonna per il controllo del servizio
+[ ] Per la query che autogenera i gestori utenti, mettere sticky bit e rimandare a pagina in cui inseriscono e-mail oltre che nuova pwd
+
+[ ] Ricontrollare il redirect se loggato, ma si tenta di accedere a una parte di aria riservata non appartenente al proprio ruolo
+
+[ ] Installare memecached
+
+[ ] Caratteri speciali mail
+
+[ ] Errori parlanti admin/approve-signup -> funzioni per inserire nuovo utente e nuovo gestore istituzione
+
+///// BASSA PRIORITÀ
+
+[ ] Controllare se controllo strong password è ovunque
+[ ] Ricontrollare che il codice fiscale sia required ovunque
+
+[ ] Refactor functions
+
+[ ] Modifica conf apache su collaudo
+    
+    queste istruzioni presenti in /etc/apache2/apache2.conf
+    <Directory /var/www/depositolegale.it>
+        Options Indexes FollowSymLinks
+        AllowOverride Allfds
+        Require all granted
+    </Directory>
+    vanno spostate in :/etc/apache2/sites-available/md-collaudo.depositolegale.it.conf
+
+
+---------------------------------- DONE ---------------------------------------
+
+[X] Controllare refresh dopo modifica campo anagrafica
+[X] Allargare iframe
+[X] Inserire default IP Autorizzati *.*.*.* - gestore istituzione
+[X] Tolgliere da pre-registrazione alta risoluzione e tesi di dottorato e mettere di default 0
+[X] Aggiungere nome istituzione + nome e cognome utente e non login
+[X] Salvare in sessione al login: UUID utente, nome e cognome utente, nome istituzione
+[X] Valorizzare harvest_name e harvest_url nell'iscrizione ai servizi
+[X] Passare alle funzioni di invio mail a super admin, utenza super admin
+[X] Mandare mail a super admin "Inserisci utente [user - password] nell'NBN password Basic" dopo aver registrato un utente a uno dei servizi
+[X] Mostrare form con i campi modificabili (tutti) per utenti già iscritti ai servizi
+[X] Modificare flusso di cambio password (no sticky-bit)
+[X] Inviare mail con nuova password
+[X] Ricontrollare voci di menu
+[X] Rendere alfanumerico PIVA in approve signup
+
+---------------------------------- OLD ---------------------------------------
+[X] aggiungere alla funzione di redirect il ruolo user
+[X] aggiungere ai menu "Profilo" se utente è loggato
+
+////// SUPER ADMIN:
+
+[X] Possibilità di modificare la propria anagrafica.
+[X] Possibilità di associare un'istituzione a un utente durante la sua creazione;
+[X] Mostrare elenco Istituzioni > Utenti per istituzione
+[X] Possibilità di modificare anagrafica utente (tutti i campi, tranne l'username);
+[X] Possibilità di assegnare il ruolo "gestore istituzione" a un utente pre-esistente (il gestore istituzione in essere diventa utente normale);
+[X] Possibilità di rimuovere un utente.
+
+////// GESTORE ISTITUZIONE:
+
+[X] Possibilità di modificare la propria anagrafica.
+[X] Possibilità di modificare anagrafica utente (tutti i campi, tranne l'username);
+[X] Possibilità di assegnare il ruolo "gestore istituzione" ad un altro utente (diventando utente normale);
+[X] Possibilità di rimuovere un utente.
+
+////// UTENTE NORMALE:
+
+[X] Possibilità di modificare la propria anagrafica.
+
+////// PASSWORD:
+
+[X] Creare funzionalità di recupero password;
+[X] Gestire controlli di sicurezza password (almeno una lettera maiuscola, almeno 8 caratteri, almeno un carattere speciale, almeno un numero);
+[X] Al cambio password, la password nuova non può essere uguale alla vecchia (controllo da fare soprattutto al primo login).
+
+////// GENERALS:
+
+[X] modifica al form di iscrizione istituzione:
+    [X] Il campo 'Partita IVA' diventa 'Partita IVA o Codice Fiscale', dev'essere obbligatorio e alfanumerico. 
+    [X] Va salvato in MDPreRegistrazione.ISTITUZIONE_PIVA così come scritto nel form;
+    
+    [X] Quando l'istituzione viene approvata va salvato in:
+        [X] MDIstituzione.PIVA così come scritto nel form;
+        [X] MDIstituzione.PATH_TMP preceduto dal valore fisso '/mnt/areaTemporanea/'
+
+
+
+[X] mostrare istituzioni > utenti per il superadmin
+
+[X] recupero password
+[X] inserire controlli di sicurezza sulla pwd
+[X] al cambio password, la pwd non può essere la stessa già in uso
+
+[X] approva istituzione: nome per login e password non obbligatori
+[x] approva istituzione: controllare elenco più di un istituzione
+[X] errori parlanti
+[X] UUID insert_new_user -F
+[X] controllare valore check box nella conferma istituzione
+[X] mostrare utenti dell'istituzione al gestore
+[X] aggiugnere home in menu mobile
+
+//////// flusso iscrizione utente
+[X] controllare perché non salva IP
+[X] differenziare id istituzione se super admin o gestore
+[X] mail di conferma a utente registrato
+[X] cambio password al primo accesso
+
+//////// GENERAL
+[X] pagina privata per inserire superadmin
+[X] invio mail con gmail
+
+[X] dropdown nel menu: Login, Signup
+[X] show password
+[X] fix style error in mobile
+
+[X] sostituire tutte le query con quelle di wpdb
+[X] controllare che tutte le pagine siano in inglese
+[X] pulire file functions.php
+
+//////// FLUSSO ISCRIZIONE ISTITUZIONE
+
+/// se la registrazione viene rigettata:
+[X] inviare mail all'istituzione
+[X] valorzzare il campo checkdifase a 'non validata' in MDPreRegistrazione
+[X] controllare refresh dopo click su "Rifiuta" (non sparisce il form, la pagina deve essere ricaricata a mano)
+
+/// se la registrazione viene accettata:
+[X] valorzzare il campo checkdifase a 'validata' in MDPreRegistrazione
+[X] i dati submittati vengono inseriti nelle rispettive tabelle MDUtenti e MDIstituzioni
+[X] viene inviata la mail con le credenziali di login e password
+[X] cambio password al primo accesso
+
