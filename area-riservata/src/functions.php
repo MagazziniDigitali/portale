@@ -1174,7 +1174,7 @@ function select_agent_ngn_and_anagrafe_harvest($dbNBN, $dbHarvest, $servizioAbil
         FROM nbn.agent
         LEFT JOIN harvest.anagrafe 
         ON nbn.agent.datasourceID = harvest.anagrafe.id_datasource
-        WHERE nbn.agent.materiale = '%s' AND harvest.anagrafe.harvest_materiale = '%s' AND nbn.agent.subNamespaceID='%s' OR harvest.anagrafe.id_datasource='%s' ", $servizioAbilitato, $servizioAbilitato, $subnamespaceID, $datasourceID);
+        WHERE nbn.agent.materiale = '%s' AND harvest.anagrafe.harvest_materiale = '%s' AND nbn.agent.subNamespaceID='%s'", $servizioAbilitato, $servizioAbilitato, $subnamespaceID);
 
     $results = $dbNBN->get_results($query);
 

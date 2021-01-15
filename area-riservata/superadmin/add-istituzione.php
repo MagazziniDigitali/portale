@@ -128,7 +128,7 @@
                     $checkDatasource        = check_datasource_into_nbn($dbNBN, $tesiNomeDatasource, $tesiUrlOai);
                 
                     if($checkDatasource == 0){
-                        $insertDatasource     = insert_into_nbn_datasource($dbNBN, $tesiNomeDatasource, $tesiUrlOai, $subnamespaceID);
+                        $insertDatasource     = insert_into_nbn_datasource($dbNBN, $tesiNomeDatasource, $tesiUrlOai, $subnamespaceID, 'td');
                     } else {
                         $alertTesi = 'Nome datasource e url datasource già presenti';
                     }
@@ -202,7 +202,7 @@
                   
                     if($checkDatasource == 0){
                   
-                        $insertDatasource = insert_into_nbn_datasource($dbNBN, $journalNomeDatasource, $journalUrlOai, $subnamespaceID);
+                        $insertDatasource = insert_into_nbn_datasource($dbNBN, $journalNomeDatasource, $journalUrlOai, $subnamespaceID, 'ej');
                   
                     } else {
                   
