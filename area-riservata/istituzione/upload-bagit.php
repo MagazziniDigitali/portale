@@ -223,6 +223,8 @@
 
             file_put_contents($targetPIVA, $target);
             rmdir_recursive($temp_dir);
+            $success = "Il bagit è stato caricato con successo";
+
 
           } else {
             $alert = "Il bagit non è conforme allo standard";
@@ -261,6 +263,9 @@
             <div class="col-md-12">
               <?php if(isset($alert)) { ?>
                 <div class='alert alert-warning mt-3'><?php echo $alert ?></div>
+              <?php } ?>
+              <?php if(isset($success)) { ?>
+                <div class='alert alert-success mt-3'><?php echo $success ?></div>
               <?php } ?>
             </div>
           </div>
