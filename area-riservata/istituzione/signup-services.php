@@ -8,7 +8,6 @@
 
   if($_SESSION['role'] == 'admin_istituzione'){
 
-
   $dbMD           = connect_to_md();
   $dbHarvest      = connect_to_harvest();
   $dbNBN          = connect_to_nbn();
@@ -21,7 +20,7 @@
 
   $tesiServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'td');
   $journalServizioAttivo  = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'ej');
-
+  $bookServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'eb');
 
   if (isset($_POST['signupTesiDottorato'])) {
 
@@ -90,10 +89,13 @@
 
       $journalUserApiNBN    = '';
       $journalPwdApiNBN     = '';
+      $bookUserApiNBN       = '';
+      $bookPwdApiNBN        = '';
 
-      send_notice_nbn_email_to_admin($dbMD, $tesiUserApiNBN, $tesiPwdApiNBN, $journalUserApiNBN, $journalPwdApiNBN);
+      send_notice_nbn_email_to_admin($dbMD, $tesiUserApiNBN, $tesiPwdApiNBN, $journalUserApiNBN, $journalPwdApiNBN, $bookUserApiNBN, $bookPwdApiNBN);
 
-      echo "<script>window.location.href = 'http://localhost/local/area-riservata/istituzione/signup-services'</script>";
+      //echo "<script>window.location.href = 'http://localhost/local/area-riservata/istituzione/signup-services'</script>";
+      echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/istituzione/signup-services'</script>";
 
     }
 
@@ -172,11 +174,85 @@
 
       $tesiUserApiNBN       = '';
       $tesiPwdApiNBN        = '';
+      $bookUserApiNBN       = '';
+      $bookPwdApiNBN        = '';
 
-      $mail = send_notice_nbn_email_to_admin($dbMD, $tesiUserApiNBN, $tesiPwdApiNBN, $journalUserApiNBN, $journalPwdApiNBN);
+      send_notice_nbn_email_to_admin($dbMD, $tesiUserApiNBN, $tesiPwdApiNBN, $journalUserApiNBN, $journalPwdApiNBN, $bookUserApiNBN, $bookPwdApiNBN);
 
-      echo "<script>window.location.href = 'http://localhost/local/area-riservata//istituzione/signup-services'</script>";
+      //echo "<script>window.location.href = 'http://localhost/local/area-riservata//istituzione/signup-services'</script>";
+      echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/istituzione/signup-services'</script>";
 
+    }
+  }
+
+  if (isset($_POST['signupBook'])) {
+
+    if (isset($_POST['bookNomeDatasource']) && $_POST['bookNomeDatasource'] != '') {
+      $bookNomeDatasource = $_POST['bookNomeDatasource'];
+    }
+    if (isset($_POST['bookUrlOai']) && $_POST['bookUrlOai'] != '') {
+      $bookUrlOai = $_POST['bookUrlOai'];
+    }
+    if (isset($_POST['bookUserApiNBN']) && $_POST['bookUserApiNBN'] != '') {
+      $bookUserApiNBN = $_POST['bookUserApiNBN'];
+    }
+    if (isset($_POST['bookPwdApiNBN']) && $_POST['bookPwdApiNBN'] != '') {
+      $bookPwdApiNBN = $_POST['bookPwdApiNBN'];
+    }
+    if (isset($_POST['bookIpApiNBN']) && $_POST['bookIpApiNBN'] != '') {
+      $bookIpApiNBN = $_POST['bookIpApiNBN'];
+    }
+  
+    $servizioAbilitato   = 'eb';
+    $bookUtenzaEmbargo   = '';
+    $bookPwdEmbargo      = '';
+  
+    //INSERT INTO MD
+    if (empty($bookServizioAttivo)) {
+  
+      $insertServizio       = insert_into_md_servizi($dbMD, $uuidIstituzione, $servizioAbilitato);
+      
+    }
+  
+    //INSERT INTO NBN
+    $checkSubnamespace      = check_istituzione_exist_nbn_subnamespace($dbNBN, $loginIstituzione, $nomeIstituzione);
+  
+    if($checkSubnamespace == 0){
+  
+      $insertSubnamespace   = insert_into_nbn_subnamespace($dbNBN, $loginIstituzione, $nomeIstituzione);
+  
+    }
+  
+    $subnamespaceID         = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstituzione, $nomeIstituzione);
+    $checkDatasource        = check_datasource_into_nbn($dbNBN, $bookNomeDatasource, $bookUrlOai);
+  
+    if($checkDatasource == 0){
+  
+      $insertDatasource     = insert_into_nbn_datasource($dbNBN, $bookNomeDatasource, $bookUrlOai, $subnamespaceID, $servizioAbilitato);
+  
+    } else {
+  
+      $alertJournal         = 'Nome datasource e url datasource già presenti';
+        
+    }
+  
+    $idDatasource           = retrieve_id_datasource_for_istituzione($dbNBN, $bookNomeDatasource, $subnamespaceID, $bookUrlOai);
+  
+    $insertAgent            = insert_into_nbn_agent($dbNBN, $bookNomeDatasource, $bookUrlOai, $bookUserApiNBN, $bookPwdApiNBN, $bookIpApiNBN, $idDatasource, $subnamespaceID, $servizioAbilitato);
+  
+    if ($insertAgent == 1) {
+  
+      $tesiUserApiNBN       = '';
+      $tesiPwdApiNBN        = '';
+      $journalUserApiNBN    = '';
+      $journalPwdApiNBN     = '';
+  
+      $mail = send_notice_nbn_email_to_admin($dbMD, $tesiUserApiNBN, $tesiPwdApiNBN, $journalUserApiNBN,
+      $journalPwdApiNBN, $bookUserApiNBN, $bookPwdApiNBN);
+  
+      //echo "<script>window.location.href = 'http://localhost/local/area-riservata//istituzione/signup-services'</script>";
+      echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/istituzione/signup-services'</script>";
+  
     }
   }
 
@@ -231,7 +307,8 @@
         
         if ($updateHarvest == 1){
 
-          echo "<script>window.location.href = 'http://localhost/local/area-riservata/istituzione/signup-services'</script>";
+          //echo "<script>window.location.href = 'http://localhost/local/area-riservata//istituzione/signup-services'</script>";
+          echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/istituzione/signup-services'</script>";
 
         }
 
@@ -292,9 +369,51 @@
         
         if ($updateHarvest == 1){
 
-          echo "<script>window.location.href = 'http://localhost/local/area-riservata/istituzione/signup-services'</script>";
+          //echo "<script>window.location.href = 'http://localhost/local/area-riservata//istituzione/signup-services'</script>";
+          echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/istituzione/signup-services'</script>";
 
         }
+
+      }
+
+    }
+
+  }
+
+  if (isset($_POST['modificaBook'])){
+
+    if (isset($_POST['nomeDatasourceBook'])){
+      $nomeDatasourceBook = $_POST['nomeDatasourceBook'];
+    }
+    if (isset($_POST['urlBook'])){
+      $urlBook = $_POST['urlBook'];
+    }
+    if (isset($_POST['userNBNBook'])){
+      $userNBNBook = $_POST['userNBNBook'];
+    }
+    if (isset($_POST['pwdNBNBook'])){
+      $pwdNBNBook = $_POST['pwdNBNBook'];
+    }
+    if (isset($_POST['ipNBNBook'])){
+      $ipNBNBook = $_POST['ipNBNBook'];
+    }
+    if (isset($_POST['idSubNamespaceBook'])){
+      $idSubNamespaceBook = $_POST['idSubNamespaceBook'];
+    }
+    if (isset($_POST['idDatasourceBook'])){
+      $idDatasourceBook = $_POST['idDatasourceBook'];
+    }
+
+    $updateDatasource   = update_datasource_nbn($dbNBN, $loginIstituzione, $nomeIstituzione, $nomeDatasourceBook, $urlBook, $idSubNamespaceBook, $idDatasourceBook);
+
+    if ($updateDatasource == 1) {
+
+      $updateAgent      = update_agent_nbn($dbNBN, $loginIstituzione, $nomeIstituzione, $nomeDatasourceBook, $urlBook, $userNBNBook, $pwdNBNBook, $ipNBNBook, 'eb', $idSubNamespaceBook, $idDatasourceBook);
+
+      if ($updateAgent == 1){
+
+        //echo "<script>window.location.href = 'http://localhost/local/area-riservata//istituzione/signup-services'</script>";
+        echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/istituzione/signup-services'</script>";
 
       }
 
@@ -315,6 +434,14 @@
     $subnamespaceID = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstituzione, $nomeIstituzione);
     $idDatasource   = retrieve_id_datasource($dbNBN, $subnamespaceID, 'ej');
     $journalAll     = select_agent_ngn_and_anagrafe_harvest($dbNBN, $dbHarvest, 'ej', $subnamespaceID, $idDatasource);
+    
+  }
+
+  if (!empty($bookServizioAttivo)) {
+
+    $subnamespaceID = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstituzione, $nomeIstituzione);
+    $idDatasource   = retrieve_id_datasource($dbNBN, $subnamespaceID, 'eb');
+    $bookAll        = select_agent_ngn($dbNBN, 'eb', $subnamespaceID);
     
   }
 
@@ -633,6 +760,108 @@
         <?php } ?>
       </div>
     <?php } ?>
+
+    <div id="eBook" class="mb-5">
+      <h5>Registra l'istituzione al servizio e-Book</h5>
+      <?php if(isset($alertBook)) { ?>
+        <div class='alert alert-warning'><?php echo $alertBook ?></div>
+      <?php } ?>
+      <form action="" method="post">
+        <div class="row">
+          <div class="col-md-6">
+            <label for="bookNomeDatasource">Nome Datasource</label>
+            <input required type="text" name="bookNomeDatasource" id="bookNomeDatasource">
+          </div>
+          <div class="col-md-6">
+            <label for="bookUrlOai">URL sito OAI</label>
+            <input required type="text" name="bookUrlOai" id="bookUrlOai">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <label for="bookUserApiNBN">User per API NBN</label>
+            <input required type="text" name="bookUserApiNBN" id="bookUserApiNBN">
+          </div>
+          <div class="col-md-6">
+            <label for="bookPwdApiNBN">Password per API NBN</label>
+            <input required type="text" name="bookPwdApiNBN" id="bookPwdApiNBN">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <label for="bookIpApiNBN">IP per API NBN</label>
+            <input required type="text" name="bookIpApiNBN" id="bookIpApiNBN">
+          </div>
+          <div class="col-md-6"></div>
+        </div>
+        <div class="row">
+          <div class="col-md-12"><input name="signupBook" type="submit" value="Registra" class="mt-3 float-right"/></div>
+        </div>
+      </form>
+    </div>
+
+    <?php if (!empty($bookServizioAttivo)) { ?>
+      <div id="infoBook">
+        <h5>e-Book già inseriti</h5>
+        <?php foreach($bookAll as $keyBook=>$results) {
+          $nomeDatasourceBook     = $results->agent_name;
+          $urlBook                = $results->baseurl;
+          $userNBNBook            = $results->user;
+          $pwdNBNBook             = $results->pass;
+          $ipNBNBook              = $results->IP;
+          $idSubNamespaceBook     = $results->subNamespaceID;
+          $idDatasourceBook       = $results->datasourceID;
+          
+          ?>
+        <div class="card">
+          <div class="card-header" id="heading<?php echo $keyBook ?>">
+            <button class="btn" data-toggle="collapse" data-target="#collapse<?php echo $keyBook ?>" aria-expanded="false" aria-controls="collapse<?php echo $keyBook ?>">
+              <h5 class="m-0"><?php echo $nomeDatasourceBook ?></h5>
+            </button>
+          </div>
+          <div id="collapse<?php echo $keyBook ?>" class="collapse" aria-labelledby="heading<?php echo $keyBook ?>">
+            <div class="card-body">
+              <form action="" method="post">
+                <input type="hidden" name="idSubNamespaceBook" value="<?php echo $idSubNamespaceBook ?>">
+                <input type="hidden" name="idDatasourceBook" value="<?php echo $idDatasourceBook ?>">
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="nomeDatasourceBook">Nome Datasource</label>
+                    <input name="nomeDatasourceBook" value="<?php echo $nomeDatasourceBook ?>" type="text">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="urlBook">URL sito OAI</label>
+                    <input name="urlBook" value="<?php echo $urlBook ?>" type="text">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="userNBNBook">User per API NBN</label>
+                    <input name="userNBNBook" value="<?php echo $userNBNBook ?>" type="text">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="pwdNBNBook">Password per API NBN</label>
+                    <input name="pwdNBNBook" value="<?php echo $pwdNBNBook ?>" type="text">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="ipNBNBook">IP per API NBN</label>
+                    <input name="ipNBNBook" value="<?php echo $ipNBNBook ?>" type="text">
+                  </div>
+                  <div class="col-md-6"></div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12"><input type="submit" name="modificaBook" value="Modifica" class="mt-3 float-right"></div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <?php } ?>
+      </div>
+    <?php } ?>
+
 </section>
     
 <?php

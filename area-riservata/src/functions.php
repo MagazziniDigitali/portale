@@ -1182,7 +1182,15 @@ function select_agent_ngn_and_anagrafe_harvest($dbNBN, $dbHarvest, $servizioAbil
         
 }
 
+function select_agent_ngn($dbNBN, $servizioAbilitato, $subnamespaceID){
 
+    $query = $dbNBN->prepare("SELECT * FROM agent WHERE materiale = '%s' AND subNamespaceID='%s'", $servizioAbilitato, $subnamespaceID);
+
+    $results = $dbNBN->get_results($query);
+
+    return $results;
+    
+}
 
 function send_confirmation_email_to_institution($utenteCognome, $utenteNome, $utenteEmail, $encryptedUuid) {
     require('./templates/confirmation-email.php');
@@ -1224,7 +1232,7 @@ function send_notice_email_to_admin($dbMD){
     }
 }
 
-function send_notice_nbn_email_to_admin($dbMD, $tesiUserApiNBN, $tesiPwdApiNBN, $journalUserApiNBN, $journalPwdApiNBN){
+function send_notice_nbn_email_to_admin($dbMD, $tesiUserApiNBN, $tesiPwdApiNBN, $journalUserApiNBN, $journalPwdApiNBN, $bookUserApiNBN, $bookPwdApiNBN){
     require('../templates/notice-nbn-email.php');
 
     $superadmin = retrieve_all_superadmin($dbMD);

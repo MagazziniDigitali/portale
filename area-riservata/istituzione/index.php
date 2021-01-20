@@ -42,7 +42,7 @@
       </div>
 
       <div id="signupServices">
-         <h5>Registra l'istituzione ai servizi <a href="signup-services#tesiDottorato">Tesi di Dottorato</a>, <a href="signup-services#eJournal">e-Journal</a></h5>
+         <h5>Registra l'istituzione ai servizi <a href="signup-services#tesiDottorato">Tesi di Dottorato</a>, <a href="signup-services#eJournal">e-Journal</a>, <a href="signup-services#eBook">e-Book</a></h5>
       </div>
    </div>
 </section>
