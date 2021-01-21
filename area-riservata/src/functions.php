@@ -228,6 +228,8 @@ function retrieve_ip_logged_user(){
 
 function do_login($dbMD, $user){
 
+    session_regenerate_id(true);
+
     $userID             = $user[0]->ID;
     $username           = $user[0]->LOGIN;
     $admin              = $user[0]->AMMINISTRATORE;
@@ -304,9 +306,20 @@ function do_login($dbMD, $user){
 }
 
 function do_logout(){
-    if(session_destroy()){
-        header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/local/" . "area-riservata/login");
+
+    $destroy = session_destroy();
+    $unset = session_unset();
+
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000,
+            $params["path"], $params["domain"],
+            $params["secure"], $params["httponly"]
+        );
     }
+    
+    header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/local/" . "area-riservata/login");
+
 }
 
 function do_signup($dbMD, $uuid, $istitutoPiva, $istitutoPassword, $istitutoNome, $istitutoIndirizzo, $istitutoTelefono, $istitutoNomeContatto, $istitutoNote, $istitutoUrl, $istitutoRegione, $utenteCognome, $utenteNome, $utenteCodiceFiscale, $utenteEmail) {
