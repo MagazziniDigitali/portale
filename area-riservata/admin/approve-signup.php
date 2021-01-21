@@ -20,7 +20,8 @@
 
         reject_submission($dbMD, $preRegID, $preRegUtenteEmail, $preRegUtenteNome, $preRegUtenteCognome);
 
-        echo "<script>window.location.href = 'http://localhost/local/area-riservata/admin/'</script>";
+        //echo "<script>window.location.href = 'http://localhost/local/area-riservata/admin/'</script>";
+        echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/admin/'</script>";
 
     } elseif (isset($_POST['acceptSubmission'])) {
 
@@ -98,61 +99,72 @@
             $alertPwd = "Password errata";
         }
 
+        check_login_istituzione($dbMD, 'unimol');
+
         if (($preRegNomeLogin != '') && ($preRegPassword != '')) {
 
-            $uuidIstituzione            = generate_uuid($dbMD);
-            $uuidUtente                 = generate_uuid($dbMD);
-            $admin                      = 1;
-            $superadmin                 = 0;
-            $preRegAltaRisoluzione      = 0;
-            $preRegTesiDottorato        = 0;
-            $ipAutorizzati              = '*.*.*.*';
+            $checkLogin = check_login_istituzione($dbMD, $preRegNomeLogin);
+            
+            if($checkLogin == 0){
 
-            $insertIstituzione = insert_new_istituzione($dbMD, $uuidIstituzione, $preRegNomeLogin, $preRegPassword, $preRegIstituzioneNome, $preRegIstituzioneIndirizzo, $preRegIstituzioneTelefono, $preRegIstituzioneNomeContatto, $preRegIstituzioneNote, $preRegIstituzioneUrl, $preRegIdRegione, $preRegIstituzionePiva, $preRegAltaRisoluzione);
+                $uuidIstituzione            = generate_uuid($dbMD);
+                $uuidUtente                 = generate_uuid($dbMD);
+                $admin                      = 1;
+                $superadmin                 = 0;
+                $preRegAltaRisoluzione      = 0;
+                $preRegTesiDottorato        = 0;
+                $ipAutorizzati              = '*.*.*.*';
 
-            if ($insertIstituzione != 1){
+                $insertIstituzione = insert_new_istituzione($dbMD, $uuidIstituzione, $preRegNomeLogin, $preRegPassword, $preRegIstituzioneNome, $preRegIstituzioneIndirizzo, $preRegIstituzioneTelefono, $preRegIstituzioneNomeContatto, $preRegIstituzioneNote, $preRegIstituzioneUrl, $preRegIdRegione, $preRegIstituzionePiva, $preRegAltaRisoluzione);
 
-                $errorIstituzione = insert_new_istituzione_check_errors($dbMD);
+                if ($insertIstituzione != 1){
 
-            } else {
-
-                $insertGestoreIstituzione = insert_new_gestore_istituzione($dbMD, $uuidUtente, $preRegNomeLogin, $preRegPassword, $preRegUtenteCognome, $preRegUtenteNome, $admin, $uuidIstituzione, $preRegUtenteCodicefiscale, $preRegUtenteEmail, $superadmin, $ipAutorizzati);
-
-                if ($insertGestoreIstituzione != 1){
-
-                    $errorUtente = insert_new_gestore_istituzione_check_errors($dbMD);
+                    $errorIstituzione = insert_new_istituzione_check_errors($dbMD);
 
                 } else {
 
-                    $uuidSoftware = generate_uuid($dbMD);
+                    $insertGestoreIstituzione = insert_new_gestore_istituzione($dbMD, $uuidUtente, $preRegNomeLogin, $preRegPassword, $preRegUtenteCognome, $preRegUtenteNome, $admin, $uuidIstituzione, $preRegUtenteCodicefiscale, $preRegUtenteEmail, $superadmin, $ipAutorizzati);
 
-                    $insertSoftware = insert_new_software($dbMD, $uuidSoftware, $uuidIstituzione, $preRegNomeLogin, $preRegPassword, $preRegIstituzioneNome);
+                    if ($insertGestoreIstituzione != 1){
+
+                        $errorUtente = insert_new_gestore_istituzione_check_errors($dbMD);
+
+                    } else {
+
+                        $uuidSoftware = generate_uuid($dbMD);
+
+                        $insertSoftware = insert_new_software($dbMD, $uuidSoftware, $uuidIstituzione, $preRegNomeLogin, $preRegPassword, $preRegIstituzioneNome);
 
 
-                    if ($insertGestoreIstituzione == 1){
+                        if ($insertGestoreIstituzione == 1){
 
-                        $insertSoftwareConfig = insert_new_software_config($dbMD, $uuidSoftware, $preRegPassword, $preRegIstituzionePiva);
+                            $insertSoftwareConfig = insert_new_software_config($dbMD, $uuidSoftware, $preRegPassword, $preRegIstituzionePiva);
+
+                        }
 
                     }
 
+                    
                 }
 
-                
+                if ($insertIstituzione && $insertGestoreIstituzione){
+
+                    set_checkdifase_to_approved($dbMD, $preRegUuid);
+
+                    send_approved_signup_email($preRegUtenteEmail, $preRegUtenteNome, $preRegUtenteCognome, $preRegNomeLogin, $preRegPassword);
+
+                    //echo "<script>window.location.href = 'http://localhost/local/area-riservata/admin/'</script>";
+                    echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/admin/'</script>";
+
+                }
+
+            } else {
+
+                $errorUtente = 'Nome per il login già in uso';
+
             }
 
             
-
-            
-
-            if ($insertIstituzione && $insertGestoreIstituzione){
-
-                set_checkdifase_to_approved($dbMD, $preRegUuid);
-
-                send_approved_signup_email($preRegUtenteEmail, $preRegUtenteNome, $preRegUtenteCognome, $preRegNomeLogin, $preRegPassword);
-
-                echo "<script>window.location.href = 'http://localhost/local/area-riservata/admin/'</script>";
-
-            }
 
         }
 

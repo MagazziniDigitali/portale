@@ -464,6 +464,15 @@ function check_user_exists($dbMD, $string){
 
 }
 
+function check_login_istituzione($dbMD, $login){
+
+    $preparedQuery = $dbMD->prepare("SELECT count(*) FROM MDIstituzione WHERE LOGIN='%s';", $login);
+    $result = $dbMD->get_results($preparedQuery);
+
+    return $result;
+
+}
+
 function generateRandomString() {
     $length = 20;
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
