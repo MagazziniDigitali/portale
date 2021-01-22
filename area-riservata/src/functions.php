@@ -889,7 +889,6 @@ function insert_into_nbn_subnamespace($dbNBN, $loginIstituzione, $nomeIstituzion
     return $insert;
 }
 
-
 function check_email_validata($dbMD, $uuid){
 
     $preparedQuery = $dbMD->prepare("SELECT EMAIL_VALIDATA FROM MDPreRegistrazione WHERE ID='%s'", $uuid);
@@ -946,25 +945,6 @@ function set_checkdifase_to_approved($dbMD, $uuid){
     );
 }
 
-function 
-_nbn_subnamespace($dbNBN, $loginIstituzione, $nomeIstituzione) {
-
-    $insert = $dbNBN->insert(
-        'subnamespace',
-        array(
-            'subNamespace'      => $loginIstituzione,
-            'inst_name'         => $nomeIstituzione
-        )
-    );
-
-    // if (!$insert) {
-    //     $error = $dbNBN->last_error;
-    //     return $error;
-    // }
-
-    return $insert;
-}
-
 function check_istituzione_exist_nbn_subnamespace($dbNBN, $loginIstituzione, $nomeIstituzione){
 
     $preparedQuery  = $dbNBN->prepare("SELECT COUNT(*) as count FROM subnamespace WHERE subNamespace='%s' AND inst_name='%s' ", $loginIstituzione, $nomeIstituzione);
@@ -985,6 +965,26 @@ function check_datasource_into_nbn($dbNBN, $nomeDatasource, $urlOai){
 
     return $resultCount;
 
+}
+
+function check_nbn_datasourceName_exists($dbNBN, $bookNomeDatasource){
+
+    $preparedQuery  = $dbNBN->prepare("SELECT COUNT(*) as count FROM datasource WHERE datasourceName='%s'", $bookNomeDatasource);
+    $results        = $dbNBN->get_results($preparedQuery);
+
+    $resultCount = intval($results[0]->count);
+
+    return $resultCount;
+}
+
+function check_nbn_datasourceName_exists_modify($dbNBN, $bookNomeDatasource, $datasourceID){
+
+    $preparedQuery  = $dbNBN->prepare("SELECT COUNT(*) as count FROM datasource WHERE datasourceName='%s' AND datasourceID<>'%s'", $bookNomeDatasource, $datasourceID);
+    $results        = $dbNBN->get_results($preparedQuery);
+
+    $resultCount = intval($results[0]->count);
+
+    return $resultCount;
 }
 
 function retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstituzione, $nomeIstituzione) {

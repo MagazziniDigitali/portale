@@ -202,58 +202,66 @@
     if (isset($_POST['bookIpApiNBN']) && $_POST['bookIpApiNBN'] != '') {
       $bookIpApiNBN = $_POST['bookIpApiNBN'];
     }
-  
-    $servizioAbilitato   = 'eb';
-    $bookUtenzaEmbargo   = '';
-    $bookPwdEmbargo      = '';
-  
-    //INSERT INTO MD
-    if (empty($bookServizioAttivo)) {
-  
-      $insertServizio       = insert_into_md_servizi($dbMD, $uuidIstituzione, $servizioAbilitato);
-      
-    }
-  
-    //INSERT INTO NBN
-    $checkSubnamespace      = check_istituzione_exist_nbn_subnamespace($dbNBN, $loginIstituzione, $nomeIstituzione);
-  
-    if($checkSubnamespace == 0){
-  
-      $insertSubnamespace   = insert_into_nbn_subnamespace($dbNBN, $loginIstituzione, $nomeIstituzione);
-  
-    }
-  
-    $subnamespaceID         = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstituzione, $nomeIstituzione);
-    $checkDatasource        = check_datasource_into_nbn($dbNBN, $bookNomeDatasource, $bookUrlOai);
-  
-    if($checkDatasource == 0){
-  
-      $insertDatasource     = insert_into_nbn_datasource($dbNBN, $bookNomeDatasource, $bookUrlOai, $subnamespaceID, $servizioAbilitato);
-  
-    } else {
-  
-      $alertJournal         = 'Nome datasource e url datasource già presenti';
+
+    $checkNameDatasource = check_nbn_datasourceName_exists($dbNBN, $bookNomeDatasource);
+
+    if ($checkNameDatasource == 0) {
+
+      $servizioAbilitato   = 'eb';
+      $bookUtenzaEmbargo   = '';
+      $bookPwdEmbargo      = '';
+    
+      //INSERT INTO MD
+      if (empty($bookServizioAttivo)) {
+    
+        $insertServizio       = insert_into_md_servizi($dbMD, $uuidIstituzione, $servizioAbilitato);
         
+      }
+    
+      //INSERT INTO NBN
+      $checkSubnamespace      = check_istituzione_exist_nbn_subnamespace($dbNBN, $loginIstituzione, $nomeIstituzione);
+    
+      if($checkSubnamespace == 0){
+    
+        $insertSubnamespace   = insert_into_nbn_subnamespace($dbNBN, $loginIstituzione, $nomeIstituzione);
+    
+      }
+    
+      $subnamespaceID         = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstituzione, $nomeIstituzione);
+      $checkDatasource        = check_datasource_into_nbn($dbNBN, $bookNomeDatasource, $bookUrlOai);
+    
+      if($checkDatasource == 0){
+    
+        $insertDatasource     = insert_into_nbn_datasource($dbNBN, $bookNomeDatasource, $bookUrlOai, $subnamespaceID, $servizioAbilitato);
+    
+      } else {
+    
+        $alertJournal         = 'Nome datasource e url datasource già presenti';
+          
+      }
+    
+      $idDatasource           = retrieve_id_datasource_for_istituzione($dbNBN, $bookNomeDatasource, $subnamespaceID, $bookUrlOai);
+    
+      $insertAgent            = insert_into_nbn_agent($dbNBN, $bookNomeDatasource, $bookUrlOai, $bookUserApiNBN, $bookPwdApiNBN, $bookIpApiNBN, $idDatasource, $subnamespaceID, $servizioAbilitato);
+    
+      if ($insertAgent == 1) {
+    
+        $tesiUserApiNBN       = '';
+        $tesiPwdApiNBN        = '';
+        $journalUserApiNBN    = '';
+        $journalPwdApiNBN     = '';
+    
+        $mail = send_notice_nbn_email_to_admin($dbMD, $tesiUserApiNBN, $tesiPwdApiNBN, $journalUserApiNBN,
+        $journalPwdApiNBN, $bookUserApiNBN, $bookPwdApiNBN);
+    
+        //echo "<script>window.location.href = 'http://localhost/local/area-riservata//istituzione/signup-services'</script>";
+        echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/istituzione/signup-services'</script>";
+    
+      }
+    } else {
+      $alertBook = 'Nome Datasource già in uso';
     }
-  
-    $idDatasource           = retrieve_id_datasource_for_istituzione($dbNBN, $bookNomeDatasource, $subnamespaceID, $bookUrlOai);
-  
-    $insertAgent            = insert_into_nbn_agent($dbNBN, $bookNomeDatasource, $bookUrlOai, $bookUserApiNBN, $bookPwdApiNBN, $bookIpApiNBN, $idDatasource, $subnamespaceID, $servizioAbilitato);
-  
-    if ($insertAgent == 1) {
-  
-      $tesiUserApiNBN       = '';
-      $tesiPwdApiNBN        = '';
-      $journalUserApiNBN    = '';
-      $journalPwdApiNBN     = '';
-  
-      $mail = send_notice_nbn_email_to_admin($dbMD, $tesiUserApiNBN, $tesiPwdApiNBN, $journalUserApiNBN,
-      $journalPwdApiNBN, $bookUserApiNBN, $bookPwdApiNBN);
-  
-      //echo "<script>window.location.href = 'http://localhost/local/area-riservata//istituzione/signup-services'</script>";
-      echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/istituzione/signup-services'</script>";
-  
-    }
+    
   }
 
   if (isset($_POST['modificaTesi'])){
@@ -404,19 +412,29 @@
       $idDatasourceBook = $_POST['idDatasourceBook'];
     }
 
-    $updateDatasource   = update_datasource_nbn($dbNBN, $loginIstituzione, $nomeIstituzione, $nomeDatasourceBook, $urlBook, $idSubNamespaceBook, $idDatasourceBook);
+    $checkNameDatasource = check_nbn_datasourceName_exists_modify($dbNBN, $nomeDatasourceBook, $idDatasourceBook);
 
-    if ($updateDatasource == 1) {
+    if ($checkNameDatasource == 0) {
 
-      $updateAgent      = update_agent_nbn($dbNBN, $loginIstituzione, $nomeIstituzione, $nomeDatasourceBook, $urlBook, $userNBNBook, $pwdNBNBook, $ipNBNBook, 'eb', $idSubNamespaceBook, $idDatasourceBook);
+      $updateDatasource   = update_datasource_nbn($dbNBN, $loginIstituzione, $nomeIstituzione, $nomeDatasourceBook, $urlBook, $idSubNamespaceBook, $idDatasourceBook);
 
-      if ($updateAgent == 1){
+      if ($updateDatasource == 1) {
 
-        //echo "<script>window.location.href = 'http://localhost/local/area-riservata//istituzione/signup-services'</script>";
-        echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/istituzione/signup-services'</script>";
+        $updateAgent      = update_agent_nbn($dbNBN, $loginIstituzione, $nomeIstituzione, $nomeDatasourceBook, $urlBook, $userNBNBook, $pwdNBNBook, $ipNBNBook, 'eb', $idSubNamespaceBook, $idDatasourceBook);
+
+        if ($updateAgent == 1){
+
+          echo "<script>window.location.href = 'http://localhost/local/area-riservata//istituzione/signup-services'</script>";
+          //echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/istituzione/signup-services'</script>";
+
+        }
 
       }
 
+    } else {
+
+      $alertBookModify = 'Nome Datasource già in uso';
+      
     }
 
   }
@@ -821,6 +839,11 @@
           </div>
           <div id="collapse<?php echo $keyBook ?>" class="collapse" aria-labelledby="heading<?php echo $keyBook ?>">
             <div class="card-body">
+
+            <?php if(isset($alertBookModify)) { ?>
+              <div class='alert alert-warning'><?php echo $alertBookModify ?></div>
+            <?php } ?>
+
               <form action="" method="post">
                 <input type="hidden" name="idSubNamespaceBook" value="<?php echo $idSubNamespaceBook ?>">
                 <input type="hidden" name="idDatasourceBook" value="<?php echo $idDatasourceBook ?>">
