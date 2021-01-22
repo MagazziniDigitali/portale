@@ -21,7 +21,7 @@
 // ** Impostazioni MySQL - È possibile ottenere queste informazioni dal proprio fornitore di hosting ** //
 /** Il nome del database di WordPress */
 define('WP_CACHE', true);
-define( 'WPCACHEHOME', '/var/www/html/new/wp-content/plugins/wp-super-cache/' );
+define( 'WPCACHEHOME', '/var/www/html/local/wp-content/plugins/wp-super-cache/' );
 define( 'DB_NAME', 'new_bncf' );
 
 /** Nome utente del database MySQL */
