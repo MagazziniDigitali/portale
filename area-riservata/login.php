@@ -5,7 +5,8 @@
     session_start();
 
     redirect_if_logged_in();
-    $dbMD = connect_to_md();
+    $dbMD   = connect_to_md();
+    $dbNBN  = connect_to_nbn();
     
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         

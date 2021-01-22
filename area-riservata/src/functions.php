@@ -242,11 +242,18 @@ function do_login($dbMD, $user){
 
     $istituzioneLong    = $istituzione[0]->NOME;
 
+    $ebook = check_if_istituzione_signed_for_service($dbMD, $istUUID, 'eb');
+
     $_SESSION['username']           = $username;
     $_SESSION['name']               = $name;
     $_SESSION['surname']            = $surname;
     $_SESSION['IP']                 = $ip;
     $_SESSION['istituzione']        = $istituzioneLong;
+    if($ebook){
+        $_SESSION['ebook']          = 'y';
+    } else {
+        $_SESSION['ebook']          = 'n';
+    }
 
     $stickyBit = substr($userID, -2);
 
@@ -763,7 +770,7 @@ function insert_new_gestore_istituzione_check_errors($dbMD){
 function insert_new_istituzione($dbMD, $uuidIstituzione, $nomeLogin, $password, $istituzioneNome, $istituzioneIndirizzo, $istituzioneTelefono, $istituzioneNomeContatto, $istituzioneNote, $istituzioneUrl, $idRegione, $istituzionePiva, $altaRisoluzione){
 
     $pwd        = generate_sha_pwd($dbMD, $password);
-    $pathTmp    = '/mnt/areaTemporanea/' . $istituzionePiva;
+    $pathTmp    = '/mnt/areaTemporanea/Ingest/' . $istituzionePiva;
 
     $insertIstituzione = $dbMD->insert(
         'MDIstituzione',
@@ -1171,10 +1178,10 @@ function update_anagrafe_harvest($dbHarvest, $uuidIstituzione, $loginIstituzione
     return $query;
 }
 
-function check_if_istituzione_signed_for_service($dbNBN, $uuidIstituzione, $servizioAbilitato){
+function check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, $servizioAbilitato){
 
-    $prepareQuery       = $dbNBN->prepare("SELECT * FROM MDServizi WHERE id_istituzione='%s' AND servizio_abilitato='%s' ", $uuidIstituzione, $servizioAbilitato);
-    $result             = $dbNBN->get_results($prepareQuery);
+    $prepareQuery       = $dbMD->prepare("SELECT * FROM MDServizi WHERE id_istituzione='%s' AND servizio_abilitato='%s' ", $uuidIstituzione, $servizioAbilitato);
+    $result             = $dbMD->get_results($prepareQuery);
 
     return $result;
 

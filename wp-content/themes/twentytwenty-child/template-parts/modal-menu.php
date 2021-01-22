@@ -146,7 +146,7 @@
 												</div>
 											</li>
 											<?php 
-											if ($_SESSION['role'] != 'superadmin' || $_SESSION['istituzione'] != 'istituzioneBase' || $_SESSION['istituzione'] != ''){ ?>
+											if ($_SESSION['role'] != 'superadmin' || $_SESSION['istituzione'] != 'istituzioneBase' || $_SESSION['istituzione'] != '' && ($_SESSION['ebook'] == 'y')){ ?>
 											<li class="menu-item menu-item-type-post_type menu-item-object-page">
 												<div class="ancestor-wrapper">
 													<a href="

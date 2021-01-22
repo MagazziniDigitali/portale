@@ -156,7 +156,7 @@
 													
 													">Profilo</a>
 												</li>
-												<?php if (($_SESSION['role'] != 'superadmin') && ($_SESSION['istituzione'] != 'istituzioneBase') && ($_SESSION['istituzione'] != '')){ ?>
+												<?php if (($_SESSION['role'] != 'superadmin') && ($_SESSION['istituzione'] != 'istituzioneBase') && ($_SESSION['istituzione'] != '') && ($_SESSION['ebook'] == 'y')){ ?>
 												<li id="menu-item-C05" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-C05">
 													<a href="
 													<?php if ($_SESSION['role'] == 'admin_istituzione'){ ?>

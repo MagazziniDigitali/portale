@@ -253,6 +253,8 @@
     
         $mail = send_notice_nbn_email_to_admin($dbMD, $tesiUserApiNBN, $tesiPwdApiNBN, $journalUserApiNBN,
         $journalPwdApiNBN, $bookUserApiNBN, $bookPwdApiNBN);
+
+        $_SESSION['ebook']    = 'y';
     
         //echo "<script>window.location.href = 'http://localhost/local/area-riservata//istituzione/signup-services'</script>";
         echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/istituzione/signup-services'</script>";
@@ -424,8 +426,8 @@
 
         if ($updateAgent == 1){
 
-          echo "<script>window.location.href = 'http://localhost/local/area-riservata//istituzione/signup-services'</script>";
-          //echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/istituzione/signup-services'</script>";
+          //echo "<script>window.location.href = 'http://localhost/local/area-riservata/istituzione/signup-services'</script>";
+          echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/istituzione/signup-services'</script>";
 
         }
 
