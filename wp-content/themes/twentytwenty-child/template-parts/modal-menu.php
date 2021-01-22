@@ -121,7 +121,8 @@
 
 									<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-C01">
 										<div class="ancestor-wrapper">
-											<a href="http://localhost/local/area-riservata/login/">Area Riservata</a>
+											<a href="http://localhost/local/area-riservata/login/">
+											<?php echo $_SESSION['username'];?></a>
 											<button class="toggle sub-menu-toggle fill-children-current-color" data-toggle-target=".menu-modal .menu-item-C01 > .sub-menu" data-toggle-type="slidetoggle" data-toggle-duration="250" aria-expanded="false">
 												<span class="screen-reader-text">Mostra il sottomenu</span>
 												<svg class="svg-icon" aria-hidden="true" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" width="20" height="12" viewBox="0 0 20 12">

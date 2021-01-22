@@ -137,7 +137,7 @@
 									<?php } else { ?>
 
 										<li id="menu-item-C02" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-C02">
-											<p class="btn btn-outline-primary">Area Riservata</p>
+											<p class="btn btn-outline-primary"><?php echo $_SESSION['username'];?></p>
 
 											<ul class="sub-menu">
 												<li id="menu-item-C03" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-C03">
