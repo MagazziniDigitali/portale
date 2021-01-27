@@ -1221,6 +1221,127 @@ function select_agent_ngn($dbNBN, $servizioAbilitato, $subnamespaceID){
     
 }
 
+/////////////////////////////////SOAP FUNCTIONS//////////////////////////////////////////
+
+//Autentica l'istituzione su Magazzini Digitali e restituisce un oggetto con tutte le info a riguardo 
+function webServiceAuthenticateSoftware($authentication){
+
+    $client = new SoapClient("http://192.168.254.159:8080/MagazziniDigitaliServices/services/AuthenticationSoftwarePort?wsdl",
+        array('exceptions' => true,)
+    );
+  
+    try {
+      
+        $software = $client->authenticationSoftwareOperation($authentication);
+  
+    } catch (SoapFault $e) {
+        var_dump("Returns: ");
+        var_dump(
+            $client->__getLastRequestHeaders(),
+            $client->__getLastRequest(),
+            $client->__getLastResponseHeaders(),
+            $client->__getLastResponse()
+        );
+    }
+    
+    return $software;
+    
+}
+
+//Controlla se il file caricato è presente in Magazzini Digitali e il suo stato.
+function webServiceCheckMD($readInfoInput){
+
+    try {
+        $client = new SoapClient("http://192.168.254.159:8080/MagazziniDigitaliServices/services/CheckMDPort?wsdl",
+            array('exceptions' => true,)
+        );
+        
+        try {
+            $ReadInfoOutput = $client->checkMDOperation($readInfoInput);
+            
+        } catch (SoapFault $e) {
+            var_dump("Returns");
+            var_dump(
+                $client->__getLastRequestHeaders(),
+                $client->__getLastRequest(),
+                $client->__getLastResponseHeaders(),
+                $client->__getLastResponse()
+                );
+        }
+        
+        return $ReadInfoOutput;
+        
+    }
+    catch ( Exception $e )
+    {
+        echo "CheckMD web service in errore o non disponibile";
+        
+    }
+    
+}
+
+//Inizia l'invio dell'oggetto a Magazzini Digitali
+function initSendOggettoDigitale($filename, $readInfoInput){
+
+    try {
+        $client = new SoapClient("http://192.168.254.159:8080/MagazziniDigitaliServices/services/InitSendMDPort?wsdl",
+            array('exceptions' => true,)
+            );
+        try {
+            $ReadInfoOutput = $client->initSendMDOperation($readInfoInput);
+        } catch (SoapFault $e) {
+            var_dump("Returns");
+            var_dump(
+                $client->__getLastRequestHeaders(),
+                $client->__getLastRequest(),
+                $client->__getLastResponseHeaders(),
+                $client->__getLastResponse()
+            );
+        }
+    }
+    catch ( Exception $e )
+    {
+        echo "CheckMD web service in errore o non disponibile";
+    }
+    return $ReadInfoOutput;
+    
+}
+
+//Conclude l'invio dell'oggetto a Magazzini Digitali
+function endSendOggettoDigitale($checkMdInfoOutput) {
+    
+    try {
+        $endSend = array(
+            "readInfoOutput" => $checkMdInfoOutput,
+            "esito" => true
+        );
+        
+        $client = new SoapClient("http://192.168.254.159:8080/MagazziniDigitaliServices/services/EndSendMDPort?wsdl",
+            array('exceptions' => true,)
+        );        
+        try {
+            $client->endSendMDOperation($endSend);
+        } catch (SoapFault $e) {
+            var_dump("Returns");
+            var_dump(
+                $client->__getLastRequestHeaders(),
+                $client->__getLastRequest(),
+                $client->__getLastResponseHeaders(),
+                $client->__getLastResponse()
+            );
+        }
+    }
+    catch ( Exception $e )
+    {
+        echo "CheckMD web service in errore o non disponibile";
+    }
+
+}
+
+
+/////////////////////////////////EMAIL FUNCTIONS//////////////////////////////////////////
+
+
 function send_confirmation_email_to_institution($utenteCognome, $utenteNome, $utenteEmail, $encryptedUuid) {
     require('./templates/confirmation-email.php');
 

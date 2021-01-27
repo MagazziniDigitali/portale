@@ -86,7 +86,6 @@
         }
       }
 
-  
       // CREATE JSON FILE
       $jsonArray = array(
         "title"         => $_POST['titolo'],
@@ -162,6 +161,98 @@
         $zip->addFile($path_temp_baginfo . '/bag-info.txt', '/bag-info.txt');
         $zip->close();
       }
+
+      //INVIO A MAGAZZINI DIGITALI
+
+      $authentication = array( //MDSoftware
+        "login" => "GS_MD", //TD_LOGIN-ISTITUZIONE
+        "password" => "36d4c3e2b842797fa1edfe5f396b896e08cd8f0dc7db16bd473a189a9b063504", //PASSWORD == PASSWORD GESTORE ISTITUZIONE
+      );
+      
+      //PER GLI ERRORI: SELECT * FROM MagazziniDigitali3_Collaudo.MDFilesTmpError where id_mdfilestmp='09f35acc-2ea5-4b6e-b084-09a049d3a281';
+
+      $software = webServiceAuthenticateSoftware($authentication);
+    
+      if (!isset($software)) {
+        echo "<br>Invalid Software authentication";
+        return;
+      }
+    
+      $filename = $path_PIVA . '/' . $stripped_filename . '-' . $timestamp . '.zip';
+    
+      if($software){
+    
+        $fTime        = filemtime($filename);
+        $md5          = md5_file($filename);
+        $md5_base64   = base64_encode($md5);    
+        $sha1         = sha1_file($filename);
+        $sha1_base64  = base64_encode($sha1);
+        
+        $readInfoInput = array (
+          "software"          => $software,
+          "oggettoDigitale"   => array(
+            "nomeFile"        => $filename,
+            "digest"          => array (
+              array(
+                "digestType"  => "MD5",
+                "digestValue" => $md5
+              ),
+              array(
+                "digestType"  => "MD5-64Base",
+                "digestValue" => $md5_base64
+              ),
+              array(
+                "digestType"  => "SHA1",
+                "digestValue" => $sha1
+              ),
+              array(
+                "digestType"  => "SHA1-64Base",
+                "digestValue" => $sha1_base64
+              ),
+            ),
+            "ultimaModifica"  => $fTime,
+          ),
+        );
+        
+        $readInfoOutput = webServiceCheckMD($readInfoInput);
+        $statoOggettoDigitale = $readInfoOutput->oggettoDigitale->statoOggettoDigitale;
+    
+        if ($statoOggettoDigitale == "NONPRESENTE") {
+            
+          $readInfoOutput = initSendOggettoDigitale($filename, $readInfoInput);
+          $statoOggettoDigitale = $readInfoOutput->oggettoDigitale->statoOggettoDigitale;
+          
+          if ($statoOggettoDigitale == "INITTRASF"){
+            endSendOggettoDigitale($readInfoOutput);
+          }
+              
+          $readInfoOutput = webServiceCheckMD($readInfoInput);
+          $statoOggettoDigitale = $readInfoOutput->oggettoDigitale->statoOggettoDigitale;
+    
+        }
+        
+        if ($statoOggettoDigitale == "INITTRASF") {
+            
+          endSendOggettoDigitale($readInfoOutput);
+          
+          $readInfoOutput = webServiceCheckMD($readInfoInput);
+          $statoOggettoDigitale = $readInfoOutput->oggettoDigitale->statoOggettoDigitale;
+    
+        }
+        
+        if ($statoOggettoDigitale == "FINETRASF"){
+    
+          $idOggettoDigitale = $readInfoOutput->oggettoDigitale->id;
+          $successGenerate = "Il bagit è stato caricato con successo<br>Numero di ricevuta: " . $idOggettoDigitale;
+    
+        } else {
+
+          rmdir_recursive($targetPIVA);
+          $alertGenerate = "Il bagit non è stato correttamente trasferito";
+          
+        }
+
+      }
       
       rmdir_recursive($temp_dir);
       rmdir_recursive($path_PIVA_tmp);
@@ -223,17 +314,103 @@
 
             file_put_contents($targetPIVA, $target);
             rmdir_recursive($temp_dir);
-            $success = "Il bagit è stato caricato con successo";
+            
+            //INVIO A MAGAZZINI DIGITALI
 
+            $authentication = array( //MDSoftware
+              "login" => "GS_MD",
+              "password" => "36d4c3e2b842797fa1edfe5f396b896e08cd8f0dc7db16bd473a189a9b063504",
+            );
+            
+            $software = webServiceAuthenticateSoftware($authentication);
+          
+            if (!isset($software)) {
+              echo "<br>Invalid Software authentication";
+              return;
+            }
+          
+            $filename = $targetPIVA;
+          
+            if($software){
+          
+              $fTime        = filemtime($filename);
+              $md5          = md5_file($filename);
+              $md5_base64   = base64_encode($md5);    
+              $sha1         = sha1_file($filename);
+              $sha1_base64  = base64_encode($sha1);
+              
+              $readInfoInput = array (
+                "software"          => $software,
+                "oggettoDigitale"   => array(
+                  "nomeFile"        => $filename,
+                  "digest"          => array (
+                    array(
+                      "digestType"  => "MD5",
+                      "digestValue" => $md5
+                    ),
+                    array(
+                      "digestType"  => "MD5-64Base",
+                      "digestValue" => $md5_base64
+                    ),
+                    array(
+                      "digestType"  => "SHA1",
+                      "digestValue" => $sha1
+                    ),
+                    array(
+                      "digestType"  => "SHA1-64Base",
+                      "digestValue" => $sha1_base64
+                    ),
+                  ),
+                  "ultimaModifica"  => $fTime,
+                ),
+              );
+              
+              $readInfoOutput = webServiceCheckMD($readInfoInput);
+              $statoOggettoDigitale = $readInfoOutput->oggettoDigitale->statoOggettoDigitale;
+          
+              if ($statoOggettoDigitale == "NONPRESENTE") {
+                  
+                $readInfoOutput = initSendOggettoDigitale($filename, $readInfoInput);
+                $statoOggettoDigitale = $readInfoOutput->oggettoDigitale->statoOggettoDigitale;
+                
+                if ($statoOggettoDigitale == "INITTRASF"){
+                  endSendOggettoDigitale($readInfoOutput);
+                }
+                    
+                $readInfoOutput = webServiceCheckMD($readInfoInput);
+                $statoOggettoDigitale = $readInfoOutput->oggettoDigitale->statoOggettoDigitale;
+          
+              }
+              
+              if ($statoOggettoDigitale == "INITTRASF") {
+                  
+                endSendOggettoDigitale($readInfoOutput);
+                
+                $readInfoOutput = webServiceCheckMD($readInfoInput);
+                $statoOggettoDigitale = $readInfoOutput->oggettoDigitale->statoOggettoDigitale;
+          
+              }
+              
+              if ($statoOggettoDigitale == "FINETRASF"){
+          
+                $idOggettoDigitale = $readInfoOutput->oggettoDigitale->id;
+                $success = "Il bagit è stato caricato con successo<br>Numero di ricevuta: " . $idOggettoDigitale;
+          
+              } else {
+
+                rmdir_recursive($targetPIVA);
+                $alert = "Il bagit non è stato correttamente trasferito";
+                
+              }
+
+            } else {
+              $alert = "Il bagit non è conforme allo standard";
+            }
 
           } else {
-            $alert = "Il bagit non è conforme allo standard";
+            $alert = "Il formato caricato non è uno zip";
           }
-
-        } else {
-          $alert = "Il formato caricato non è uno zip";
         }
-        
   
       }
     }
@@ -286,6 +463,9 @@
           <div class="col-md-12">
             <?php if(isset($alertGenerate)) { ?>
               <div class='alert alert-warning mt-3'><?php echo $alertGenerate ?></div>
+            <?php } ?>
+            <?php if(isset($successGenerate)) { ?>
+              <div class='alert alert-warning mt-3'><?php echo $successGenerate ?></div>
             <?php } ?>
           </div>
         </div>
@@ -470,9 +650,10 @@
   
         setTimeout(function() {
   
-          formBagit.reset();
-          spinner.style.display = "none";
-          button.disabled = false;
+          // formBagit.reset();
+          // spinner.style.display = "none";
+          // button.disabled = false;
+          window.location.href = 'http://localhost/local/area-riservata/istituzione/upload-bagit';
   
         }, 3000);
       })
