@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Themes - Twenty Twenty package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-01-21 18:45:52+0000\n"
+"PO-Revision-Date: 2021-03-06 17:10:43+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,6 +30,10 @@ msgctxt "color"
 msgid "Default"
 msgstr "Predefinito"
 
+#: inc/block-patterns.php:197
+msgid "With seven floors of striking architecture, UMoMA shows exhibitions of international contemporary art, sometimes along with art historical retrospectives. Existential, political, and philosophical issues are intrinsic to our program. As visitor, you are invited to guided tours artist talks, lectures, film screenings, and other events with free admission."
+msgstr "Con sette piani di sorprendente architettura, UMoMA propone mostre di arte contemporanea internazionale, talvolta a fianco di retrospettive artistiche storiche. I temi esistenziali, politici e filosofici sono intrinsechi al nostro programma. Sei invitato a visite guidate, incontri con gli artisti, conferenze, proiezioni cinematografiche e altri eventi a ingresso gratuito."
+
 #: inc/block-patterns.php:194
 msgid "The Premier Destination for Modern Art in Sweden"
 msgstr "La principale destinazione per l'arte moderna in Svezia"
@@ -37,6 +41,10 @@ msgstr "La principale destinazione per l'arte moderna in Svezia"
 #: inc/block-patterns.php:187
 msgid "Introduction"
 msgstr "Introduzione"
+
+#: inc/block-patterns.php:157 inc/block-patterns.php:171
+msgid "August 1 — December 1"
+msgstr "1 Agosto — 1 Dicembre"
 
 #: inc/block-patterns.php:151 inc/block-patterns.php:165
 msgid "Abstract Rectangles"
@@ -46,9 +54,17 @@ msgstr "Rettangoli astratti"
 msgid "Featured Content"
 msgstr "Contenuto in evidenza"
 
+#: inc/block-patterns.php:128
+msgid "<em>Price</em><br>Included"
+msgstr "<em>Prezzo</em><br>incluso"
+
 #: inc/block-patterns.php:123
 msgid "<em>Location</em><br>Exhibit Hall B"
 msgstr "<em>Luogo</em><br>Area espositiva B"
+
+#: inc/block-patterns.php:118
+msgid "<em>Dates</em><br>Aug 1 — Dec 1"
+msgstr "<em>Date</em><br>1 Ago — 1 Dic"
 
 #: inc/block-patterns.php:108
 msgid "Event Details"
@@ -74,14 +90,31 @@ msgstr "Mostre pluripremiate con artisti di fama internazionale."
 msgid "The Museum"
 msgstr "Il museo"
 
+#: inc/block-patterns.php:61
+msgid "Double Call to Action"
+msgstr "Doppio invito all'azione"
+
+#: inc/block-patterns.php:48
+msgid "Become a Member"
+msgstr "Diventa un membro"
+
 #: inc/block-patterns.php:42
 msgid "Support the Museum and Get Exclusive Offers"
 msgstr "Sostieni il museo e ottieni offerte esclusive"
+
+#: inc/block-patterns.php:33
+msgid "Call to Action"
+msgstr "Invito all'azione"
 
 #: template-parts/modal-menu.php:73
 msgctxt "menu"
 msgid "Mobile"
 msgstr "Mobile"
+
+#: template-parts/modal-menu.php:48
+msgctxt "menu"
+msgid "Expanded"
+msgstr "Espanso"
 
 #: header.php:88
 msgctxt "menu"
@@ -129,7 +162,7 @@ msgstr "In"
 msgid "Join the Club"
 msgstr "Unisciti al club"
 
-#: inc/starter-content.php:148 inc/block-patterns.php:45
+#: inc/block-patterns.php:45 inc/starter-content.php:148
 msgid "Members get access to exclusive exhibits and sales. Our memberships cost $99.99 and are billed annually."
 msgstr "I membri hanno accesso a mostre e offerte esclusive. L'iscrizione costa $99.99, addebitati annualmente."
 
@@ -153,7 +186,7 @@ msgstr "\"I Cyborg, come ha stabilito la filosofa Donna Haraway, non sono rispet
 msgid "From Signac to Matisse"
 msgstr "Da Signac a Matisse"
 
-#: inc/starter-content.php:99 inc/block-patterns.php:168
+#: inc/block-patterns.php:168 inc/starter-content.php:99
 msgid "The Life I Deserve"
 msgstr "La vita che merito"
 
@@ -165,10 +198,10 @@ msgstr "1 ottobre --  1 dicembre"
 msgid "Theatre of Operations"
 msgstr "Teatro delle operazioni"
 
-#: inc/starter-content.php:73 inc/starter-content.php:88
-#: inc/starter-content.php:105 inc/starter-content.php:120
 #: inc/block-patterns.php:78 inc/block-patterns.php:160
-#: inc/block-patterns.php:174
+#: inc/block-patterns.php:174 inc/starter-content.php:73
+#: inc/starter-content.php:88 inc/starter-content.php:105
+#: inc/starter-content.php:120
 msgid "Read More"
 msgstr "Leggi tutto"
 
@@ -176,7 +209,7 @@ msgstr "Leggi tutto"
 msgid "August 1 -- December 1"
 msgstr "1 Agosto -- 1 Dicembre"
 
-#: inc/starter-content.php:67 inc/block-patterns.php:154
+#: inc/block-patterns.php:154 inc/starter-content.php:67
 msgid "Works and Days"
 msgstr "Opere e Giorni"
 
@@ -220,7 +253,7 @@ msgstr "Applica un colore personalizzato per link, pulsanti, immagini in evidenz
 msgid "Primary Color"
 msgstr "Colore principale"
 
-#: searchform.php:24 template-parts/modal-search.php:20
+#: template-parts/modal-search.php:20 searchform.php:24
 msgid "Search for:"
 msgstr "Cerca:"
 
@@ -293,7 +326,7 @@ msgid "Footer"
 msgstr "Footer"
 
 #. translators: %s: Author name.
-#: inc/template-tags.php:357 template-parts/entry-author-bio.php:20
+#: template-parts/entry-author-bio.php:20 inc/template-tags.php:357
 msgid "By %s"
 msgstr "Di %s"
 
@@ -340,8 +373,8 @@ msgstr "Articolo in evidenza"
 msgid "Tags"
 msgstr "Tag"
 
-#: inc/template-tags.php:392 template-parts/entry-header.php:36
-#: template-parts/content-cover.php:70
+#: template-parts/content-cover.php:70 template-parts/entry-header.php:36
+#: inc/template-tags.php:392
 msgid "Categories"
 msgstr "Categorie"
 
