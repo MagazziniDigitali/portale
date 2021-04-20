@@ -21,8 +21,10 @@
             } else {
 
                 $user = check_user_session($dbMD);
-                
-                $oldPwd = $user[0]->PASSWORD;                
+                $amministratore     = $user[0]->AMMINISTRATORE;
+                $superadmin         = $user[0]->SUPERADMIN;
+                $istituzione        = $user[0]->ID_ISTITUZIONE;
+                $oldPwd             = $user[0]->PASSWORD;                
                 
                 $encryptedPWD = generate_sha_pwd($dbMD, $newPassword);
 
@@ -31,9 +33,15 @@
                     $uuid = $user[0]->ID;
 
                     $change = change_password_first_login($dbMD, $encryptedUUID, $encryptedPWD);
-                    var_dump($change);
                 
                     if($change){
+
+                        if (($amministratore == 1) && ($superadmin == 0)){
+                  
+                            $updateConfig   = update_password_mdconfig($dbMD, $newPassword, $istituzione);
+                            $updateSoftware = update_password_mdsoftware($dbMD, $encryptedPWD, $uuidIstituzione);
+          
+                        }
                         
                         header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/local/" . "area-riservata/login");
                         exit();
@@ -41,7 +49,6 @@
                     } else {
 
                         $alert = $dbMD->show_errors;
-                        echo "Sto qua";
 
                     }
                 

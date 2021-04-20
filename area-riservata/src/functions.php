@@ -156,17 +156,37 @@ function retrieve_user_by_id_istituzione($dbMD, $id){
 }
 
 function change_role($dbMD, $encryptedUUID, $admin){
+
     $uuidDecrypted = decrypt_string($encryptedUUID);
-    
-    $updateDB = $dbMD->update(
-        'MDUtenti',
-        array(
-            'AMMINISTRATORE'    => $admin
-        ),
-        array(
-            'ID'                => $uuidDecrypted
-        )
-    );
+
+    if ($admin == 1) {
+
+        $newUuidDecrypted = $uuidDecrypted . '-F';
+
+        $updateDB = $dbMD->update(
+            'MDUtenti',
+            array(
+                'AMMINISTRATORE'    => $admin,
+                'ID'                => $newUuidDecrypted
+            ),
+            array(
+                'ID'                => $uuidDecrypted
+            )
+        );
+    } else {
+
+        $updateDB = $dbMD->update(
+            'MDUtenti',
+            array(
+                'AMMINISTRATORE'    => $admin
+            ),
+            array(
+                'ID'                => $uuidDecrypted
+            )
+        );
+
+    }
+
 }
 
 function select_gestore($dbMD, $idIstituzione){
@@ -249,6 +269,8 @@ function do_login($dbMD, $user){
     $_SESSION['surname']            = $surname;
     $_SESSION['IP']                 = $ip;
     $_SESSION['istituzione']        = $istituzioneLong;
+    $_SESSION['uuidIst']            = $istUUID;
+
     if($ebook){
         $_SESSION['ebook']          = 'y';
     } else {
@@ -883,6 +905,51 @@ function insert_new_software_config($dbMD, $uuidSoftware, $preRegPassword, $preR
 
 }
 
+function update_password_mdconfig($dbMD, $password, $uuidIstituzione) {
+
+    $selectSoftware = $dbMD->prepare("SELECT ID FROM MDSoftware WHERE ID_ISTITUZIONE='%s'", $uuidIstituzione);
+    $uuidSoftware = $dbMD->get_results($selectSoftware);
+    $uuidSoftware = $uuidSoftware[0]->ID;
+
+    $updateDB = $dbMD->update(
+        'MDSoftwareConfig',
+        array(
+            'VALUE'         => $password
+        ),
+        array(
+            'NOME'          => 'sendRsyncPwd',
+            'ID_SOFTWARE'   => $uuidSoftware
+        )
+    );
+
+}
+
+function update_password_mdsoftware($dbMD, $password, $uuidIstituzione) {
+
+    $updateDB = $dbMD->update(
+        'MDSoftware',
+        array(
+            'PASSWORD'         => $password
+        ),
+        array(
+            'ID_ISTITUZIONE'   => $uuidIstituzione
+        )
+    );
+
+}
+
+function retrieve_info_from_mdsoftware($dbMD){
+
+    $uuidIstituzione = $_SESSION['uuidIst'];
+
+    $preparedQuery = $dbMD->prepare("SELECT LOGIN, PASSWORD FROM MDSoftware WHERE ID_ISTITUZIONE='%s'", $uuidIstituzione);
+
+    $info = $dbMD->get_results($preparedQuery);
+
+    return $info;
+
+}
+
 function insert_into_nbn_subnamespace($dbNBN, $loginIstituzione, $nomeIstituzione) {
 
     $insert = $dbNBN->insert(
@@ -1235,7 +1302,7 @@ function webServiceAuthenticateSoftware($authentication){
         $software = $client->authenticationSoftwareOperation($authentication);
   
     } catch (SoapFault $e) {
-        var_dump("Returns: ");
+        var_dump("Returns webServiceAuthenticateSoftware: ");
         var_dump(
             $client->__getLastRequestHeaders(),
             $client->__getLastRequest(),
@@ -1251,6 +1318,8 @@ function webServiceAuthenticateSoftware($authentication){
 //Controlla se il file caricato è presente in Magazzini Digitali e il suo stato.
 function webServiceCheckMD($readInfoInput){
 
+    $ReadInfoOutput = 'ERROR';
+
     try {
         $client = new SoapClient("http://192.168.254.159:8080/MagazziniDigitaliServices/services/CheckMDPort?wsdl",
             array('exceptions' => true,)
@@ -1260,7 +1329,7 @@ function webServiceCheckMD($readInfoInput){
             $ReadInfoOutput = $client->checkMDOperation($readInfoInput);
             
         } catch (SoapFault $e) {
-            var_dump("Returns");
+            var_dump("Returns webServiceCheckMD: ");
             var_dump(
                 $client->__getLastRequestHeaders(),
                 $client->__getLastRequest(),
@@ -1290,7 +1359,7 @@ function initSendOggettoDigitale($filename, $readInfoInput){
         try {
             $ReadInfoOutput = $client->initSendMDOperation($readInfoInput);
         } catch (SoapFault $e) {
-            var_dump("Returns");
+            var_dump("Returns initSendOggettoDigitale: ");
             var_dump(
                 $client->__getLastRequestHeaders(),
                 $client->__getLastRequest(),
@@ -1322,7 +1391,7 @@ function endSendOggettoDigitale($checkMdInfoOutput) {
         try {
             $client->endSendMDOperation($endSend);
         } catch (SoapFault $e) {
-            var_dump("Returns");
+            var_dump("Returns endSendOggettoDigitale:");
             var_dump(
                 $client->__getLastRequestHeaders(),
                 $client->__getLastRequest(),

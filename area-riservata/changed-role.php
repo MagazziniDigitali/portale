@@ -18,8 +18,6 @@
     $oldAdmin           = 0;
     $newAdmin           = 1;
 
-
-
     //rende il current gestore un utente normale
     change_role($dbMD, $encryptedUUID, $oldAdmin);
 
