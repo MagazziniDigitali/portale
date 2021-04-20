@@ -1,0 +1,10 @@
+@CHARSET "UTF-8";
+
+input.defaultText {
+  width: 300px;
+}
+
+input.defaultTextActive {
+  color: #a1a1a1;
+  font-style: italic;
+}

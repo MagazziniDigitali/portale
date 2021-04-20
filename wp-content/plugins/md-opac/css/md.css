@@ -1,0 +1,103 @@
+fieldset.tecaSearchForm {
+#    background-color: #efefef;
+    border: 0 none;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    margin: 15px 0 0;
+    min-width: 0;
+    padding: 0 0 20px;
+}
+
+fieldset.tecaSearchForm legend {
+#    background-color: #607ab2;
+    border-top: 2px solid #aec0e4;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+#    color: #ffffff;
+    display: block;
+#    font-size: 13px;
+    line-height: inherit;
+    margin-bottom: 5px;
+    padding: 12px;
+    text-transform: uppercase;
+    width: 100%;
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-image: none;
+}
+
+input.defaultTextActive {
+    color: #a1a1a1;
+ #   font-style: italic;
+}
+
+input.defaultText_old {
+    margin: 15px 0 0 15px;
+    width: 450px;
+}
+
+table.mdResultFacet {
+    width: auto;
+}
+
+table.tecaSearchNavigator {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: -moz-use-text-color;
+    border-image: none;
+    border-style: hidden hidden solid;
+    border-width: medium medium 1px;
+}
+
+table.tecaSearchNavigator td {
+    border-bottom: 1px solid;
+    border-left: medium hidden;
+    border-right: medium hidden;
+ #   font-size: x-small;
+}
+
+table.tecaSearchNavigator td.navigator {
+    width: 35px;
+}
+table.tecaSearchNavigator td.lRecPag {
+    width: 130px;
+}
+table.tecaSearchNavigator td.iRecPag {
+    width: -moz-min-content;
+    width:70px;
+}
+
+table.mdResultFacet {
+#  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+#  font-size: 12px;
+}
+
+table.mdResultRice {
+#  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+#  font-size: 12px;
+}
+
+fieldset.tecaSearchFacet {
+    border: hidden;
+    margin-top: 20px;
+    padding: 0;
+}
+
+table#scheda td#valueB{
+	cursor: default;
+}
+
+table#scheda td#valueB a{
+	cursor: pointer;
+}
+
+p.numberView{
+	float: right;
+    margin-bottom: 0;
+    margin-left: 10px;
+    margin-top: 0;
+}
