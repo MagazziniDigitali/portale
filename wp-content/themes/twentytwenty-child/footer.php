@@ -76,9 +76,17 @@
 			var memoria = document.querySelector('li#menu-item-30>a');
 			var consultazione = document.querySelector('li#menu-item-33>a');
 
+			var magazziniDigitaliMobile = document.querySelector('nav.mobile-menu li.menu-item.menu-item-type-post_type.menu-item-object-page.menu-item-32');
+			var memoriaMobile = document.querySelector('nav.mobile-menu li.menu-item.menu-item-type-post_type.menu-item-object-page.menu-item-30 a');
+			var consultazioneMobile = document.querySelector('nav.mobile-menu li.menu-item.menu-item-type-post_type.menu-item-object-page.menu-item-33 a');
+
 			magazziniDigitali.classList.add('d-none');
 			memoria.classList.add('d-none');
 			consultazione.classList.add('d-none');
+
+			magazziniDigitaliMobile.classList.add('d-none');
+			memoriaMobile.classList.add('d-none');
+			consultazioneMobile.classList.add('d-none');
 
 			<?php
 			if(isset($_SESSION['username']) && $_SESSION['username'] == 'superadmin') { ?>
@@ -87,9 +95,15 @@
 				consultazione.classList.remove('d-none');
 				magazziniDigitali.classList.remove('d-none');
 
+				memoriaMobile.classList.remove('d-none');
+				consultazioneMobile.classList.remove('d-none');
+				magazziniDigitaliMobile.classList.remove('d-none');
+
 			<?php } elseif (isset($_SESSION['username'])) { ?>
 
 				magazziniDigitali.classList.remove('d-none');
+
+				magazziniDigitaliMobile.classList.remove('d-none');
 				
 			<?php } ?>
 
