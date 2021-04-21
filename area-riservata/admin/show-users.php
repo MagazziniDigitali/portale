@@ -79,7 +79,7 @@
 
         if($check != 1){
 
-        $alert = $check;
+          $alert = $check;
         
         } else {
 
