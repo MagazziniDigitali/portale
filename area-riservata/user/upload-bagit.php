@@ -3,7 +3,10 @@
   require("../src/functions.php");
   require("../src/lib/bagit.php");
 
-  session_start();
+        if(!isset($_SESSION)) 
+    { 
+        session_start(); 
+    } 
   redirect_if_not_logged_in();
 
   if($_SESSION['role'] == 'user_istituzione'){

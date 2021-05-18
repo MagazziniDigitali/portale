@@ -62,6 +62,38 @@ else{
         $content_to_eval='?>'.$content_to_eval;
 }
 
+
+
+if(get_option('xyz_ips_auto_exception')==1) {
+
+  $str1 = " try{";
+  $var="$";
+  $str2 = "}catch(Exception ".$var."e) {echo 'Caught exception: '.".$var."e->getMessage();}";
+
+  $first_start_tag=strpos($content_to_eval,"<?php");
+  $last_end_tag=strrpos($content_to_eval,"?>");
+  $last_start_tag=strrpos($content_to_eval,"<?php");
+
+  if($first_start_tag>=0) {
+    $new_pos=$first_start_tag+5; //add length of php start tag
+    $content_to_eval=substr_replace( $content_to_eval, $str1, $new_pos, 0 );
+  }
+  if($last_end_tag<$last_start_tag) {
+    $content_to_eval=$content_to_eval.$str2;
+  }
+  else {
+    if($last_end_tag>0) {
+      $new_pos=$last_end_tag+5; //add length of $str1
+      $content_to_eval=substr_replace( $content_to_eval, $str2, $new_pos, 0 );
+    }
+    else if($last_end_tag==0) {
+      $content_to_eval=$content_to_eval.$str2;
+    }
+  }
+  //echo $content_to_eval;die;
+}
+
+
                         eval($content_to_eval);
                         $xyz_em_content = ob_get_contents();
                        // ob_clean();

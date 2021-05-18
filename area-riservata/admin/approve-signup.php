@@ -99,8 +99,6 @@
             $alertPwd = "Password errata";
         }
 
-        check_login_istituzione($dbMD, 'unimol');
-
         if (($preRegNomeLogin != '') && ($preRegPassword != '')) {
 
             $checkLogin = check_login_istituzione($dbMD, $preRegNomeLogin);
@@ -166,6 +164,8 @@
 
             
 
+        } else {
+            $errorIstituzione = "Inserire nome per il login e/o password";
         }
 
     }

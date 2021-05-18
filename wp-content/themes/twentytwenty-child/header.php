@@ -9,7 +9,10 @@
  * @since Twenty Twenty 1.0
  */
 
-  session_start();
+        if(!isset($_SESSION)) 
+    { 
+        session_start(); 
+    } 
 
 ?><!DOCTYPE html>
 

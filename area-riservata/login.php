@@ -2,7 +2,10 @@
     require("../wp-load.php");
     require("./src/functions.php");
 
-    session_start();
+          if(!isset($_SESSION)) 
+    { 
+        session_start(); 
+    } 
 
     redirect_if_logged_in();
     $dbMD   = connect_to_md();

@@ -178,7 +178,7 @@ if($xyz_ips_message == 8)
 	<option value="2">Delete</option>
 </select>
 <input type="submit" title="Apply" name="apply_ips_bulk_actions" value="Apply" style="color:#21759B;cursor:pointer;padding: 5px;background:linear-gradient(to top, #ECECEC, #F9F9F9) repeat scroll 0 0 #F1F1F1;border: 2px solid #DFDFDF;">
-
+</form>
 
 
 <form name="manage_snippets" action="" method="post">
@@ -186,111 +186,116 @@ if($xyz_ips_message == 8)
 							<div class="xyz_ips_search_div"  style="float:right;">
 				            	<table class="xyz_ips_search_div_table" style="width:100%;">
 				                	<tr>
-
-
 				                  		 	 <input type="text" name="snippet_name" value= "<?php if(isset($search_name)){echo esc_attr($search_name);}?>" placeholder="Search" >
 				                   			<input type="submit" name="search" value="Go" />
-
 				              		</tr>
 				           		</table>
 	          				</div>
 </form>
 
+<table class="widefat" style="width: 99%; margin: 0 auto; border-bottom:none;">
+	<thead>
+		<tr>
+		    <th scope="col" width="3%"><input type="checkbox" id="chkAllSnippets" /></th>
+			<th scope="col" >Tracking Name</th>
+			<th scope="col" >Snippet Short Code</th>
+			<th scope="col" >Status</th>
+			<th scope="col" colspan="4" style="text-align: center;">Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php
+		if( count($entries)>0 ) {
+			$count=1;
+			$class = '';
+			foreach( $entries as $entry ) {
+				$class = ( $count % 2 == 0 ) ? ' class="alternate"' : '';
+				$snippetId=intval($entry->id);
+				?>
+		<tr <?php echo $class; ?>>
+		<td style="vertical-align: middle !important;padding-left: 18px;">
+		<input type="checkbox" class="chk" value="<?php echo $snippetId; ?>" name="xyz_ips_snippet_ids[]" id="xyz_ips_snippet_ids" />
+		</td>
+			<td id="xyz_ips_vAlign"><?php
+			echo esc_html($entry->title);
+			?></td>
+			<td id="xyz_ips_vAlign"><?php
+			if($entry->status == 2){echo 'NA';}
+			else
+			echo '[xyz-ips snippet="'.esc_html($entry->title).'"]';
+			?></td>
+			<td id="xyz_ips_vAlign">
+				<?php
+					if($entry->status == 2){
+						echo "Inactive";
+					}elseif ($entry->status == 1){
+					echo "Active";
+					}
 
-
-
-
-			<table class="widefat" style="width: 99%; margin: 0 auto; border-bottom:none;">
-				<thead>
-					<tr>
-					    <th scope="col" width="3%"><input type="checkbox" id="chkAllSnippets" /></th>
-						<th scope="col" >Tracking Name</th>
-						<th scope="col" >Snippet Short Code</th>
-						<th scope="col" >Status</th>
-						<th scope="col" colspan="3" style="text-align: center;">Action</th>
-					</tr>
-				</thead>
-				<tbody>
+				?>
+			</td>
+			<?php
+					if($entry->status == 2){
+						$stat1 = admin_url('admin.php?page=insert-php-code-snippet-manage&action=snippet-status&snippetId='.$snippetId.'&status=1&pageno='.$pagenum);
+			?>
+			<td style="text-align: center;"><a
+				href='<?php echo wp_nonce_url($stat1,'ips-pstat_'.$snippetId); ?>'><img
+					id="xyz_ips_img" title="Activate"
+					src="<?php echo plugins_url('images/activate.png',XYZ_INSERT_PHP_PLUGIN_FILE)?>">
+			</a>
+			</td>
+				<?php
+					}elseif ($entry->status == 1){
+						$stat2 = admin_url('admin.php?page=insert-php-code-snippet-manage&action=snippet-status&snippetId='.$snippetId.'&status=2&pageno='.$pagenum);
+					?>
+			<td style="text-align: center;"><a
+				href='<?php echo wp_nonce_url($stat2,'ips-pstat_'.$snippetId); ?>'><img
+					id="xyz_ips_img" title="Deactivate"
+					src="<?php echo plugins_url('images/pause.png',XYZ_INSERT_PHP_PLUGIN_FILE)?>">
+			</a>
+			</td>
 					<?php
-					if( count($entries)>0 ) {
-						$count=1;
-						$class = '';
-						foreach( $entries as $entry ) {
-							$class = ( $count % 2 == 0 ) ? ' class="alternate"' : '';
-							$snippetId=intval($entry->id);
-							?>
-					<tr <?php echo $class; ?>>
-					<td style="vertical-align: middle !important;padding-left: 18px;">
-					<input type="checkbox" class="chk" value="<?php echo $snippetId; ?>" name="xyz_ips_snippet_ids[]" id="xyz_ips_snippet_ids" />
-					</td>
-						<td id="xyz_ips_vAlign"><?php
-						echo esc_html($entry->title);
-						?></td>
-						<td id="xyz_ips_vAlign"><?php
-						if($entry->status == 2){echo 'NA';}
-						else
-						echo '[xyz-ips snippet="'.esc_html($entry->title).'"]';
-						?></td>
-						<td id="xyz_ips_vAlign">
-							<?php
-								if($entry->status == 2){
-									echo "Inactive";
-								}elseif ($entry->status == 1){
-								echo "Active";
-								}
+					}
 
-							?>
-						</td>
-						<?php
-								if($entry->status == 2){
-									$stat1 = admin_url('admin.php?page=insert-php-code-snippet-manage&action=snippet-status&snippetId='.$snippetId.'&status=1&pageno='.$pagenum);
-						?>
-						<td style="text-align: center;"><a
-							href='<?php echo wp_nonce_url($stat1,'ips-pstat_'.$snippetId); ?>'><img
-								id="xyz_ips_img" title="Activate"
-								src="<?php echo plugins_url('images/activate.png',XYZ_INSERT_PHP_PLUGIN_FILE)?>">
-						</a>
-						</td>
-							<?php
-								}elseif ($entry->status == 1){
-									$stat2 = admin_url('admin.php?page=insert-php-code-snippet-manage&action=snippet-status&snippetId='.$snippetId.'&status=2&pageno='.$pagenum);
-								?>
-						<td style="text-align: center;"><a
-							href='<?php echo wp_nonce_url($stat2,'ips-pstat_'.$snippetId); ?>'><img
-								id="xyz_ips_img" title="Deactivate"
-								src="<?php echo plugins_url('images/pause.png',XYZ_INSERT_PHP_PLUGIN_FILE)?>">
-						</a>
-						</td>
-								<?php
-								}
+				?>
 
-							?>
+			<td style="text-align: center;"><a
+				href='<?php echo admin_url('admin.php?page=insert-php-code-snippet-manage&action=snippet-edit&snippetId='.$snippetId.'&pageno='.$pagenum); ?>'><img
+					id="xyz_ips_img" title="Edit Snippet"
+					src="<?php echo plugins_url('images/edit.png',XYZ_INSERT_PHP_PLUGIN_FILE)?>">
+			</a>
+			</td>
 
-						<td style="text-align: center;"><a
-							href='<?php echo admin_url('admin.php?page=insert-php-code-snippet-manage&action=snippet-edit&snippetId='.$snippetId.'&pageno='.$pagenum); ?>'><img
-								id="xyz_ips_img" title="Edit Snippet"
-								src="<?php echo plugins_url('images/edit.png',XYZ_INSERT_PHP_PLUGIN_FILE)?>">
-						</a>
-						</td>
+			<?php $delurl = admin_url('admin.php?page=insert-php-code-snippet-manage&action=snippet-delete&snippetId='.$snippetId.'&pageno='.$pagenum);?>
+			<td style="text-align: center;" ><a
+				href='<?php echo wp_nonce_url($delurl,'ips-pdel_'.$snippetId); ?>'
+				onclick="javascript: return confirm('Please click \'OK\' to confirm ');"><img
+					id="xyz_ips_img" title="Delete Snippet"
+					src="<?php echo plugins_url('images/delete.png',XYZ_INSERT_PHP_PLUGIN_FILE)?>">
+			</a></td>
 
-						<?php $delurl = admin_url('admin.php?page=insert-php-code-snippet-manage&action=snippet-delete&snippetId='.$snippetId.'&pageno='.$pagenum);?>
-						<td style="text-align: center;" ><a
-							href='<?php echo wp_nonce_url($delurl,'ips-pdel_'.$snippetId); ?>'
-							onclick="javascript: return confirm('Please click \'OK\' to confirm ');"><img
-								id="xyz_ips_img" title="Delete Snippet"
-								src="<?php echo plugins_url('images/delete.png',XYZ_INSERT_PHP_PLUGIN_FILE)?>">
-						</a></td>
-					</tr>
-					<?php
-					$count++;
-						}
-					} else { ?>
-					<tr>
-						<td colspan="6" >PHP Code Snippets not found</td>
-					</tr>
-					<?php } ?>
-				</tbody>
-			</table>
+			<?php
+			$page_url =xyz_ips_get_link_by_slug('xyz-ics-preview-page');
+			$page_url =add_query_arg( 'preview', 'true', $page_url );
+			$page_url =add_query_arg( 'snippetId', $snippetId, $page_url );
+			$prewurl =esc_url($page_url);
+			?>
+			<td style="text-align: center;" >
+				<a href='<?php echo $prewurl;?>' target="_blank">
+					<img id="xyz_ips_img" title="Preview" src="<?php echo plugins_url('images/preview.png',XYZ_INSERT_PHP_PLUGIN_FILE)?>">
+				</a>
+			</td>
+		</tr>
+		<?php
+		$count++;
+			}
+		} else { ?>
+		<tr>
+			<td colspan="7" >PHP Code Snippets not found</td>
+		</tr>
+		<?php } ?>
+	</tbody>
+</table>
 
 			<input  id="xyz_ips_submit_ips"
 				style="cursor: pointer; margin-top:10px;margin-left:8px;" type="button"
@@ -320,7 +325,7 @@ if($xyz_ips_message == 8)
 
 		</fieldset>
 
-	</form>
+	
 
 </div>
 <script type="text/javascript">

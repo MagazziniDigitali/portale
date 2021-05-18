@@ -108,6 +108,9 @@ function redirect_if_not_logged_in(){
 
 function redirect_if_logged_in(){
 
+    if (!empty($_SESSION)) {
+
+   
     if($_SESSION['role'] == 'superadmin') {
         header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/local/" . "area-riservata/admin/");
         die();
@@ -119,6 +122,7 @@ function redirect_if_logged_in(){
         die();
     }
     
+    }
 }
 
 function retrieve_regions($dbMD) {
@@ -757,7 +761,7 @@ function insert_new_gestore_istituzione($dbMD, $uuidUtente, $nomeLogin, $passwor
 
 function insert_new_gestore_istituzione_check_errors($dbMD){
 
-    $error = $dbMD->last_error;
+    $error = $dbMD->print_error();
         
     $duplicate = "Duplicate entry";
 

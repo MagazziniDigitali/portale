@@ -45,6 +45,9 @@ if($_POST){
         $xyz_ips_auto_insert = intval($_POST['xyz_ips_auto_insert']);
         update_option('xyz_ips_auto_insert',$xyz_ips_auto_insert);
 
+        $xyz_ips_auto_exception = intval($_POST['xyz_ips_auto_exception']);
+        update_option('xyz_ips_auto_exception',$xyz_ips_auto_exception);
+
         $xyz_ips_sortfield=sanitize_text_field($_POST['xyz_ips_sort_by_field']);
 
         if(($xyz_ips_sortfield=="id")||($xyz_ips_sortfield=="title"))
@@ -120,6 +123,17 @@ if($_POST){
                             <select name="xyz_ips_auto_insert" id="xyz_ips_auto_insert">
                                 <option value="0" <?php selected(get_option('xyz_ips_auto_insert'),0);?>>Disable</option>
                                 <option value="1" <?php selected(get_option('xyz_ips_auto_insert'),1);?>>Enable</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td scope="row">
+                            <label for="xyz_ips_auto_exception">Enabling automatic exception handling for PHP snippets</label>
+                        </td>
+                        <td>
+                            <select name="xyz_ips_auto_exception" id="xyz_ips_auto_exception">
+                                <option value="0" <?php selected(get_option('xyz_ips_auto_exception'),0);?>>Disable</option>
+                                <option value="1" <?php selected(get_option('xyz_ips_auto_exception'),1);?>>Enable</option>
                             </select>
                         </td>
                     </tr>

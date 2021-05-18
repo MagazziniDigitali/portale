@@ -299,8 +299,13 @@ class MDSolr extends MDSolrFacet {
     			}
                         $solrQuery = $this->addFilterAdvanzed($solrQuery, $xml);
                 } else {
-                        $solrQuery = $this->addFilterAdvanzed($solrQuery, $xml);
-                }
+					if(!empty($xml))
+                      { 
+						   $solrQuery = $this->addFilterAdvanzed($solrQuery, $xml);
+                	 }else{
+						$solrQuery = $this->addFilterAdvanzed($solrQuery, null);
+					 }
+			}
 
 		$tecaSolrSearchExclude = get_option ( 'tecaSolrSearchExclude' );
 		if (isset($tecaSolrSearchExclude) && $tecaSolrSearchExclude != ''){
