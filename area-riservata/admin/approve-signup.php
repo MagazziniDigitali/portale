@@ -103,7 +103,7 @@
 
             $checkLogin = check_login_istituzione($dbMD, $preRegNomeLogin);
             
-            if($checkLogin == 0){
+            if($checkLogin==0){
 
                 $uuidIstituzione            = generate_uuid($dbMD);
                 $uuidUtente                 = generate_uuid($dbMD);

@@ -514,6 +514,12 @@ function check_login_istituzione($dbMD, $login){
 
     $preparedQuery = $dbMD->prepare("SELECT count(*) FROM MDIstituzione WHERE LOGIN='%s';", $login);
     $result = $dbMD->get_results($preparedQuery);
+    foreach ($result as $value) {
+        foreach ($value as $key => $val) {
+            echo $key;
+            return $val;
+        }
+    }
 
     return $result;
 
@@ -1418,7 +1424,7 @@ function endSendOggettoDigitale($checkMdInfoOutput) {
 function send_confirmation_email_to_institution($utenteCognome, $utenteNome, $utenteEmail, $encryptedUuid) {
     require('./templates/confirmation-email.php');
 
-    $mail = init_phpmailer("smtp.mailtrap.io", 587, 'tls', '41c8040031b9b6', 'e1462af4452040', 'from@example.com', 'Magazzini Digitali');
+    $mail = init_phpmailer("smtp.mailtrap.io", 587, 'tls', 'cedf82b4d4c1b2', 'f06ef4a6a9b766', 'from@example.com', 'Magazzini Digitali');
 
     $mail->addAddress($utenteEmail, $utenteNome . " " . $utenteCognome);
     $mail->Subject = 'Conferma la tua email';
@@ -1435,7 +1441,7 @@ function send_notice_email_to_admin($dbMD){
 
     $superadmin = retrieve_all_superadmin($dbMD);
 
-    $mail = init_phpmailer("smtp.mailtrap.io", 587, 'tls', '41c8040031b9b6', 'e1462af4452040', 'from@example.com', 'Magazzini Digitali');
+    $mail = init_phpmailer("smtp.mailtrap.io", 587, 'tls', 'cedf82b4d4c1b2', 'f06ef4a6a9b766', 'from@example.com', 'Magazzini Digitali');
 
     foreach($superadmin as $key=>$results) {
 
@@ -1460,7 +1466,7 @@ function send_notice_nbn_email_to_admin($dbMD, $tesiUserApiNBN, $tesiPwdApiNBN, 
 
     $superadmin = retrieve_all_superadmin($dbMD);
 
-    $mail = init_phpmailer("smtp.mailtrap.io", 587, 'tls', '41c8040031b9b6', 'e1462af4452040', 'from@example.com', 'Magazzini Digitali');
+    $mail = init_phpmailer("smtp.mailtrap.io", 587, 'tls', 'cedf82b4d4c1b2', 'f06ef4a6a9b766', 'from@example.com', 'Magazzini Digitali');
 
     foreach($superadmin as $key=>$results) {
 
@@ -1483,7 +1489,7 @@ function send_notice_nbn_email_to_admin($dbMD, $tesiUserApiNBN, $tesiPwdApiNBN, 
 function send_rejected_signup_email($utenteEmail, $utenteNome, $utenteCognome){
     require('../templates/rejected-signup-email.php');
 
-    $mail = init_phpmailer("smtp.mailtrap.io", 587, 'tls', '41c8040031b9b6', 'e1462af4452040', 'from@example.com', 'Magazzini Digitali');
+    $mail = init_phpmailer("smtp.mailtrap.io", 587, 'tls', 'cedf82b4d4c1b2', 'f06ef4a6a9b766', 'from@example.com', 'Magazzini Digitali');
 
     $mail->addAddress($utenteEmail, $utenteNome . " " . $utenteCognome);
     $mail->Subject = 'Richiesta di registrazione rigettata';
@@ -1498,7 +1504,7 @@ function send_rejected_signup_email($utenteEmail, $utenteNome, $utenteCognome){
 function send_approved_signup_email($utenteEmail, $utenteNome, $utenteCognome, $preRegNomeLogin, $preRegPassword){
     require('../templates/approved-signup-email.php');
 
-    $mail = init_phpmailer("smtp.mailtrap.io", 587, 'tls', '41c8040031b9b6', 'e1462af4452040', 'from@example.com', 'Magazzini Digitali');
+    $mail = init_phpmailer("smtp.mailtrap.io", 587, 'tls', 'cedf82b4d4c1b2', 'f06ef4a6a9b766', 'from@example.com', 'Magazzini Digitali');
 
     $mail->addAddress($utenteEmail, $utenteNome . " " . $utenteCognome);
     $mail->Subject = 'Richiesta di registrazione approvata';
@@ -1513,7 +1519,7 @@ function send_approved_signup_email($utenteEmail, $utenteNome, $utenteCognome, $
 function send_confirmation_email_to_user($utenteCognome, $utenteNome, $utenteEmail, $encryptedUuid, $newUserLogin, $newUserPassword){
     require('../templates/user-registration-email.php');
 
-    $mail = init_phpmailer("smtp.mailtrap.io", 587, 'tls', '41c8040031b9b6', 'e1462af4452040', 'from@example.com', 'Magazzini Digitali');
+    $mail = init_phpmailer("smtp.mailtrap.io", 587, 'tls', 'cedf82b4d4c1b2', 'f06ef4a6a9b766', 'from@example.com', 'Magazzini Digitali');
 
     $mail->addAddress($utenteEmail, $utenteNome . " " . $utenteCognome);
     $mail->Subject = 'Registrazione a Magazzini Digitali';
@@ -1528,7 +1534,9 @@ function send_confirmation_email_to_user($utenteCognome, $utenteNome, $utenteEma
 function send_change_password_email($dbMD, $nameUser, $surnameUser, $mailUser, $login, $password){
     require('./templates/change-password.php');
 
-    $mail = init_phpmailer("smtp.mailtrap.io", 587, 'tls', '41c8040031b9b6', 'e1462af4452040', 'from@example.com', 'Magazzini Digitali');
+//    $mail = init_phpmailer("smtp.mailtrap.io", 587, 'tls', 'cedf82b4d4c1b2', 'f06ef4a6a9b766', 'from@example.com', 'Magazzini Digitali');
+    $mail = init_phpmailer("smtp.mailtrap.io", 587, 'tls', 'cedf82b4d4c1b2', 'f06ef4a6a9b766', 'from@example.com', 'Magazzini Digitali');
+
 
     $mail->addAddress($mailUser, $nameUser . " " . $surnameUser);
     $mail->Subject = 'Nuova password per il login a Magazzini Digitali';
