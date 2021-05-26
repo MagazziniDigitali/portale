@@ -25,7 +25,7 @@
 
         if (!$user) {
             
-            $alert = "Nome utente o password errata xx Hassan";
+            $alert = "Nome utente o password errata";
 
         } else {
 
