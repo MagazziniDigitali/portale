@@ -25,7 +25,7 @@
          <p>Istituzione di appartenenza: <?php echo $_SESSION['istituzione'] ?></p>
       <?php } ?>
 
-      <a href="http://localhost/local/area-riservata/logout">Logout</a>
+      <a href="/area-riservata/logout">Logout</a>
    </div>
 </section>
       

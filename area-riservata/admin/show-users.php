@@ -18,7 +18,7 @@
 
       delete_user($dbMD, $encryptedUUID, $idIstituzione);
 
-      echo "<script>window.location.href = 'http://localhost/local/area-riservata/'</script>";
+      echo "<script>window.location.href = '/area-riservata/'</script>";
 
     } elseif (isset($_POST['updateUser'])) {
 
@@ -64,13 +64,13 @@
           
             cnf = confirm("Questa operazione renderà questo utente gestore di istituzione, togliendolo all\'attuale gestore. Vuoi continuare?");
 
-            if (cnf) {window.location.href = "http://localhost/local/area-riservata/changed-role?n=' . $encryptedUUID . '&i=' . $idIstituzione . '" }
+            if (cnf) {window.location.href = "/area-riservata/changed-role?n=' . $encryptedUUID . '&i=' . $idIstituzione . '" }
               
           </script>';
 
         }
 
-        echo "<script>window.location.href = 'http://localhost/local/area-riservata/'</script>";
+        echo "<script>window.location.href = '/local/area-riservata/'</script>";
 
       } elseif (isset($_POST['password']) && $_POST['password'] != ''){
 
@@ -99,13 +99,13 @@
 
                 cnf = confirm("Questa operazione renderà questo utente gestore di istituzione, togliendolo all\'attuale gestore. Vuoi continuare?");
 
-                if (cnf) {window.location.href = "http://localhost/local/area-riservata/changed-role?n=' . $encryptedUUID . '&i=' . $idIstituzione . '" }
+                if (cnf) {window.location.href = "/area-riservata/changed-role?n=' . $encryptedUUID . '&i=' . $idIstituzione . '" }
                   
               </script>';
 
             }
 
-            echo "<script>window.location.href = 'http://localhost/local/area-riservata/'</script>";
+            echo "<script>window.location.href = '/area-riservata/'</script>";
 
           } else {
 

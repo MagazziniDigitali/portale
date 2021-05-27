@@ -75,7 +75,7 @@
             
                   $update = update_user($dbMD, $encryptedUUID, $pwd, $cognome, $nome, $codiceFiscale, $email, $ipAutorizzati);
 
-                  echo "<script>window.location.href = 'http://localhost/local/area-riservata/istituzione/profile'</script>";
+                  echo "<script>window.location.href = '/area-riservata/istituzione/profile'</script>";
  
                } else {
                    

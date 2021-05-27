@@ -21,7 +21,7 @@
         reject_submission($dbMD, $preRegID, $preRegUtenteEmail, $preRegUtenteNome, $preRegUtenteCognome);
 
         //echo "<script>window.location.href = 'http://localhost/local/area-riservata/admin/'</script>";
-        echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/admin/'</script>";
+        echo "<script>window.location.href = '/area-riservata/admin/'</script>";
 
     } elseif (isset($_POST['acceptSubmission'])) {
 
@@ -152,7 +152,7 @@
                     send_approved_signup_email($preRegUtenteEmail, $preRegUtenteNome, $preRegUtenteCognome, $preRegNomeLogin, $preRegPassword);
 
                     //echo "<script>window.location.href = 'http://localhost/local/area-riservata/admin/'</script>";
-                    echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/admin/'</script>";
+                    echo "<script>window.location.href = '/area-riservata/admin/'</script>";
 
                 }
 

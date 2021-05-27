@@ -42,7 +42,7 @@
                 $encryptedUuid = encrypt_string($uuid);
                 send_confirmation_email_to_user($newUserCognome, $newUserNome, $newUserEmail, $encryptedUuid, $newUserLogin, $newUserPassword);
 
-                echo "<script>window.location.href = 'http://localhost/local/area-riservata/istituzione/'</script>";
+                echo "<script>window.location.href = '/area-riservata/istituzione/'</script>";
 
             }
         }

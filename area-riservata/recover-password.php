@@ -66,7 +66,7 @@
                   
                 send_change_password_email($dbMD, $nome, $cognome, $email, $login, $password);
 
-                echo "<script>window.location.href = 'http://localhost/local/area-riservata/'</script>";
+                echo "<script>window.location.href = '/area-riservata/'</script>";
   
               }
 

@@ -166,8 +166,8 @@
                         
                                 send_notice_nbn_email_to_admin($dbMD, $tesiUserApiNBN, $tesiPwdApiNBN, $journalUserApiNBN, $journalPwdApiNBN, $bookUserApiNBN, $bookPwdApiNBN);
     
-                                //echo "<script>window.location.href = 'http://localhost/local/area-riservata/superadmin/add-istituzione'</script>";
-                                echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/superadmin/add-istituzione'</script>";
+                                echo "<script>window.location.href = '/area-riservata/superadmin/add-istituzione'</script>";
+                             //   echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/superadmin/add-istituzione'</script>";
     
                             }
                         }
@@ -247,14 +247,14 @@
                         
                                 $mail = send_notice_nbn_email_to_admin($dbMD, $tesiUserApiNBN, $tesiPwdApiNBN, $journalUserApiNBN, $journalPwdApiNBN, $bookUserApiNBN, $bookPwdApiNBN);
     
-                                echo "<script>window.location.href = 'http://localhost/local/area-riservata/superadmin/add-istituzione'</script>";
+                                echo "<script>window.location.href = '/area-riservata/superadmin/add-istituzione'</script>";
                                 //echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/superadmin/add-istituzione'</script>";
                             }
     
                         }
     
                     } else {
-                        echo "<script>window.location.href = 'http://localhost/local/area-riservata/superadmin/add-istituzione'</script>";
+                        echo "<script>window.location.href = '/area-riservata/superadmin/add-istituzione'</script>";
                         //echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/superadmin/add-istituzione'</script>";
                         //echo "<script>window.location.href = 'http://new-www.depositolegale.it:81/area-riservata/superadmin/add-istituzione'</script>";
                     }

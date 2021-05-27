@@ -105,7 +105,7 @@
 								if(!isset($_SESSION['username'])) { ?>
 									<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-C01">
 										<div class="ancestor-wrapper">
-											<a href="http://localhost/local/area-riservata/login/">Area Riservata</a>
+											<a href="/area-riservata/login/">Area Riservata</a>
 											<button class="toggle sub-menu-toggle fill-children-current-color" data-toggle-target=".menu-modal .menu-item-C01 > .sub-menu" data-toggle-type="slidetoggle" data-toggle-duration="250" aria-expanded="false">
 												<span class="screen-reader-text">Mostra il sottomenu</span>
 												<svg class="svg-icon" aria-hidden="true" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" width="20" height="12" viewBox="0 0 20 12">
@@ -113,15 +113,15 @@
 											</button>
 										</div>
 										<ul class="sub-menu">
-											<li class="menu-item menu-item-type-post_type menu-item-object-page"><div class="ancestor-wrapper"><a href="http://localhost/local/area-riservata/login/">Login</a></div></li>
-											<li class="menu-item menu-item-type-post_type menu-item-object-page"><div class="ancestor-wrapper"><a href="http://localhost/local/area-riservata/signup">Registrati</a></div></li>
+											<li class="menu-item menu-item-type-post_type menu-item-object-page"><div class="ancestor-wrapper"><a href="/area-riservata/login/">Login</a></div></li>
+											<li class="menu-item menu-item-type-post_type menu-item-object-page"><div class="ancestor-wrapper"><a href="/area-riservata/signup">Registrati</a></div></li>
 										</ul>
 									</li>
 								<?php } else { ?>
 
 									<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-C01">
 										<div class="ancestor-wrapper">
-											<a href="http://localhost/local/area-riservata/login/">
+											<a href="/area-riservata/login/">
 											<?php echo $_SESSION['username'];?></a>
 											<button class="toggle sub-menu-toggle fill-children-current-color" data-toggle-target=".menu-modal .menu-item-C01 > .sub-menu" data-toggle-type="slidetoggle" data-toggle-duration="250" aria-expanded="false">
 												<span class="screen-reader-text">Mostra il sottomenu</span>
@@ -130,16 +130,16 @@
 											</button>
 										</div>
 										<ul class="sub-menu">
-											<li class="menu-item menu-item-type-post_type menu-item-object-page"><div class="ancestor-wrapper"><a href="http://localhost/local/area-riservata/">Home</a></div></li>
+											<li class="menu-item menu-item-type-post_type menu-item-object-page"><div class="ancestor-wrapper"><a href="/area-riservata/">Home</a></div></li>
 											<li class="menu-item menu-item-type-post_type menu-item-object-page">
 												<div class="ancestor-wrapper">
 													<a href="
 														<?php if ($_SESSION['role'] == 'superadmin'){ ?>
-															http://localhost/local/area-riservata/admin/profile
+															/area-riservata/admin/profile
 														<?php } elseif ($_SESSION['role'] == 'admin_istituzione'){ ?>
-															http://localhost/local/area-riservata/istituzione/profile
+															/area-riservata/istituzione/profile
 														<?php } else { ?>
-															http://localhost/local/area-riservata/user/profile
+															/area-riservata/user/profile
 														<?php } ?>
 														
 														">Profilo
@@ -162,7 +162,7 @@
 												</div>
 											</li>
 											<?php } ?>
-											<li class="menu-item menu-item-type-post_type menu-item-object-page"><div class="ancestor-wrapper"><a href="http://localhost/local/area-riservata/logout">Logout</a></div></li>
+											<li class="menu-item menu-item-type-post_type menu-item-object-page"><div class="ancestor-wrapper"><a href="/area-riservata/logout">Logout</a></div></li>
 										</ul>
 									</li>
 

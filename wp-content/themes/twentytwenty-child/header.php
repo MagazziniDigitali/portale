@@ -25,7 +25,7 @@
 
 		<link rel="profile" href="https://gmpg.org/xfn/11">
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-		<link rel="stylesheet" href="http://localhost/local/area-riservata/src/style.css">
+		<link rel="stylesheet" href="/area-riservata/src/style.css">
 		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 		<?php wp_head(); ?>
 
@@ -128,11 +128,11 @@
 
 											<ul class="sub-menu">
 												<li id="menu-item-C03" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-C03">
-													<a href="http://localhost/local/area-riservata/login">Login</a>
+													<a href="/area-riservata/login">Login</a>
 												</li>
 												
 												<li id="menu-item-C04" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-C04">
-													<a href="http://localhost/local/area-riservata/signup">Registrati</a>
+													<a href="/area-riservata/signup">Registrati</a>
 												</li>
 											</ul>
 										</li>
@@ -144,17 +144,17 @@
 
 											<ul class="sub-menu">
 												<li id="menu-item-C03" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-C03">
-													<a href="http://localhost/local/area-riservata/">Home</a>
+													<a href="/area-riservata/">Home</a>
 												</li>
 
 												<li id="menu-item-C04" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-C04">
 													<a href="
 													<?php if ($_SESSION['role'] == 'superadmin'){ ?>
-														http://localhost/local/area-riservata/admin/profile
+														/area-riservata/admin/profile
 													<?php } elseif ($_SESSION['role'] == 'admin_istituzione'){ ?>
-														http://localhost/local/area-riservata/istituzione/profile
+														/area-riservata/istituzione/profile
 													<?php } else { ?>
-														http://localhost/local/area-riservata/user/profile
+														/area-riservata/user/profile
 													<?php } ?>
 													
 													">Profilo</a>
@@ -163,15 +163,15 @@
 												<li id="menu-item-C05" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-C05">
 													<a href="
 													<?php if ($_SESSION['role'] == 'admin_istituzione'){ ?>
-														http://localhost/local/area-riservata/istituzione/upload-bagit
+														/area-riservata/istituzione/upload-bagit
 													<?php } elseif ($_SESSION['role'] == 'user_istituzione'){ ?>
-														http://localhost/local/area-riservata/user/upload-bagit
+														/area-riservata/user/upload-bagit
 													<?php } ?>
 													">Carica BAGIT</a>
 												</li>
 												<?php } ?>
 												<li id="menu-item-C06" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-C06">
-													<a href="http://localhost/local/area-riservata/logout">Logout</a>
+													<a href="/area-riservata/logout">Logout</a>
 												</li>
 											</ul>
 										</li>
