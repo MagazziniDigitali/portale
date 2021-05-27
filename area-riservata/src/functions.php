@@ -9,17 +9,20 @@ require 'send-email/SMTP.php';
 require 'mailer-parm.php';//hassan vado a includele  il modulo mailer-local per mandare le mail tramite mailtrap
 
 function connect_to_md(){
-    $dbMD = new wpdb('newuser','password','md','localhost');
+    //$dbMD = new wpdb('newuser','password','md','localhost');
+    $dbMD = new wpdb(DB_USER_MD,DB_PASSWORD_MD,DB_NAME_MD,DB_HOST_MD);
     return $dbMD;
 }
 
 function connect_to_harvest(){
-    $dbHarvest = new wpdb('newuser','password','harvest','localhost');
+  //  $dbHarvest = new wpdb('newuser','password','harvest','localhost');
+    $dbHarvest = new wpdb(DB_USER_HARVEST,DB_PASSWORD_HARVEST,DB_NAME_HARVEST,DB_HOST_HARVEST);
     return $dbHarvest;
 }
 
 function connect_to_nbn(){
-    $dbNBN = new wpdb('newuser','password','nbn','localhost');
+  //  $dbNBN = new wpdb('newuser','password','nbn','localhost');
+    $dbNBN = new wpdb(DB_USER_NBN,DB_PASSWORD_NBN,DB_NAME_NBN,DB_HOST_NBN);
     return $dbNBN;
 }
 
