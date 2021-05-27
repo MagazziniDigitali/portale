@@ -18,7 +18,7 @@
 
             delete_user($dbMD, $encryptedUUID, $idIstituzione);
 
-            echo "<script>window.location.href = 'http://localhost/local/area-riservata/'</script>";
+            echo "<script>window.location.href = '/area-riservata/'</script>";
 
         } elseif (isset($_POST['updateUser'])) {
 
@@ -64,13 +64,13 @@
                     echo '<script>
                         cnf = confirm("Questa operazione renderà questo utente gestore di istituzione, rendendoti utente semplice. Vuoi continuare?");
 
-                        if (cnf) {window.location.href = "http://localhost/local/area-riservata/changed-role?n=' . $encryptedUUID . '&i=' . $idIstituzione . '" }
+                        if (cnf) {window.location.href = "/area-riservata/changed-role?n=' . $encryptedUUID . '&i=' . $idIstituzione . '" }
                         
                     </script>';
 
                 }
 
-                echo "<script>window.location.href = 'http://localhost/local/area-riservata/'</script>";
+                echo "<script>window.location.href = '/area-riservata/'</script>";
 
             } elseif (isset($_POST['password']) && $_POST['password'] != ''){
 
@@ -96,13 +96,13 @@
                             echo '<script>
                                 cnf = confirm("Questa operazione renderà questo utente gestore di istituzione, rendendoti utente semplice. Vuoi continuare?");
             
-                                if (cnf) {window.location.href = "http://localhost/local/area-riservata/changed-role?n=' . $encryptedUUID . '&i=' . $idIstituzione . '" }
+                                if (cnf) {window.location.href = "/area-riservata/changed-role?n=' . $encryptedUUID . '&i=' . $idIstituzione . '" }
                                 
                             </script>';
             
                         }
 
-                        echo "<script>window.location.href = 'http://localhost/local/area-riservata/'</script>";
+                        echo "<script>window.location.href = '/area-riservata/'</script>";
 
                     } else {
 

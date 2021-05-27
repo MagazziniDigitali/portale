@@ -705,7 +705,7 @@
       document.getElementById('formBagit').addEventListener('submit', function() {
   		
         setTimeout(function() {
-          //window.location.href = 'http://localhost/local/area-riservata/istituzione/upload-bagit';
+          //window.location.href = '/area-riservata/istituzione/upload-bagit';
           //window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/istituzione/upload-bagit';
   		  window.location.reload();
         }, 3000);
