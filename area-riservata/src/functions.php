@@ -1303,10 +1303,21 @@ function select_agent_ngn($dbNBN, $servizioAbilitato, $subnamespaceID){
 
 //Autentica l'istituzione su Magazzini Digitali e restituisce un oggetto con tutte le info a riguardo 
 function webServiceAuthenticateSoftware($authentication){
+    $_urlSoap=null;
+    if(strtolower(AMBIENTE_APPLICATIVO)=='locale')
+    {
+        $_urlSoap=SOAP_CLIENT_AUTH_SW_LOCALE;
+    }
+    else  if(strtolower(AMBIENTE_APPLICATIVO)=='collaudo')
+    {
+        $_urlSoap=SOAP_CLIENT_AUTH_SW_COLLAUDO;
+    }
+    else  if(strtolower(AMBIENTE_APPLICATIVO)=='esercizio')
+    {
+        $_urlSoap=SOAP_CLIENT_AUTH_SW_ESERCIZIO;
+    }
 
-    $client = new SoapClient("http://192.168.254.159:8080/MagazziniDigitaliServices/services/AuthenticationSoftwarePort?wsdl",
-        array('exceptions' => true,)
-    );
+    $client = new SoapClient($_urlSoap,array('exceptions' => true,));
   
     try {
       
@@ -1332,7 +1343,22 @@ function webServiceCheckMD($readInfoInput){
     $ReadInfoOutput = 'ERROR';
 
     try {
-        $client = new SoapClient("http://192.168.254.159:8080/MagazziniDigitaliServices/services/CheckMDPort?wsdl",
+        $_urlSoap=null;
+        if(strtolower(AMBIENTE_APPLICATIVO)=='locale')
+        {
+            $_urlSoap=SOAP_CLIENT_AUTH_CHK_LOCALE;
+        }
+        else  if(strtolower(AMBIENTE_APPLICATIVO)=='collaudo')
+        {
+            $_urlSoap=SOAP_CLIENT_AUTH_CHK_COLLAUDO;
+        }
+        else  if(strtolower(AMBIENTE_APPLICATIVO)=='esercizio')
+        {
+            $_urlSoap=SOAP_CLIENT_AUTH_CHK_ESERCIZIO;
+        }
+        
+    
+        $client = new SoapClient($_urlSoap,
             array('exceptions' => true,)
         );
         
@@ -1364,7 +1390,20 @@ function webServiceCheckMD($readInfoInput){
 function initSendOggettoDigitale($filename, $readInfoInput){
 
     try {
-        $client = new SoapClient("http://192.168.254.159:8080/MagazziniDigitaliServices/services/InitSendMDPort?wsdl",
+        $_urlSoap=null;
+        if(strtolower(AMBIENTE_APPLICATIVO)=='locale')
+        {
+            $_urlSoap=SOAP_CLIENT_INI_S_LOCALE;
+        }
+        else  if(strtolower(AMBIENTE_APPLICATIVO)=='collaudo')
+        {
+            $_urlSoap=SOAP_CLIENT_INI_S_COLLAUDO;
+        }
+        else  if(strtolower(AMBIENTE_APPLICATIVO)=='esercizio')
+        {
+            $_urlSoap=SOAP_CLIENT_INI_S_ESERCIZIO;
+        }
+        $client = new SoapClient($_urlSoap,
             array('exceptions' => true,)
             );
         try {
@@ -1391,12 +1430,25 @@ function initSendOggettoDigitale($filename, $readInfoInput){
 function endSendOggettoDigitale($checkMdInfoOutput) {
     
     try {
-        $endSend = array(
-            "readInfoOutput" => $checkMdInfoOutput,
-            "esito" => true
-        );
-        
-        $client = new SoapClient("http://192.168.254.159:8080/MagazziniDigitaliServices/services/EndSendMDPort?wsdl",
+          $endSend = array(
+              "readInfoOutput" => $checkMdInfoOutput,
+              "esito" => true
+          );
+          $_urlSoap=null;
+          if(strtolower(AMBIENTE_APPLICATIVO)=='locale')
+          {
+              $_urlSoap=SOAP_CLIENT_END_S_LOCALE;
+          }
+          else  if(strtolower(AMBIENTE_APPLICATIVO)=='collaudo')
+          {
+              $_urlSoap=SOAP_CLIENT_END_S_COLLAUDO;
+          }
+          else  if(strtolower(AMBIENTE_APPLICATIVO)=='esercizio')
+          {
+              $_urlSoap=SOAP_CLIENT_END_S_ESERCIZIO;
+          }
+
+        $client = new SoapClient($_urlSoap,
             array('exceptions' => true,)
         );        
         try {

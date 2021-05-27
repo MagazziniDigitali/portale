@@ -39,6 +39,43 @@ define( 'DB_CHARSET', 'utf8mb4' );
 /** Il tipo di Collazione del Database. Da non modificare se non si ha idea di cosa sia. */
 define('DB_COLLATE', '');
 
+
+
+
+
+/**#@+
+
+/** Nome Ambiente */
+define( 'AMBIENTE_APPLICATIVO', 'locale' );
+/** Nome Ambiente Collaudo */
+//define( 'AMBIENTE_APPLICATIVO', 'collaudo' );
+/** Nome Ambiente Esercizio */
+//define( 'AMBIENTE_APPLICATIVO', 'esercizio' );
+
+define('SOAP_CLIENT_AUTH_SW_LOCALE','http://192.168.254.159:8080/MagazziniDigitaliServices/services/AuthenticationSoftwarePort?wsdl');
+
+// define('SOAP_CLIENT_AUTH_SW_COLLAUDO','http://192.168.254.159:8080/MagazziniDigitaliServices/services/AuthenticationSoftwarePort?wsdl');
+
+// define('SOAP_CLIENT_AUTH_SW_ESERCIZIO','http://localhost:8080/MagazziniDigitaliServices/services/AuthenticationSoftwarePort?wsdl');
+
+define('SOAP_CLIENT_AUTH_CHK_LOCALE','http://192.168.254.159:8080/MagazziniDigitaliServices/services/CheckMDPort?wsdl');
+
+// define('SOAP_CLIENT_AUTH_CHK_COLLAUDO','http://192.168.254.159:8080/MagazziniDigitaliServices/services/CheckMDPort?wsdl');
+
+// define('SOAP_CLIENT_AUTH_CHK_ESERCIZIO','http://localhost:8080/MagazziniDigitaliServices/services/CheckMDPort?wsdl');
+
+define('SOAP_CLIENT_INI_S_LOCALE','http://192.168.254.159:8080/MagazziniDigitaliServices/services/InitSendMDPort?wsdl');
+
+// define('SOAP_CLIENT_INI_S_COLLAUDO','http://192.168.254.159:8080/MagazziniDigitaliServices/services/InitSendMDPort?wsdl');
+
+// define('SOAP_CLIENT_INI_S_ESERCIZIO','http://localhost/MagazziniDigitaliServices/services/InitSendMDPort?wsdl');
+
+define('SOAP_CLIENT_END_S_LOCALE','http://192.168.254.159:8080/MagazziniDigitaliServices/services/EndSendMDPort?wsdl');
+
+// define('SOAP_CLIENT_END_S_COLLAUDO','http://192.168.254.159:8080/MagazziniDigitaliServices/services/EndSendMDPort?wsdl');
+
+// define('SOAP_CLIENT_END_S_ESERCIZIO','http://localhost/MagazziniDigitaliServices/services/EndSendMDPort?wsdl');
+
 /**#@+
  * Chiavi Univoche di Autenticazione e di Salatura.
  *
