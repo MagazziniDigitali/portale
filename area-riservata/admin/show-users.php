@@ -70,7 +70,7 @@
 
         }
 
-        echo "<script>window.location.href = '/local/area-riservata/'</script>";
+        echo "<script>window.location.href = '/area-riservata/'</script>";
 
       } elseif (isset($_POST['password']) && $_POST['password'] != ''){
 
