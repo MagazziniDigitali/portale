@@ -116,13 +116,13 @@ function redirect_if_logged_in(){
 
    
     if($_SESSION['role'] == 'superadmin') {
-        header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "area-riservata/admin/");
+        header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/area-riservata/admin/");
         die();
     } elseif($_SESSION['role'] == 'admin_istituzione') {
-        header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "area-riservata/istituzione/");
+        header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/area-riservata/istituzione/");
         die();
     } elseif($_SESSION['role'] == 'user_istituzione') {
-        header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "area-riservata/user/");
+        header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/area-riservata/user/");
         die();
     }
     
