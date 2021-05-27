@@ -31,6 +31,7 @@
     if($currentUser == 'admin_istituzione'){
         do_logout();
     } else {
-        header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/local/" . "area-riservata/");
+        //header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/local/" . "area-riservata/");
+        header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/area-riservata/");
     }
 ?>

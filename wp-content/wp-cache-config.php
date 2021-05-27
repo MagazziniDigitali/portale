@@ -7,7 +7,7 @@ See wp-cache.php for author details.
 
 $dismiss_readable_warning = 1;
 $cache_page_secret = '97143a2c8fff7b25c9a4321ae9b49cca';
-$wp_cache_home_path = '/local/';
+$wp_cache_home_path = '';
 $wp_cache_slash_check = 1;
 $cache_time_interval = 600;
 if ( ! defined('WPCACHEHOME') )

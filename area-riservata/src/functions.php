@@ -105,7 +105,7 @@ function estimate_progressive($dbMD){
 
 function redirect_if_not_logged_in(){
     if (!$_SESSION['role']){
-        header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/local/" . "area-riservata/login");
+        header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/area-riservata/login");
         die();
     }
 }
@@ -116,13 +116,13 @@ function redirect_if_logged_in(){
 
    
     if($_SESSION['role'] == 'superadmin') {
-        header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/local/" . "area-riservata/admin/");
+        header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "area-riservata/admin/");
         die();
     } elseif($_SESSION['role'] == 'admin_istituzione') {
-        header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/local/" . "area-riservata/istituzione/");
+        header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "area-riservata/istituzione/");
         die();
     } elseif($_SESSION['role'] == 'user_istituzione') {
-        header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/local/" . "area-riservata/user/");
+        header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "area-riservata/user/");
         die();
     }
     
@@ -294,12 +294,12 @@ function do_login($dbMD, $user){
         if ($stickyBit == '-F'){
 
             $encryptedUUID = encrypt_string($userID);
-            header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/local/" . "area-riservata/first-access?token=" . $encryptedUUID);
+            header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/area-riservata/first-access?token=" . $encryptedUUID);
             exit();
             
         } else {
 
-            header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/local/" . "area-riservata/admin/");
+            header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/area-riservata/admin/");
             exit();
             
         }
@@ -311,12 +311,12 @@ function do_login($dbMD, $user){
         if ($stickyBit == '-F'){
 
             $encryptedUUID = encrypt_string($userID);
-            header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/local/" . "area-riservata/first-access?token=" . $encryptedUUID);
+            header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/area-riservata/first-access?token=" . $encryptedUUID);
             exit();
             
         } else {
 
-            header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/local/" . "area-riservata/istituzione/");
+            header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/area-riservata/istituzione/");
             exit();
 
         }
@@ -328,12 +328,12 @@ function do_login($dbMD, $user){
         if ($stickyBit == '-F'){
 
             $encryptedUUID = encrypt_string($userID);
-            header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/local/" . "area-riservata/first-access?token=" . $encryptedUUID);
+            header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/area-riservata/first-access?token=" . $encryptedUUID);
             exit();
             
         } else {
 
-            header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/local/" . "area-riservata/user/");
+            header("Location: " . "http://" . $_SERVER['HTTP_HOST'] .  "/area-riservata/user/");
             exit();
             
         }
@@ -355,7 +355,7 @@ function do_logout(){
         );
     }
     
-    header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/local/" . "area-riservata/login");
+    header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/area-riservata/login");
 
 }
 

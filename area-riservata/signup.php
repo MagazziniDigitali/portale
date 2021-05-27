@@ -83,7 +83,7 @@
             $encryptedUuid = encrypt_string($uuid);
             send_confirmation_email_to_institution($utenteCognome, $utenteNome, $utenteEmail, $encryptedUuid);
 
-            header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/local/" . "area-riservata/istituzione/signup-success");
+            header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/area-riservata/istituzione/signup-success");
             die();
 
         }

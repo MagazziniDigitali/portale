@@ -46,7 +46,8 @@
           
                         }
                         
-                        header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/local/" . "area-riservata/login");
+                    //    header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/local/" . "area-riservata/login");
+                    header("Location: " . "http://" . $_SERVER['HTTP_HOST'] .  "/area-riservata/login");
                         exit();
 
                     } else {
