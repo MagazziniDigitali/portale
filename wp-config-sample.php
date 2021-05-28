@@ -20,22 +20,36 @@
 
 // ** Impostazioni MySQL - È possibile ottenere queste informazioni dal proprio fornitore di hosting ** //
 /** Il nome del database di WordPress */
-define('DB_NAME', 'nome_del_database_qui');
+define('WP_CACHE', true);
+define( 'WPCACHEHOME', '/var/www/html/local/wp-content/plugins/wp-super-cache/' );
+define( 'DB_NAME', 'new_bncf' );
 
 /** Nome utente del database MySQL */
-define('DB_USER', 'nome_utente_qui');
+define( 'DB_USER', 'newuser' );
 
 /** Password del database MySQL */
-define('DB_PASSWORD', 'password_qui');
+define( 'DB_PASSWORD', 'password' );
 
 /** Hostname MySQL  */
-define('DB_HOST', 'localhost');
+define( 'DB_HOST', 'localhost' );
 
 /** Charset del Database da utilizzare nella creazione delle tabelle. */
-define('DB_CHARSET', 'utf8');
+define( 'DB_CHARSET', 'utf8mb4' );
 
 /** Il tipo di Collazione del Database. Da non modificare se non si ha idea di cosa sia. */
 define('DB_COLLATE', '');
+
+
+
+$ambiente = getenv('AMBIENTE_APPLICATIVO'); // Get Il Nome Del AMBIENTE  \r\n"
+if($ambiente =="local")
+	require("wp-config-local.php");
+else if($ambiente =="collaudo")
+	require("wp-config-collaudo.php");
+else if($ambiente =="esercizio")
+	require("wp-config-esercizio.php");
+
+
 
 /**#@+
  * Chiavi Univoche di Autenticazione e di Salatura.
@@ -46,14 +60,14 @@ define('DB_COLLATE', '');
  *
  * @since 2.6.0
  */
-define('AUTH_KEY',         'Mettere la vostra frase unica qui');
-define('SECURE_AUTH_KEY',  'Mettere la vostra frase unica qui');
-define('LOGGED_IN_KEY',    'Mettere la vostra frase unica qui');
-define('NONCE_KEY',        'Mettere la vostra frase unica qui');
-define('AUTH_SALT',        'Mettere la vostra frase unica qui');
-define('SECURE_AUTH_SALT', 'Mettere la vostra frase unica qui');
-define('LOGGED_IN_SALT',   'Mettere la vostra frase unica qui');
-define('NONCE_SALT',       'Mettere la vostra frase unica qui');
+define( 'AUTH_KEY',         '-BGfwASFM+wGD#Yo*5_Fz@d$ ONeR^@!>v!Q5dH5$(t0T{Hn}0&Wu38vn:k/IRl~' );
+define( 'SECURE_AUTH_KEY',  '`E<l#_:OtP)zsLbtR0*ibe>SL`=mb3[S%%%hZ1PdI9n-8N2jeI@r_-:w92ZF*N@%' );
+define( 'LOGGED_IN_KEY',    'mptTf`Y:hs7/2m7r:U{`upNGk#Sn<;&(323J`1;^CL.[@UH6O8!g7/hw9IP`h}Tj' );
+define( 'NONCE_KEY',        '!A<q,Ib1APOgYA%f8+R4Cn#U1l/scboNV/(Dx7S(Wt!|Wxz2{[1:Kc>O}f0.vr>E' );
+define( 'AUTH_SALT',        'Q.(}.5aaU]sy2bRVS/<T7~%;4WlUppL`;LpL,! vI/=->Cpt7Tl>al5KU#`n;Y6b' );
+define( 'SECURE_AUTH_SALT', 'MyxF+/1*(JP|HB5T#%Mlt=Q-I-n%M?uQ>+|In91JuD8DXBs:n6I>jrRS<h!JIp]Z' );
+define( 'LOGGED_IN_SALT',   'T0X(U0GmD8{,5+!n#^;BF}U(6kewSvaeGP7%XWQ?2Z>85kIK[ }R{fvAhjG!F ]d' );
+define( 'NONCE_SALT',       '93uGXv6Za1=6BiVN=~=?ObC1QuFnr%*@ke$0wDsI@Azj(Z_UK,52-xU-nsz*Vw+A' );
 
 /**#@-*/
 
@@ -78,7 +92,7 @@ $table_prefix = 'wp_';
  *
  * @link https://wordpress.org/support/article/debugging-in-wordpress/
  */
-define('WP_DEBUG', false);
+define('WP_DEBUG', true);
 
 /* Finito, interrompere le modifiche! Buon blogging. */
 
@@ -87,4 +101,6 @@ if ( !defined('ABSPATH') )
 	define('ABSPATH', dirname(__FILE__) . '/');
 
 /** Imposta le variabili di WordPress ed include i file. */
-require_once(ABSPATH . 'wp-settings.php');
+require_once(ABSPATH . 'wp-settings.php');	
+
+define('FS_METHOD','direct');
