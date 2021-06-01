@@ -827,7 +827,11 @@ function insert_new_istituzione($dbMD, $uuidIstituzione, $nomeLogin, $password, 
         'IP_AUTORIZZATI'        => '*.*.*.*.'
         )
     );
-
+    if ($insertIstituzione == 1){
+    if (!file_exists($pathTmp)) {
+        mkdir($pathTmp, 0777, true);
+      }
+    }
     return $insertIstituzione;
 
 }

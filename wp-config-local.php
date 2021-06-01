@@ -19,16 +19,16 @@ define( 'DB_PASSWORD_MD', 'password' );
 
 
 /** Database NBN locale**/
-define( 'DB_HOST_MD', 'localhost' );
-define( 'DB_NAME_MD', 'md' );
-define( 'DB_USER_MD', 'newuser' );
-define( 'DB_PASSWORD_MD', 'password' );
+define( 'DB_HOST_NBN', 'localhost' );
+define( 'DB_NAME_NBN', 'nbn' );
+define( 'DB_USER_NBN', 'newuser' );
+define( 'DB_PASSWORD_NBN', 'password' );
 
 
 
 /** Database Harvest locale**/
 define( 'DB_HOST_HARVEST', 'localhost' );
-define( 'DB_NAME_HARVEST', 'md' );
+define( 'DB_NAME_HARVEST', 'harvest' );
 define( 'DB_USER_HARVEST', 'newuser' );
 define( 'DB_PASSWORD_HARVEST', 'password' );
 
