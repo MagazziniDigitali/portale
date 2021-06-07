@@ -207,8 +207,9 @@ function select_gestore($dbMD, $idIstituzione){
 }
 
 function retrieve_sid(){
-
-    $md_env = apache_getenv('MD_ENVIRONMENT');
+//getenv ==> da testare
+$md_env =getenv('AMBIENTE_APPLICATIVO');
+   // $md_env = apache_getenv('MD_ENVIRONMENT');
 
     if ($md_env == 'collaudo') {
 
@@ -829,7 +830,7 @@ function insert_new_istituzione($dbMD, $uuidIstituzione, $nomeLogin, $password, 
     );
     if ($insertIstituzione == 1){
     if (!file_exists($pathTmp)) {
-        mkdir($pathTmp, 0777, true);
+        mkdir($pathTmp, 0774, true);
       }
     }
     return $insertIstituzione;

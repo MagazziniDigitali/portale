@@ -1,6 +1,7 @@
 <?php
-   require("../../wp-load.php");;
-   require("../src/functions.php");
+   include_once("../../wp-load.php");
+   include_once("../src/functions.php");
+
 
          if(!isset($_SESSION)) 
     { 
@@ -45,10 +46,27 @@
       </div>
 
       <div id="signupServices">
-         <h5>Registra l'istituzione ai servizi <a href="signup-services#tesiDottorato">Tesi di Dottorato</a>, <a href="signup-services#eJournal">e-Journal</a>, <a href="signup-services#eBook">e-Book</a></h5>
+         <h5>Registra l'istituzione ai servizi:</h5>
+         <div class="row">
+          <div class="col-md-12"><input style="background: cadetblue;" name="gotosignupTesiDottorato" type="button" value="Tesi di Dottorato" class="mt-3 float-left" onclick="location.href='signup-services#tesiDottorato';" /></div>
+          <div class="col-md-12"><input style="background: cadetblue;" name="gotosignupEJournal" type="button" value="e-Journal" class="mt-3 float-left" onclick="location.href='signup-services#eJournal';" /></div>
+          <div class="col-md-12"><input style="background: cadetblue;" name="gotosignupEBook" type="button" value="e-Book" class="mt-3 float-left" onclick="location.href='signup-services#eBook';" /></div>
+          </div>
+           <!-- <a  href="signup-services#tesiDottorato">Tesi di Dottorato</a>, <a href="signup-services#eJournal">e-Journal</a>, <a href="signup-services#eBook">e-Book</a> -->
       </div>
+      
+      <div id="showServicies">
+         <h5>Servizi registrati</h5>
+      <?php
+$_isviewonly=true;
+ include_once("signup-services.php");
+ ?>
+   </div>
+
    </div>
 </section>
+
+
       
 <?php }
     get_footer(); 

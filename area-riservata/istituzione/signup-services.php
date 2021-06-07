@@ -1,6 +1,6 @@
 <?php
-  require("../../wp-load.php");;
-  require("../src/functions.php");
+  include_once("../../wp-load.php");;
+  include_once("../src/functions.php");
 
         if(!isset($_SESSION)) 
     { 
@@ -20,6 +20,11 @@
   
   $loginIstituzione   = $istituzione[0]->LOGIN;
   $nomeIstituzione    = $istituzione[0]->NOME;
+
+  if(!isset($_isviewonly)) 
+  { 
+    $_isviewonly=false; 
+  } 
 
   $tesiServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'td');
   $journalServizioAttivo  = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'ej');
@@ -475,9 +480,10 @@
 <section>
   <div class="container">
 
-    <div id="tesiDottorato">
+    <!-- <div id="tesiDottorato">
 
       <?php if (empty($tesiServizioAttivo)) {  ?>
+        <?php if (!$_isviewonly) { ?>
 
         <h5>Registra l'istituzione al servizio di Tesi di Dottorato</h5>
 
@@ -541,7 +547,7 @@
             <div class="col-md-12"><input name="signupTesiDottorato" type="submit" value="Registra" class="mt-3 float-right"/></div>
           </div>
         </form>
-
+        <?php } ?>
         <?php } else { ?>
 
         <h5>Sei già iscritto al servizio di Tesi di Dottorato</h5>
@@ -629,8 +635,183 @@
         <?php } ?>
 
       <?php } ?>
-    </div>
+    </div> -->
 
+
+
+
+ <div id="tesiDottorato">
+    <?php if ((!$_isviewonly)&&(empty($tesiServizioAttivo))) { ?>
+    <div id="tesi" class="mb-5">
+
+        <h5>Registra l'istituzione al servizio Tesi di Dottorato</h5>
+        
+        <?php if(isset($alertTesi)) { ?>
+            <div class='alert alert-warning'><?php echo $alertTesi ?></div>
+        <?php } ?>
+        <form action="" method="post">
+          <div class="row">
+            <div class="col-md-6">
+              <label for="tesiNomeDatasource">Nome Datasource</label>
+              <input type="text" name="tesiNomeDatasource" required id="tesiNomeDatasource">
+            </div>
+            <div class="col-md-6">
+              <label for="tesiUrlOai">URL sito OAI</label>
+              <input type="text" name="tesiUrlOai" required id="tesiUrlOai">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <label for="tesiContatti">Contatti</label>
+              <input type="text" name="tesiContatti" required id="tesiContatti">
+            </div>
+            <div class="col-md-6">
+              <label for="tesiFormatMetadati">Format dei metadati</label>
+              <input type="text" name="tesiFormatMetadati" required id="tesiFormatMetadati">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <label for="tesiSetMetadati">Set dei metadati</label>
+              <input type="text" name="tesiSetMetadati" required id="tesiSetMetadati">
+            </div>
+            <div class="col-md-6">
+              <label for="tesiUtenzaEmbargo">Utenza per accesso embargo</label>
+              <input type="text" name="tesiUtenzaEmbargo" id="tesiUtenzaEmbargo">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <label for="tesiPwdEmbargo">Password per accesso embargo</label>
+              <input type="text" name="tesiPwdEmbargo" id="tesiPwdEmbargo">
+            </div>
+            <div class="col-md-6">
+              <label for="tesiUserApiNBN">User per API NBN</label>
+              <input type="text" name="tesiUserApiNBN" required id="tesiUserApiNBN">
+            </div>
+          </div>
+          <div class="row"> 
+            <div class="col-md-6">
+              <label for="tesiPwdApiNBN">Password per API NBN</label>
+              <input type="text" name="tesiPwdApiNBN" required id="tesiPwdApiNBN">
+            </div>
+            <div class="col-md-6">
+              <label for="tesiIpApiNBN">IP per API NBN</label>
+              <input type="text" name="tesiIpApiNBN" required id="tesiIpApiNBN">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12"><input name="signupTesiDottorato" type="submit" value="Registra" class="mt-3 float-right"/></div>
+          </div>
+        </form>            
+    </div>
+    <?php } ?>
+    
+    <?php if (!empty($tesiServizioAttivo)) { ?>
+      <div id="infotesi">
+
+        <h5>Tesi di Dottorato già inseriti</h5>
+
+        <?php foreach($tesiAll as $key=>$results) {
+          $nomeDatasource     = $results->agent_name;
+          $url                = $results->baseurl;
+          $contatti           = $results->harvest_contact;
+          $format             = $results->harvest_format;
+          $set                = $results->harvest_set;
+          $userEmbargo        = $results->harvest_userEmbargo;
+          $pwdEmbargo         = $results->harvest_pwdEmbargo;
+          $userNBN            = $results->user;
+          $pwdNBN             = $results->pass;
+          $ipNBN              = $results->IP;
+          $idSubNamespace     = $results->subNamespaceID;
+          $idDatasource       = $results->datasourceID;
+        ?>
+              
+          <div class="card">            
+            <div class="card-header" id="heading<?php echo $key ?>">
+                
+              <button class="btn" data-toggle="collapse" data-target="#collapse<?php echo $key ?>" aria-expanded="false" aria-controls="collapse<?php echo $key ?>">
+                <h5 class="m-0"><?php echo $nomeDatasource ?></h5>
+              </button>
+                
+            </div>
+
+            <div id="collapse<?php echo $key ?>" class="collapse" aria-labelledby="heading<?php echo $key ?>">
+              <div class="card-body">
+                <form action="" method="post">
+                <input type="hidden" name="idSubNamespace" value="<?php echo $idSubNamespace ?>">
+                <input type="hidden" name="idDatasource" value="<?php echo $idDatasource ?>">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label for="nomeDatasource">Nome Datasource</label>
+                      <input name="nomeDatasource" value="<?php echo $nomeDatasource ?>" type="text">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="url">URL sito OAI</label>
+                      <input name="url" value="<?php echo $url ?>" type="text">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label for="contatti">Contatti</label>
+                      <input name="contatti" value="<?php echo $contatti ?>" type="text">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="format">Format dei metadati</label>
+                      <input name="format" value="<?php echo $format ?>" type="text">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label for="set">Set dei metadati</label>
+                      <input name="set" value="<?php echo $set ?>" type="text">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="userEmbargo">Utenza per accesso embargo</label>
+                      <input name="userEmbargo" value="<?php echo $userEmbargo ?>" type="text">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label for="pwdEmbargo">Password per accesso embargo</label>
+                      <input name="pwdEmbargo" value="<?php echo $pwdEmbargo ?>" type="text">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="userNBN">User per API NBN</label>
+                      <input name="userNBN" value="<?php echo $userNBN ?>" type="text">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label for="pwdNBN">Password per API NBN</label>
+                      <input name="pwdNBN" value="<?php echo $pwdNBN ?>" type="text">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="ipNBN">IP per API NBN</label>
+                      <input name="ipNBN" value="<?php echo $ipNBN ?>" type="text">
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-12"><input type="submit" name="modificatesi" value="Modifica" class="mt-3 float-right"></div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+        <?php } ?>
+      </div>
+    <?php } ?>
+
+
+
+
+
+
+
+    <?php if (!$_isviewonly) { ?>
     <div id="eJournal" class="mb-5">
 
         <h5>Registra l'istituzione al servizio e-Journal</h5>
@@ -684,6 +865,7 @@
           </div>
         </form>            
     </div>
+    <?php } ?>
     
     <?php if (!empty($journalServizioAttivo)) { ?>
       <div id="infoJournal">
@@ -783,7 +965,7 @@
         <?php } ?>
       </div>
     <?php } ?>
-
+    <?php if (!$_isviewonly) { ?>
     <div id="eBook" class="mb-5">
       <h5>Registra l'istituzione al servizio e-Book</h5>
       <?php if(isset($alertBook)) { ?>
@@ -822,6 +1004,7 @@
         </div>
       </form>
     </div>
+    <?php } ?>
 
     <?php if (!empty($bookServizioAttivo)) { ?>
       <div id="infoBook">
