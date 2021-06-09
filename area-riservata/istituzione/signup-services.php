@@ -638,7 +638,11 @@
     </div> -->
 
 
+    <?php if ($_isviewonly) { ?>
 
+       <h5>Servizi registrati:</h5>
+
+       <?php } ?>
 
  <div id="tesiDottorato">
     <?php if ((!$_isviewonly)&&(empty($tesiServizioAttivo))) { ?>
@@ -731,13 +735,13 @@
           <div class="card">            
             <div class="card-header" id="heading<?php echo $key ?>">
                 
-              <button class="btn" data-toggle="collapse" data-target="#collapse<?php echo $key ?>" aria-expanded="false" aria-controls="collapse<?php echo $key ?>">
+              <button class="btn" data-toggle="collapse" data-target="#collapse_tesi<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_tesi<?php echo $key ?>">
                 <h5 class="m-0"><?php echo $nomeDatasource ?></h5>
               </button>
                 
             </div>
 
-            <div id="collapse<?php echo $key ?>" class="collapse" aria-labelledby="heading<?php echo $key ?>">
+            <div id="collapse_tesi<?php echo $key ?>" class="collapse" aria-labelledby="heading<?php echo $key ?>">
               <div class="card-body">
                 <form action="" method="post">
                 <input type="hidden" name="idSubNamespace" value="<?php echo $idSubNamespace ?>">
@@ -892,13 +896,13 @@
           <div class="card">            
             <div class="card-header" id="heading<?php echo $key ?>">
                 
-              <button class="btn" data-toggle="collapse" data-target="#collapse<?php echo $key ?>" aria-expanded="false" aria-controls="collapse<?php echo $key ?>">
+              <button class="btn" data-toggle="collapse" data-target="#collapse_journal<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_journal<?php echo $key ?>">
                 <h5 class="m-0"><?php echo $nomeDatasource ?></h5>
               </button>
                 
             </div>
 
-            <div id="collapse<?php echo $key ?>" class="collapse" aria-labelledby="heading<?php echo $key ?>">
+            <div id="collapse_journal<?php echo $key ?>" class="collapse" aria-labelledby="heading<?php echo $key ?>">
               <div class="card-body">
                 <form action="" method="post">
                 <input type="hidden" name="idSubNamespace" value="<?php echo $idSubNamespace ?>">
@@ -1021,11 +1025,11 @@
           ?>
         <div class="card">
           <div class="card-header" id="heading<?php echo $keyBook ?>">
-            <button class="btn" data-toggle="collapse" data-target="#collapse<?php echo $keyBook ?>" aria-expanded="false" aria-controls="collapse<?php echo $keyBook ?>">
+            <button class="btn" data-toggle="collapse" data-target="#collapse_Book<?php echo $keyBook ?>" aria-expanded="false" aria-controls="collapse_Book<?php echo $keyBook ?>">
               <h5 class="m-0"><?php echo $nomeDatasourceBook ?></h5>
             </button>
           </div>
-          <div id="collapse<?php echo $keyBook ?>" class="collapse" aria-labelledby="heading<?php echo $keyBook ?>">
+          <div id="collapse_Book<?php echo $keyBook ?>" class="collapse" aria-labelledby="heading<?php echo $keyBook ?>">
             <div class="card-body">
 
             <?php if(isset($alertBookModify)) { ?>
@@ -1076,8 +1080,9 @@
 </section>
     
 <?php
-  
-  get_footer(); 
-
+   if (!$_isviewonly)
+   {
+     get_footer(); 
+   }
 }
 ?>
