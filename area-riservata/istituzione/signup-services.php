@@ -712,10 +712,15 @@
     </div>
     <?php } ?>
     
+
+    <?php if (!empty($tesiServizioAttivo)||!empty($journalServizioAttivo)||!empty($bookServizioAttivo)) { ?>
+  <h4>Servizi: </h4>
+  <?php } ?>
+
     <?php if (!empty($tesiServizioAttivo)) { ?>
       <div id="infotesi">
 
-        <h5>Tesi di Dottorato già inseriti</h5>
+        <h5>Tesi di Dottorato </h5>
 
         <?php foreach($tesiAll as $key=>$results) {
           $nomeDatasource     = $results->agent_name;
@@ -874,7 +879,7 @@
     <?php if (!empty($journalServizioAttivo)) { ?>
       <div id="infoJournal">
 
-        <h5>e-Journal già inseriti</h5>
+        <h5>e-Journal </h5>
 
         <?php foreach($journalAll as $key=>$results) {
 
@@ -1012,7 +1017,7 @@
 
     <?php if (!empty($bookServizioAttivo)) { ?>
       <div id="infoBook">
-        <h5>e-Book già inseriti</h5>
+        <h5>e-Book </h5>
         <?php foreach($bookAll as $keyBook=>$results) {
           $nomeDatasourceBook     = $results->agent_name;
           $urlBook                = $results->baseurl;

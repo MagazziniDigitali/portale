@@ -11,7 +11,9 @@
    
    if($_SESSION['role'] == 'superadmin'){
 
-      $dbMD = connect_to_md();
+      $dbMD       = connect_to_md();
+      $dbNBN      = connect_to_nbn();
+      $dbHarvest  = connect_to_harvest();
       
       $pendingPreReg = check_istituzioni_to_be_approved($dbMD);
 
@@ -58,7 +60,7 @@
          </div>
 
          <div id="showAllUser">
-            <h5>Lista utenti</h5>
+            <h5>Lista Istituzioni</h5>
             <?php include("show-users.php"); ?>
          </div>
       </div>

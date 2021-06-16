@@ -1196,10 +1196,13 @@ function retrieve_id_datasource($dbNBN, $subnamespaceID, $servizioAbilitato) {
 
     $result             = $dbNBN->get_results($prepareQuery);
 
-    $datasourceID       = $result[0]->datasourceID;
+    if($result){
+        $datasourceID       = $result[0]->datasourceID;
+        return $datasourceID;
+    }
 
-    return $datasourceID;
-
+    return $result;
+    
 }
 
 function retrieve_id_datasource_for_istituzione($dbNBN, $nomeDatasource, $subnamespaceID, $url) {
