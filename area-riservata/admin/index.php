@@ -45,7 +45,7 @@
 
                   <?php } else { ?> 
 
-                     <h5>Ci sono <?php echo $pendingPreReg ?> richieste di registrazione da approvare</h5>
+                     <h5>Lista richieste di registrazione da approvare:  <?php echo $pendingPreReg ?> </h5>
                   
                      <?php include("approve-signup.php"); ?>
 
@@ -54,13 +54,13 @@
                <?php } ?>
          </div>
 
-         <div id="addUser">
+         <!-- <div id="addUser">
             <h5>Aggiungi un utente</h5>
-            <?php include("add-user.php"); ?>
-         </div>
+            <?php //include("add-user.php"); ?>
+         </div> -->
 
          <div id="showAllUser">
-            <h5>Lista Istituzioni</h5>
+            <h5>Lista Istituzioni:</h5>
             <?php include("show-users.php"); ?>
          </div>
       </div>

@@ -1127,6 +1127,23 @@ function update_datasource_nbn($dbNBN, $loginIstituzione, $nomeIstituzione, $nom
 
     return $query;
 }
+function update_datasource_nbn_mod($dbNBN, $nomeDatasource, $url, $subnamespaceID, $idDatasource){ // add by Hassan
+      
+    $query = $dbNBN->update(
+      'datasource',
+      array(
+        'datasourceName'        => $nomeDatasource,
+        'baseurl'               => $url,
+      ),
+      array(
+        'subNamespaceID'        => $subnamespaceID,
+        'datasourceID'          => $idDatasource
+
+      )
+    );
+
+    return $query;
+}
 
 function insert_into_nbn_agent($dbNBN, $nomeDatasource, $urlOai, $userApiNBN, $pwdApiNBN, $ipApiNBN, $idDatasource, $subnamespaceID, $servizioAbilitato){
 
@@ -1170,6 +1187,27 @@ function update_agent_nbn($dbNBN, $loginIstituzione, $nomeIstituzione, $nomeData
     
 }
 
+function update_agent_nbn_mod($dbNBN, $nomeDatasource, $url, $userNBN, $pwdNBN, $ipNBN, $servizioAbilitato, $subnamespaceID, $idDatasource){  // add by Hassan
+
+    $query = $dbNBN->update(
+      'agent',
+      array(
+        'agent_name'        => $nomeDatasource,
+        'baseurl'           => $url,
+        'user'              => $userNBN,
+        'pass'              => $pwdNBN,
+        'IP'                => $ipNBN
+      ),
+      array(
+        'subNamespaceID'    => $subnamespaceID,
+        'datasourceID'      => $idDatasource,
+        'materiale'         => $servizioAbilitato
+      )
+    );
+
+    return $query;
+    
+}
 
 function insert_into_md_servizi($dbMD, $idIstituzione, $servizioAbilitato){
 
@@ -1267,6 +1305,30 @@ function update_anagrafe_harvest($dbHarvest, $uuidIstituzione, $loginIstituzione
     return $query;
 }
 
+
+
+function update_anagrafe_harvest_mod($dbHarvest, $uuidIstituzione, $loginIstituzione, $nomeDatasource, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $url, $servizioAbilitato, $idDatasource){ // add by Hassan
+
+    $query = $dbHarvest->update(
+      'anagrafe',
+      array(
+        'harvest_contact'           => $contatti,
+        'harvest_format'            => $format,
+        'harvest_set'               => $set,
+        'harvest_userEmbargo'       => $userEmbargo,
+        'harvest_pwdEmbargo'        => $pwdEmbargo,
+        'harvest_name'              => $loginIstituzione,
+        'harvest_url'               => $url
+      ),
+      array(
+        'id_istituzione'            => $uuidIstituzione,
+        'id_datasource'             => $idDatasource,
+        'harvest_materiale'         => $servizioAbilitato
+      )
+    );
+
+    return $query;
+}
 function check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, $servizioAbilitato){
 
     $prepareQuery       = $dbMD->prepare("SELECT * FROM MDServizi WHERE id_istituzione='%s' AND servizio_abilitato='%s' ", $uuidIstituzione, $servizioAbilitato);
