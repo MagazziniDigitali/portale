@@ -13,7 +13,7 @@
    $allRegions = retrieve_regions($dbMD);
 
    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
+    if(isset($_POST['inserisciformSignupCustom'])) {
        $istitutoPiva = '';
        if(isset($_POST['pivaSignupCustom']) && $_POST['pivaSignupCustom'] != '') {
            $istitutoPiva = $_POST['pivaSignupCustom'];
@@ -89,6 +89,7 @@
         }
        
     }
+}
 
    get_header();
 
@@ -178,7 +179,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <input name="submit" type="submit" value="Registrati" class="mt-4 float-right"/>
+                    <input name="submit" type="submit" name="inserisciformSignupCustom" value="Registrati" class="mt-4 float-right"/>
                 </div>
             </div>
         </form>     

@@ -114,7 +114,6 @@ function redirect_if_logged_in(){
 
     if (!empty($_SESSION)) {
 
-   
     if($_SESSION['role'] == 'superadmin') {
         header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/area-riservata/admin/");
         die();
