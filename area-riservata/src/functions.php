@@ -1227,6 +1227,25 @@ function insert_into_md_servizi($dbMD, $idIstituzione, $servizioAbilitato){
 
 }
 
+function insert_into_md_MDIstituzioneImport($dbMD, $idIstituzione,$idUtente){
+
+    $selectID   = $dbMD->get_row("SELECT MAX(ID) AS 'MaximumValue' FROM MDIstituzioneImport");
+    $id         = intval($selectID->MaximumValue);
+    $id        += 1;
+
+    $insert = $dbMD->insert(
+        'MDIstituzioneImport',
+        array(
+            'ID'         => $id ,
+            'ID_Istituto'  => $idIstituzione,
+            'ID_Utente'  => $idUtente
+        )
+    );
+
+    return $insert;
+
+}
+
 function retrieve_id_datasource($dbNBN, $subnamespaceID, $servizioAbilitato) {
 
     $prepareQuery       = $dbNBN->prepare("SELECT datasourceID FROM datasource WHERE materiale='%s' AND subNamespaceID='%s' ", $servizioAbilitato, $subnamespaceID);

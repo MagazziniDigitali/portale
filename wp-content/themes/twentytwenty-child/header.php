@@ -160,6 +160,17 @@
 													
 													">Profilo</a>
 												</li>
+												<?php if ($_SESSION['role'] == 'superadmin'){ ?>
+													<li id="menu-item-C04" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-C04">
+														<a href="
+
+															/area-riservata/admin/import
+
+
+
+														">Import Istituzioni</a>
+													</li>
+												<?php } ?>
 												<?php if (($_SESSION['role'] != 'superadmin') && ($_SESSION['istituzione'] != 'istituzioneBase') && ($_SESSION['istituzione'] != '') && ($_SESSION['ebook'] == 'y')){ ?>
 												<li id="menu-item-C05" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-C05">
 													<a href="

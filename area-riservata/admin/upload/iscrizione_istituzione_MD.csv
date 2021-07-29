@@ -1,0 +1,36 @@
+#|Numero campi per struttura|Nome istituto|Indirizzo|Telefono|Nome Contatto|URL Istituto|Partita IVA o Codice Fiscale|Regione|Nome breve istituzione|Password (https://www.clavesegura.org/it/)
+#||istitutoSignupCustom|indirizzoSignupCustom|telefonoSignupCustom|nomeContattoSignupCustom|urlSignupCustom|pivaSignupCustom|regioneSignupCustom|preRegNomeLogin|preRegPassword
+ISTITUZIONE|11|Test Hassan Milano4|Via Festa del Perdono 7 - 20122 Milano|+39 02 5032 5035|Nome contatto istituzione|https://www.unimi.it/it|03064870162|9|testhassanmilano3|d~=lKbuJ|coghassan3|nomhassan4|03064870162hs|test@test2.com|
+||||||||||
+#||Cognome utente|Nome utente|E-mail||||||
+#||newUserCognome|newUserNome|newUserPassword||||||
+UTENTE|5|Amministratore|testdani5|paolatest.galimbertitest3@unimi.it|testcsv4|testcsv4|03064873153|9||
+||||||||||
+#||Valorizzare MDServizi||||||||
+#||Iscritto SI/NO|Da caricare in base dati|||||||
+ISCRITTO_SERVIZIO_NBN|4|SI|NO|||||||
+ISCRITTO_SERVIZIO_TD|4|SI|SI|||||||
+ISCRITTO_SERVIZIO_EJ|4|SI|NO|||||||
+ISCRITTO_SERVIZIO_EB|4|NO|NO|||||||
+||||||||||
+#||User per API NBN (campo nbn.agent.agent_name)|Password per API NBN|IP per API NBN||||||
+#||tesiUserApiNBN|tesiPwdApiNBN|tesiIpApiNBN||||||
+SERVIZIO_NBN||||||||||
+||||||||||
+#||Nome datasource|URL sito OAI|Contatti|Format dei metadati|Set dei metadati||||
+#||tesiNomeDatasource|tesiUrlOai|tesiContatti|tesiFormatMetadati|tesiSetMetadati||||
+SERVIZIO_TD|7|Tesi Air unimi|https://air.unimi.it/oai/request|paola.galimberti@unimi.it|didl|col_2434_146884|userEmbargo|pwdEmbargo|userNBN|pwdNBN|
+air.admin@unimi.it,laura.gioppo@unimi.it,laura.santoro1@unimi.it|didl|col_2434_146884||||
+||||||||||
+#||Nome Datasource (campo nbn.datasource.datsourceName)|URL sito OAI|Contatti|Format dei metadati|Set dei metadati||||
+#||journalNomeDatasource|journalUrlOai|journalContatti|journalFormatMetadati|journalSetMetadati||||
+SERVIZIO_EJ||||||||||
+||||||||||
+#||Nome Datasource|URL sito OAI|||||||
+#||bookNomeDatasource|bookUrlOai|||||||
+SERVIZIO_EB||||||||||
+
+
+'td'
+'ej'
+'eb'
