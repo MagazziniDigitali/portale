@@ -37,8 +37,8 @@ h4 {
 
                  //if there was an error uploading the file
              if ($_FILES["file"]["error"] > 0) {
-                 echo "Return Code: " . $_FILES["file"]["error"] . "<br />";
-     
+               //  echo "Return Code: " . $_FILES["file"]["error"] . "<br />";
+               echo "<div class='p-3 mb-2 bg-danger text-white'> No file selected </div> <br />";
              }
              else {
                 if (!file_exists(SITE_ROOT."/upload/")) {
@@ -262,15 +262,22 @@ h4 {
 }
       
       get_header();
+      
 
    ?>
+<header class="entry-header has-text-align-center header-footer-group" style="background: white;">
 
+	
+<div class="entry-header-inner section-inner medium">
+
+  <h1 class="entry-title">Import Istituzioni</h1>
+</div><!-- .entry-header-inner -->
+
+</header>
    <section>
       <div class="container">
          <p>Benvenuto <strong><?php echo $_SESSION['name'] . ' ' . $_SESSION['surname']; ?></strong></p>
-         <?php if($_SESSION['istituzione'] != 'istituzioneBase') { ?>
-            <p>Istituzione di appartenenza: <?php echo $_SESSION['istituzione'] ?></p>
-         <?php } ?>
+
 
 
 
@@ -280,75 +287,47 @@ h4 {
             <input type="submit" value="Carica File" name="UpladFile">
         </form>
 
+        <h6>
+         * i file da importare devono essere in formato csv.
+        </h6>
+      </div>
+      <div class="container">
+         <div id="showAllUser">
+            <h5>Lista Istituzioni Importate:
+            <div id="buttons" style="display: none;">
+            <button type="button" class="btn btn-outline-secondary"  onclick="" disabled >
+                   <i class="icon-remove icon-2x" title="cancella Istituto"></i>
+                  </button>  
+                  <button type="button" class="btn btn-outline-secondary"  onclick="" disabled >
+                   <i class="icon-list icon-2x" title="approva Istituto"></i>
+                  </button> 
+                  <button type="button" class="btn btn-outline-secondary"  onclick="" disabled >
+                   <i class="icon-envelope-alt icon-2x" title="invia mail al risponsabile dell'istituto"></i>
+                  </button> 
+                  </div>
+            </h5>
 
-
-
+            <?php 
+            $isImport=1; include("show-users.php"); ?>
+         </div>
       </div>
    </section>
+
       
-<div class="container">
-<h6>
-* i file da importare devono essere in formato csv.
-</h6>
-</div>
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th scope="col">Select Day</th>
-            <th scope="col">Article Name</th>
-            <th scope="col">Author</th>
-            <th scope="col">Words</th>
-            <th scope="col">Shares</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="customCheck1" checked>
-                  <label class="custom-control-label" for="customCheck1">1</label>
-              </div>
-            </td>
-            <td>Bootstrap 4 CDN and Starter Template</td>
-            <td>Cristina</td>
-            <td>913</td>
-            <td>2.846</td>
-          </tr>
-          <tr>
-            <td>
-              <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="customCheck2">
-                  <label class="custom-control-label" for="customCheck2">2</label>
-              </div>
-            </td>
-            <td>Bootstrap Grid 4 Tutorial and Examples</td>
-            <td>Cristina</td>
-            <td>1.434</td>
-            <td>3.417</td>
-          </tr>
-          <tr>
-            <td>
-              <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="customCheck3">
-                  <label class="custom-control-label" for="customCheck3">3</label>
-              </div>
-            </td>
-            <td>Bootstrap Flexbox Tutorial and Examples</td>
-            <td>Cristina</td>
-            <td>1.877</td>
-            <td>1.234</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-<!-- partial -->
 <?php 
 
     get_footer(); 
 ?>
 
+<script>
+$(".form-check-input").change(function(){
+
+  if($('input:checked').length>0)
+  {
+    $("#buttons").show();
+  }else
+  {
+      $("#buttons").hide();
+      }
+});
+</script>

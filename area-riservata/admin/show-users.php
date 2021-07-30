@@ -18,9 +18,12 @@ function PreOpeninsertUserModal(idIstituzione) {
 }
 </script>
 <?php
-
-  $uniqueIdIst = $dbMD->get_results("SELECT ID_ISTITUZIONE FROM MDUtenti WHERE SUPERADMIN <> 1 AND SUPERADMIN <> 2 GROUP BY ID_ISTITUZIONE");
-
+if(isset($isImport)&&$isImport==1){
+$uniqueIdIst = $dbMD->get_results("SELECT ID_ISTITUZIONE FROM MDUtenti WHERE SUPERADMIN <> 1 AND SUPERADMIN <> 2 and ID_ISTITUZIONE in (SELECT `ID_Istituto` FROM   `MDIstituzioneImport` where `Inviato`=0 and `Approvato`=0  GROUP BY `ID_Istituto`) GROUP BY ID_ISTITUZIONE");
+}else{ 
+  $uniqueIdIst = $dbMD->get_results("SELECT ID_ISTITUZIONE FROM MDUtenti WHERE SUPERADMIN <> 1 AND SUPERADMIN <> 2 and ID_ISTITUZIONE not in (SELECT `ID_Istituto` FROM   `MDIstituzioneImport` where `Inviato`=0 and `Approvato`=0  GROUP BY `ID_Istituto`) GROUP BY ID_ISTITUZIONE"); 
+//  $uniqueIdIst = $dbMD->get_results("SELECT ID_ISTITUZIONE FROM MDUtenti WHERE SUPERADMIN <> 1 AND SUPERADMIN <> 2 GROUP BY ID_ISTITUZIONE");
+}
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_POST['removeUser'])) {
@@ -550,25 +553,40 @@ function PreOpeninsertUserModal(idIstituzione) {
     ?>
 
     <div class="card">
-      <div class="card-header" id="heading<?php echo $key ?>">
-      
+      <div class="card-header" id="heading<?php echo $key ?>">     
+      <?php if(isset($isImport)&&$isImport==1){?>
+      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+      <?php } ?>
         <button class="btn" data-toggle="collapse" data-target="#collapse_ist<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_ist<?php echo $key ?>">
           <?php if ($loginIstLogin == 'istituzioneBase'){ ?>
               <h5 class="m-0">Utenti non appartenenti a un'istituzione</h5>
           <?php } else { ?>
               <h5 class="m-0"><?php echo $loginIstName ?></h5>
           <?php } ?>
-        </button>
-
+        </button> 
+        <?php
+if(isset($isImport)&&$isImport==1){?>
+               <button type="button" class="btn btn-outline-secondary"  onclick="" disabled >
+                   <i class="icon-remove icon-2x" title="cancella Istituto"></i>
+                  </button>  
+                  <button type="button" class="btn btn-outline-secondary"  onclick="" disabled >
+                   <i class="icon-list icon-2x" title="approva Istituto"></i>
+                  </button> 
+                  <button type="button" class="btn btn-outline-secondary"  onclick="" disabled >
+                   <i class="icon-envelope-alt icon-2x" title="invia mail al risponsabile dell'istituto"></i>
+                  </button> 
+                  <?php } ?>
       </div>
 
       <div id="collapse_ist<?php echo $key ?>" class="collapse" aria-labelledby="heading<?php echo $key ?>">
           <div class="card-body">
 
           <h4>Utenti:
+          <?php if(!isset($isImport)){ ?>
   <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#insertUserModal" onclick="PreOpeninsertUserModal('<?php echo $idIst ?>')" >
   <i class="icon-plus icon-2x" title="Aggiungi un nuovo Utente"></i>
 </button> 
+<?php } ?>
 </h4>
             <?php foreach($users as $key=>$resultsU) {
 
@@ -593,12 +611,22 @@ function PreOpeninsertUserModal(idIstituzione) {
                 
               <button class="btn" data-toggle="collapse" data-target="#collapse_utente<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_utente<?php echo $key ?>">
                 <h5 class="m-0">   <?php if ($admin == 1) { ?>
-                  <h6 class="mt-0">Gestore d'istituzione: <?php echo $login ?></h6>
+                  <h5 class="mt-0">Gestore d'istituzione: <?php echo $login ?></h5>
               <?php } else { ?>
-                  <h6 class="mt-0"><?php echo $login ?></h6>
+                  <h5 class="mt-0"><?php echo $login ?></h5>
               <?php } ?></h5>
               </button>
-                
+              <?php if(isset($isImport)&&$isImport==1){?>
+              <button type="button" class="btn btn-outline-secondary"  onclick="" disabled >
+                   <i class="icon-remove icon-2x" title="cancella Utente"></i>
+                  </button>  
+                  <button type="button" class="btn btn-outline-secondary"  onclick="" disabled >
+                   <i class="icon-list icon-2x" title="approva Utente"></i>
+                  </button> 
+                  <button type="button" class="btn btn-outline-secondary"  onclick="" disabled >
+                   <i class="icon-envelope-alt icon-2x" title="invia mail all'utente"></i>
+                  </button> 
+                  <?php } ?>
             </div>
 
             <div id="collapse_utente<?php echo $key ?>" class="collapse" aria-labelledby="heading<?php echo $key ?>">
@@ -688,9 +716,11 @@ function PreOpeninsertUserModal(idIstituzione) {
 
 
   <h4>Servizi:
+  <?php if(!isset($isImport)){ ?>
   <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#insertIstModal" onclick="PreOpenModal('<?php echo $idIst ?>', '<?php echo $loginIstLogin ?>', '<?php echo $loginIstName ?>')" >
   <i class="icon-plus icon-2x" title="Aggiungi un nuovo servizio"></i>
 </button> 
+<?php } ?>
 </h4>
 
    <?php if (!empty($tesiServizioAttivo)) { ?>

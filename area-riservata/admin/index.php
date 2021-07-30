@@ -166,7 +166,15 @@ function PreOpeninsertIstituModal(idIstituzione) {
       get_header();
 
    ?>
+<header class="entry-header has-text-align-center header-footer-group" style="background: white;">
 
+	
+<div class="entry-header-inner section-inner medium">
+
+  <h1 class="entry-title">Home SuperAdmin</h1>
+</div><!-- .entry-header-inner -->
+
+</header>
    <section>
       <div class="container">
          <p>Benvenuto <strong><?php echo $_SESSION['name'] . ' ' . $_SESSION['surname']; ?></strong></p>

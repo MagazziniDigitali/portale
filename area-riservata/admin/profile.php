@@ -91,7 +91,15 @@
       get_header();
 
 ?>
+<header class="entry-header has-text-align-center header-footer-group" style="background: white;">
 
+	
+<div class="entry-header-inner section-inner medium">
+
+  <h1 class="entry-title">Profilo SuperAdmin</h1>
+</div><!-- .entry-header-inner -->
+
+</header>
 <section>
    <div class="container">
       <form action="" method="post">
