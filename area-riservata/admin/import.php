@@ -281,7 +281,7 @@ h4 {
 
 
 
-         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" enctype="multipart/form-data">
+         <form action="" method="post" enctype="multipart/form-data">
             Seleziona un file* da caricare:
             <input type="file" accept=".csv" name="file" id="file">
             <input type="submit" value="Carica File" name="UpladFile">
