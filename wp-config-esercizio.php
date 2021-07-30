@@ -28,10 +28,10 @@ define( 'DB_PASSWORD_NBN', 'md_ese_pwd_2021' );
 
 
 /** Database Harvest Esercizio**/
-define( 'DB_HOST_MD', 'localhost' );
-define( 'DB_NAME_MD', 'harvest' );
-define( 'DB_USER_MD', 'md_ese' );
-define( 'DB_PASSWORD_MD', 'md_ese_pwd_2021' );
+define( 'DB_HOST_HARVEST', 'localhost' );
+define( 'DB_NAME_HARVEST', 'harvest' );
+define( 'DB_USER_HARVEST', 'md_ese' );
+define( 'DB_PASSWORD_HARVEST', 'md_ese_pwd_2021' );
 
  define('SOAP_CLIENT_AUTH_SW_ESERCIZIO','http://localhost:8080/MagazziniDigitaliServices/services/AuthenticationSoftwarePort?wsdl');
 
