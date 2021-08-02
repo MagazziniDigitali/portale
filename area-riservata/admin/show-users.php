@@ -555,7 +555,7 @@ $uniqueIdIst = $dbMD->get_results("SELECT ID_ISTITUZIONE FROM MDUtenti WHERE SUP
     <div class="card">
       <div class="card-header" id="heading<?php echo $key ?>">     
       <?php if(isset($isImport)&&$isImport==1){?>
-      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+      <input class="form-check-input" type="checkbox" value="" id="<?php echo $idIst ?>">
       <?php } ?>
         <button class="btn" data-toggle="collapse" data-target="#collapse_ist<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_ist<?php echo $key ?>">
           <?php if ($loginIstLogin == 'istituzioneBase'){ ?>
@@ -566,13 +566,13 @@ $uniqueIdIst = $dbMD->get_results("SELECT ID_ISTITUZIONE FROM MDUtenti WHERE SUP
         </button> 
         <?php
 if(isset($isImport)&&$isImport==1){?>
-               <button type="button" class="btn btn-outline-secondary"  onclick="" disabled >
+               <button type="button" id="<?php echo $idIst ?>" class="btn btn-outline-secondary"   disabled >
                    <i class="icon-remove icon-2x" title="cancella Istituto"></i>
                   </button>  
-                  <button type="button" class="btn btn-outline-secondary"  onclick="" disabled >
+                  <button type="button" id="<?php echo $idIst ?>" class="btn btn-outline-secondary" disabled>
                    <i class="icon-list icon-2x" title="approva Istituto"></i>
                   </button> 
-                  <button type="button" class="btn btn-outline-secondary"  onclick="" disabled >
+                  <button type="button" id="<?php echo $idIst ?>" class="btn btn-outline-secondary"  disabled>
                    <i class="icon-envelope-alt icon-2x" title="invia mail al risponsabile dell'istituto"></i>
                   </button> 
                   <?php } ?>
@@ -617,13 +617,13 @@ if(isset($isImport)&&$isImport==1){?>
               <?php } ?></h5>
               </button>
               <?php if(isset($isImport)&&$isImport==1){?>
-              <button type="button" class="btn btn-outline-secondary"  onclick="" disabled >
-                   <i class="icon-remove icon-2x" title="cancella Utente"></i>
+              <button type="button" class="btn btn-outline-secondary utente-cancella" id="<?php echo $uuid ?>" disabled >
+                   <i class="icon-remove icon-2x " title="cancella Utente"></i>
                   </button>  
-                  <button type="button" class="btn btn-outline-secondary"  onclick="" disabled >
+                  <button type="button" class="btn btn-outline-secondary utente-approva"  id="<?php echo $uuid ?>" >
                    <i class="icon-list icon-2x" title="approva Utente"></i>
                   </button> 
-                  <button type="button" class="btn btn-outline-secondary"  onclick="" disabled >
+                  <button type="button" class="btn btn-outline-secondary utente-mail"  id="<?php echo $uuid ?>" >
                    <i class="icon-envelope-alt icon-2x" title="invia mail all'utente"></i>
                   </button> 
                   <?php } ?>

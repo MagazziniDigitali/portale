@@ -162,6 +162,22 @@ function retrieve_user_by_id_istituzione($dbMD, $id){
     return $user;
 }
 
+function retrieve_amministratore_by_id_istituzione($dbMD, $id){
+
+    $preparedQuery = $dbMD->prepare("SELECT * FROM MDUtenti WHERE SUPERADMIN <> '%d' AND SUPERADMIN <> '%d' AND AMMINISTRATORE ='%d' AND ID_ISTITUZIONE='%s'  ORDER BY AMMINISTRATORE DESC", 1, 2,1, $id);
+    $user = $dbMD->get_results($preparedQuery);
+
+    return $user;
+}
+
+function retrieve_user_by_id($dbMD, $id){
+
+    $preparedQuery = $dbMD->prepare("SELECT * FROM MDUtenti WHERE SUPERADMIN <> '%d' AND SUPERADMIN <> '%d' AND ID='%s' ORDER BY AMMINISTRATORE DESC", 1, 2, $id);
+    $user = $dbMD->get_results($preparedQuery);
+
+    return $user;
+}
+
 function change_role($dbMD, $encryptedUUID, $admin){
 
     $uuidDecrypted = decrypt_string($encryptedUUID);
@@ -1007,6 +1023,34 @@ function set_email_validata_to_true($dbMD, $uuid){
     );
 }
 
+function set_email_to_true_import($dbMD, $uuid){
+
+    $inviato = 1;
+
+    $updateDB = $dbMD->update(
+        'MDIstituzioneImport',
+        array(
+            'Inviato'            => $inviato,
+        ),
+        array(
+            'ID_Utente'          => $uuid
+        )
+    );
+}
+function set_approve_to_true_import($dbMD, $uuid){
+
+    $approvato = 0;
+
+    $updateDB = $dbMD->update(
+        'MDIstituzioneImport',
+        array(
+            'Approvato'     => $approvato,
+        ),
+        array(
+            'ID_Utente'   => $uuid
+        )
+    );
+}
 function set_checkdifase_to_rejected($dbMD, $uuid){
 
     $checkidfase = 'non validata';
