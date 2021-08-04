@@ -1,17 +1,4 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<style>
-.container-tb {
-  padding: 2rem 0rem;
-}
-
-h4 {
-  margin: 2rem 0rem 1rem;
-}
-
-.table-image td, .table-image th {
-  vertical-align: middle;
-}
-</style>
 <?php
    include("../../wp-load.php");
    require("../src/functions.php");
@@ -31,6 +18,33 @@ h4 {
       $dbHarvest  = connect_to_harvest();
 
 
+      if ( isset($_POST["ApprovaUser"]) ) {
+        if(isset($_POST['argument']))
+      {
+ $_iduser=$_POST['argument'];
+
+ set_approve_to_true_import($dbMD,$_iduser);
+       }
+     }
+
+
+      if ( isset($_POST["SendMailToUser"]) ) {
+       if(isset($_POST['argument']))
+     {
+$_iduser=$_POST['argument'];
+    $_user = retrieve_user_by_id($dbMD,$_iduser );
+    $_uuid                = $_user[0]->ID;
+    $_login               = $_user[0]->LOGIN;
+    $_pwd                 = $_user[0]->PASSWORD;
+    $_cognome             = $_user[0]->COGNOME;
+    $_nome                = $_user[0]->NOME;
+    $_email               = $_user[0]->EMAIL;
+    set_email_to_true_import($dbMD,$_uuid);
+        $_encryptedUuid = encrypt_string($_uuid);
+        send_confirmation_email_to_user($_cognome, $_nome, $_email, $_encryptedUuid, $_login, $_pwd);
+      }
+    }
+
       if ( isset($_POST["UpladFile"]) ) {
 
         if ( isset($_FILES["file"])) {
@@ -38,8 +52,9 @@ h4 {
                  //if there was an error uploading the file
              if ($_FILES["file"]["error"] > 0) {
                //  echo "Return Code: " . $_FILES["file"]["error"] . "<br />";
-               echo "<div class='p-3 mb-2 bg-danger text-white'> No file selected </div> <br />";
-             }
+              // echo "<div class='p-3 mb-2 bg-danger text-white'> No file selected </div> <br />";
+            echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>No file selected.</div>";
+            }
              else {
                 if (!file_exists(SITE_ROOT."/upload/")) {
                     mkdir(SITE_ROOT."/upload/", 0777, true);
@@ -47,7 +62,8 @@ h4 {
      
                       //if file already exists
                   if (file_exists(SITE_ROOT."/upload/" . $_FILES["file"]["name"])) {
-                 echo "<div class='p-3 mb-2 bg-danger text-white'>".$_FILES["file"]["name"] . " already exists. </div> ";
+                //  echo "<div class='p-3 mb-2 bg-danger text-white'>".$_FILES["file"]["name"] . " already exists. </div> ";
+                 echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>".$_FILES["file"]["name"] . " already exists.</div>";
                   }
                   else {
                          //Store file in directory "upload" with the name of "uploaded_file.txt"
@@ -249,12 +265,15 @@ h4 {
                     }
                     
                     fclose($handle);
-                    echo "<div class='p-3 mb-2 bg-success text-white'>The file has been inserted successfully </div> <br />";
+                    // echo "<div class='p-3 mb-2 bg-success text-white'>The file has been inserted successfully </div> <br />";
+                    echo "<div class='alert alert-success alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>The file has been inserted successfully.</div>";
                  }
                  }
              }
           } else {
-                  echo "<div class='p-3 mb-2 bg-danger text-white'> No file selected </div> <br />";
+                  // echo "<div class='p-3 mb-2 bg-danger text-white'> No file selected </div> <br />";
+                  echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>No file selected.</div>";
+                  
           }
      }
       
@@ -330,4 +349,26 @@ $(".form-check-input").change(function(){
       $("#buttons").hide();
       }
 });
+$(".utente-mail").click(function(e){
+        console.log(this);
+        console.log(this.id);
+        jQuery.ajax({
+    type: "POST",
+    url: 'import.php',
+    dataType: 'json',
+    data: {SendMailToUser: 'SendMailToUser', argument: this.id},
+
+});
+    }); 
+    $(".utente-approva").click(function(e){
+        console.log(this);
+        console.log(this.id);
+        jQuery.ajax({
+    type: "POST",
+    url: 'import.php',
+    dataType: 'json',
+    data: {ApprovaUser: 'ApprovaUser', argument: this.id},
+
+});
+    }); 
 </script>
