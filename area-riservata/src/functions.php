@@ -1042,7 +1042,7 @@ function set_email_to_true_import($dbMD, $uuid){
     $updateDB = $dbMD->update(
         'MDIstituzioneImport',
         array(
-            'Inviato'            => $inviato,
+            'Inviato'            => (int)$inviato,
         ),
         array(
             'ID_Utente'          => $uuid
@@ -1056,7 +1056,7 @@ function set_approve_to_true_import($dbMD, $uuid){
     $updateDB = $dbMD->update(
         'MDIstituzioneImport',
         array(
-            'Approvato'     => $approvato,
+            'Approvato'     => (int)$approvato,
         ),
         array(
             'ID_Utente'   => $uuid
