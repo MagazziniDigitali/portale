@@ -112,7 +112,8 @@ $_iduser=$_POST['argument'];
                                         if(empty($checkLogin)){
                                 
                                             $uuidIstituzione            = generate_uuid($dbMD);
-                                            $uuidUtente                 = generate_uuid($dbMD);
+                                            $uuidUtente                 = generate_uuid($dbMD) . '-F';
+                                            // $uuidUtente                 = $uuidUtente . '-F';
                                             $admin                      = 1;
                                             $superadmin                 = 0;
                                             $preRegAltaRisoluzione      = 0;
@@ -198,14 +199,25 @@ $_iduser=$_POST['argument'];
                                         // break;//hassan
                                    //INSERT INTO MD
                                    $insertServizio     = insert_into_md_servizi($dbMD, $idIstituzione, $servizioAbilitato);
+                                   if ($insertServizio != 1)
+                                      $error = check_db_error($dbMD);
                                    $insertSubnamespace     = insert_into_nbn_subnamespace($dbNBN, $loginIstituzione, $nomeIstituzione);
-                                 $subnamespaceID         = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstituzione, $nomeIstituzione);
+                                   if ($insertSubnamespace != 1)
+                                      $error = check_db_error($dbNBN);
+                                   $subnamespaceID         = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstituzione, $nomeIstituzione);
                                    $insertDatasource     = insert_into_nbn_datasource($dbNBN, $nomeDatasource, $url, $subnamespaceID, $servizioAbilitato);
-                                 $idDatasource           = retrieve_id_datasource_for_istituzione($dbNBN, $nomeDatasource, $subnamespaceID, $url);
-                                 $insertAgent            = insert_into_nbn_agent($dbNBN, $nomeDatasource, $url, $userNBN, $pwdNBN, $ipNBN, $idDatasource, $subnamespaceID, $servizioAbilitato);
+                                   if ($insertDatasource != 1)
+                                    $error = check_db_error($dbNBN);
+
+                                  $idDatasource = retrieve_id_datasource_for_istituzione($dbNBN, $nomeDatasource, $subnamespaceID, $url);
+                                  $insertAgent            = insert_into_nbn_agent($dbNBN, $nomeDatasource, $url, $userNBN, $pwdNBN, $ipNBN, $idDatasource, $subnamespaceID, $servizioAbilitato);
+                                  if ($insertAgent != 1)
+                                    $error = check_db_error($dbNBN);
                                  //INSERT INTO HARVEST
                                  $insertAnagrafe         = insert_into_harvest_anagrafe($dbHarvest, $idIstituzione, $idDatasource, $loginIstituzione, $url, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $servizioAbilitato);
-                                      break;
+                                 if ($insertAnagrafe != 1)
+                                 $error = check_db_error($dbHarvest);
+                                   break;
                                      case "SERVIZIO_EJ":
                                         $num_campi	     = $row[1];
                                         $nomeDatasource  = $row[2];
@@ -213,23 +225,33 @@ $_iduser=$_POST['argument'];
                                         $contatti        = $row[4];
                                         $format          = $row[5];
                                         $set             = $row[6];
-                                        $userEmbargo     = $row[7];
-                                        $pwdEmbargo      = $row[8];
+                                        $userEmbargo     = null; //$row[7];
+                                        $pwdEmbargo      = null; //$row[8];
                                         $userNBN         = $row[9];
                                         $pwdNBN          = $row[10];
                                         $servizioAbilitato='ej';
                                         $ipNBN            = '*.*.*.*';
-                                        break;//hassan
+                                        // break;//hassan
                                    //INSERT INTO MD
                                    $insertServizio     = insert_into_md_servizi($dbMD, $idIstituzione, $servizioAbilitato);
+                                   if ($insertServizio != 1)
+                                      $error = check_db_error($dbMD);
                                    $insertSubnamespace     = insert_into_nbn_subnamespace($dbNBN, $loginIstituzione, $nomeIstituzione);
+                                   if ($insertSubnamespace != 1)
+                                      $error = check_db_error($dbNBN);
                                  $subnamespaceID         = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstituzione, $nomeIstituzione);
                                    $insertDatasource     = insert_into_nbn_datasource($dbNBN, $nomeDatasource, $url, $subnamespaceID, $servizioAbilitato);
+                                   if ($insertDatasource != 1)
+                                      $error = check_db_error($dbNBN);
                                  $idDatasource           = retrieve_id_datasource_for_istituzione($dbNBN, $nomeDatasource, $subnamespaceID, $url);
                                  $insertAgent            = insert_into_nbn_agent($dbNBN, $nomeDatasource, $url, $userNBN, $pwdNBN, $ipNBN, $idDatasource, $subnamespaceID, $servizioAbilitato);
-                                 //INSERT INTO HARVEST
+                                 if ($insertAgent != 1)
+                                   $error = check_db_error($dbNBN);
+                            //INSERT INTO HARVEST
                                  $insertAnagrafe         = insert_into_harvest_anagrafe($dbHarvest, $idIstituzione, $idDatasource, $loginIstituzione, $url, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $servizioAbilitato);
-                                      break;
+                                 if ($insertAnagrafe != 1)
+                                   $error = check_db_error($dbHarvest);
+                                 break;
 
                                      case "SERVIZIO_EB":
                                         $num_campi	     = $row[1];
@@ -238,23 +260,33 @@ $_iduser=$_POST['argument'];
                                         $contatti        = $row[4];
                                         $format          = $row[5];
                                         $set             = $row[6];
-                                        $userEmbargo     = $row[7];
-                                        $pwdEmbargo      = $row[8];
+                                        $userEmbargo     = null; //$row[7];
+                                        $pwdEmbargo      = null; //$row[8];
                                         $userNBN         = $row[9];
                                         $pwdNBN          = $row[10];
                                         $servizioAbilitato='eb';
                                         $ipNBN            = '*.*.*.*';
-                                        break; //hassan
+                                        // break; //hassan
                                    //INSERT INTO MD
                                    $insertServizio     = insert_into_md_servizi($dbMD, $idIstituzione, $servizioAbilitato);
+                                   if ($insertServizio != 1)
+                                      $error = check_db_error($dbMD);
                                    $insertSubnamespace     = insert_into_nbn_subnamespace($dbNBN, $loginIstituzione, $nomeIstituzione);
-                                 $subnamespaceID         = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstituzione, $nomeIstituzione);
+                                   if ($insertSubnamespace != 1)
+                                      $error = check_db_error($dbNBN);
+                                   $subnamespaceID         = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstituzione, $nomeIstituzione);
                                    $insertDatasource     = insert_into_nbn_datasource($dbNBN, $nomeDatasource, $url, $subnamespaceID, $servizioAbilitato);
-                                 $idDatasource           = retrieve_id_datasource_for_istituzione($dbNBN, $nomeDatasource, $subnamespaceID, $url);
-                                 $insertAgent            = insert_into_nbn_agent($dbNBN, $nomeDatasource, $url, $userNBN, $pwdNBN, $ipNBN, $idDatasource, $subnamespaceID, $servizioAbilitato);
-                                 //INSERT INTO HARVEST
+                                   if ($insertDatasource != 1)
+                                      $error = check_db_error($dbNBN);
+                                    $idDatasource           = retrieve_id_datasource_for_istituzione($dbNBN, $nomeDatasource, $subnamespaceID, $url);
+                                    $insertAgent            = insert_into_nbn_agent($dbNBN, $nomeDatasource, $url, $userNBN, $pwdNBN, $ipNBN, $idDatasource, $subnamespaceID, $servizioAbilitato);
+                                    if ($insertAgent != 1)
+                                      $error = check_db_error($dbNBN);
+                               //INSERT INTO HARVEST
                                  $insertAnagrafe         = insert_into_harvest_anagrafe($dbHarvest, $idIstituzione, $idDatasource, $loginIstituzione, $url, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $servizioAbilitato);
-                                      break;
+                                 if ($insertAnagrafe != 1)
+                                   $error = check_db_error($dbHarvest);
+                                   break;
                                           default:
                                           break;
 

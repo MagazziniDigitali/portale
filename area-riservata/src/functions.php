@@ -8,6 +8,15 @@ require 'send-email/PHPMailer.php';
 require 'send-email/SMTP.php';
 require 'mailer-parm.php';//hassan vado a includele  il modulo mailer-local per mandare le mail tramite mailtrap
 
+// function insert_check_errors($db){
+    function check_db_error($db){
+
+        $error = $db->last_error;
+        $last_query = $db->last_query;        
+    
+        return $error;
+    }
+    
 function connect_to_md(){
     //$dbMD = new wpdb('newuser','password','md','localhost');
     $dbMD = new wpdb(DB_USER_MD,DB_PASSWORD_MD,DB_NAME_MD,DB_HOST_MD);
@@ -411,6 +420,8 @@ function do_signup($dbMD, $uuid, $istitutoPiva, $istitutoPassword, $istitutoNome
 
 }
 
+
+
 function signup_insert_check_errors($dbMD){
     
     $error = $dbMD->last_error;
@@ -762,19 +773,20 @@ function insert_new_user_check_errors($dbMD){
 function insert_new_gestore_istituzione($dbMD, $uuidUtente, $nomeLogin, $password, $utenteCognome, $utenteNome, $admin, $uuidIstituzione, $utenteCodicefiscale, $utenteEmail, $superadmin, $ipAutorizzati){
 
     $pwd    = generate_sha_pwd($dbMD, $password);
-    $uuid   = $uuidUtente . '-F';
+    // $uuid   = $uuidUtente . '-F';
 
     $insertGestoreIstituzione = $dbMD->insert(
         'MDUtenti',
         array(
-        'ID'                       => $uuid,
+        // 'ID'                       => $uuid,
+        'ID'                       => $uuidUtente,
         'LOGIN'                    => $nomeLogin,
         'PASSWORD'                 => $pwd,
         'COGNOME'                  => $utenteCognome,
         'NOME'                     => $utenteNome,
         'AMMINISTRATORE'           => $admin,
         'ID_ISTITUZIONE'           => $uuidIstituzione,
-        'CODICEFISCALE'            => $utenteCodicefiscale,
+        // 'CODICEFISCALE'            => $utenteCodicefiscale,
         'EMAIL'                    => $utenteEmail,
         'SUPERADMIN'               => $superadmin,
         'IP_AUTORIZZATI'           => $ipAutorizzati
@@ -787,8 +799,8 @@ function insert_new_gestore_istituzione($dbMD, $uuidUtente, $nomeLogin, $passwor
 
 function insert_new_gestore_istituzione_check_errors($dbMD){
 
-    $error = $dbMD->print_error();
-        
+    $error = $dbMD->last_error;
+    $last_query = $dbMD->last_query;        
     $duplicate = "Duplicate entry";
 
     $cannotAddRowForeign = "Cannot add or update a child row: a foreign key constraint fails";
@@ -1039,7 +1051,7 @@ function set_email_to_true_import($dbMD, $uuid){
 }
 function set_approve_to_true_import($dbMD, $uuid){
 
-    $approvato = 0;
+    $approvato = 1;
 
     $updateDB = $dbMD->update(
         'MDIstituzioneImport',
@@ -1050,6 +1062,8 @@ function set_approve_to_true_import($dbMD, $uuid){
             'ID_Utente'   => $uuid
         )
     );
+    // $error = check_db_error($dbMD);
+
 }
 function set_checkdifase_to_rejected($dbMD, $uuid){
 
@@ -1735,4 +1749,41 @@ function send_change_password_email($dbMD, $nameUser, $surnameUser, $mailUser, $
     if(!$mail->send()){
         echo "Mailer Error: " . $mail->ErrorInfo;
     }
+
+
+// function insert_new_gestore_istituzione_check_errors($dbMD){
+
+//     $error = $dbMD->last_error;
+//     $last_query = $dbMD->last_query;        
+//     $duplicate = "Duplicate entry";
+
+//     $cannotAddRowForeign = "Cannot add or update a child row: a foreign key constraint fails";
+//     $uuidIstituzioneNotMatched = "FOREIGN KEY (`ID_ISTITUZIONE`) REFERENCES `MDIstituzione` (`ID`))";
+
+//     $uuidError = "'MDUtenti.PRIMARY'";
+//     $loginError = "'MDUtenti.U_MDUtenti_01'";
+//     $codiceFiscaleError = "'MDUtenti.U_MDUtenti_02'";
+
+//     if (strpos($error, $cannotAddRowForeign) !== false && strpos($error, $uuidIstituzioneNotMatched) !== false){
+//         $errorMessage = "UUID dell'Istituzione non valido";
+//         return $errorMessage;
+//     }
+//     if (strpos($error, $duplicate) !== false && strpos($error, $uuidError) !== false){
+//         $errorMessage = "UUID utente già presente";
+//         return $errorMessage;
+//     }
+//     if (strpos($error, $duplicate) !== false && strpos($error, $loginError) !== false){
+//         $errorMessage = "Nome utente già presente";
+//         return $errorMessage;
+//     }
+//     if (strpos($error, $duplicate) !== false && strpos($error, $codiceFiscaleError) !== false){
+//         $errorMessage = "Codice fiscale già presente";
+//         return $errorMessage;
+//     }
+
+//     return $error;
+    
+// }
+
+
 }
