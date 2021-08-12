@@ -13,7 +13,12 @@ require 'mailer-parm.php';//hassan vado a includele  il modulo mailer-local per 
 
         $error = $db->last_error;
         $last_query = $db->last_query;        
-    
+        $duplicate = "Duplicate entry";
+
+        // if (strpos($error, $duplicate) !== false ){
+        //     $errorMessage = "Record già presente";
+        //     return $errorMessage;
+        // }    
         return $error;
     }
     
@@ -547,7 +552,7 @@ function check_login_istituzione($dbMD, $login){
     $result = $dbMD->get_results($preparedQuery);
     foreach ($result as $value) {
         foreach ($value as $key => $val) {
-            echo $key;
+            // echo $key;
             return $val;
         }
     }
@@ -1137,10 +1142,13 @@ function check_nbn_datasourceName_exists_modify($dbNBN, $bookNomeDatasource, $da
     return $resultCount;
 }
 
-function retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstituzione, $nomeIstituzione) {
+function retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstituzione) { // , $nomeIstituzione
 
-    $prepareQuery       = $dbNBN->prepare("SELECT subNamespaceID FROM `subnamespace` WHERE subNamespace='%s' AND inst_name='%s' ", $loginIstituzione, $nomeIstituzione);
+    $prepareQuery       = $dbNBN->prepare("SELECT subNamespaceID FROM `subnamespace` WHERE subNamespace='%s'  ", $loginIstituzione); // AND inst_name='%s', $nomeIstituzione
     $result             = $dbNBN->get_results($prepareQuery);
+
+    // $error = $dbNBN->last_error;
+    // $last_query = $dbNBN->last_query;        
 
     if($result){
         $subnamespaceID     = $result[0]->subNamespaceID;
@@ -1305,30 +1313,57 @@ function insert_into_md_MDIstituzioneImport($dbMD, $idIstituzione,$idUtente){
 }
 
 function retrieve_id_datasource($dbNBN, $subnamespaceID, $servizioAbilitato) {
-
     $prepareQuery       = $dbNBN->prepare("SELECT datasourceID FROM datasource WHERE materiale='%s' AND subNamespaceID='%s' ", $servizioAbilitato, $subnamespaceID);
-
-    $result             = $dbNBN->get_results($prepareQuery);
-
+   $result             = $dbNBN->get_results($prepareQuery);
     if($result){
         $datasourceID       = $result[0]->datasourceID;
         return $datasourceID;
+    }
+    return $result;
+}
+
+function retrieve_id_istituzione($dbMD, $login) {
+    $prepareQuery = $dbMD->prepare("SELECT ID FROM MDIstituzione WHERE login='%s'", $login);
+    $result        = $dbMD->get_results($prepareQuery);
+    if($result){
+        return $result[0]->ID;
+    }
+    return $result;
+}
+
+
+
+function retrieve_id_agent_nbn($dbNBN, $subnamespaceID, $idDatasource) {
+
+    $prepareQuery       = $dbNBN->prepare("SELECT agentID FROM agent WHERE subNamespaceID='%s' and datasourceID='%s'", $subnamespaceID, $idDatasource);
+    $result             = $dbNBN->get_results($prepareQuery);
+
+    if($result){
+        $agentID       = $result[0]->agentID;
+        return $agentID;
     }
 
     return $result;
     
 }
 
-function retrieve_id_datasource_for_istituzione($dbNBN, $nomeDatasource, $subnamespaceID, $url) {
 
-    $prepareQuery       = $dbNBN->prepare("SELECT datasourceID FROM datasource WHERE datasourceName='%s' AND subNamespaceID='%s' AND baseurl='%s' ", $nomeDatasource, $subnamespaceID, $url);
 
+// function retrieve_id_datasource_for_istituzione($dbNBN, $nomeDatasource, $subnamespaceID, $url) {
+// Argentino 11/08/2020
+function retrieve_id_datasource_for_istituzione($dbNBN, $subnamespaceID, $url) {
+
+    // $prepareQuery       = $dbNBN->prepare("SELECT datasourceID FROM datasource WHERE datasourceName='%s' AND subNamespaceID='%s' AND baseurl='%s' ", $nomeDatasource, $subnamespaceID, $url);
+    $prepareQuery       = $dbNBN->prepare("SELECT datasourceID FROM datasource WHERE subNamespaceID='%s' AND baseurl='%s' ", $subnamespaceID, $url);
     $result             = $dbNBN->get_results($prepareQuery);
+    // $datasourceID       = $result[0]->datasourceID;
+    if($result){
+        $datasourceID       = $result[0]->datasourceID;
+        return $datasourceID;
+    }
 
-    $datasourceID       = $result[0]->datasourceID;
-
-    return $datasourceID;
-    
+    return $result;
+   
 }
 
 function insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $loginIstituzione, $urlOai, $contatti, $formatMetadati, $setMetadati, $utenzaEmbargo, $pwdEmbargo, $servizioAbilitato){
@@ -1749,41 +1784,17 @@ function send_change_password_email($dbMD, $nameUser, $surnameUser, $mailUser, $
     if(!$mail->send()){
         echo "Mailer Error: " . $mail->ErrorInfo;
     }
-
-
-// function insert_new_gestore_istituzione_check_errors($dbMD){
-
-//     $error = $dbMD->last_error;
-//     $last_query = $dbMD->last_query;        
-//     $duplicate = "Duplicate entry";
-
-//     $cannotAddRowForeign = "Cannot add or update a child row: a foreign key constraint fails";
-//     $uuidIstituzioneNotMatched = "FOREIGN KEY (`ID_ISTITUZIONE`) REFERENCES `MDIstituzione` (`ID`))";
-
-//     $uuidError = "'MDUtenti.PRIMARY'";
-//     $loginError = "'MDUtenti.U_MDUtenti_01'";
-//     $codiceFiscaleError = "'MDUtenti.U_MDUtenti_02'";
-
-//     if (strpos($error, $cannotAddRowForeign) !== false && strpos($error, $uuidIstituzioneNotMatched) !== false){
-//         $errorMessage = "UUID dell'Istituzione non valido";
-//         return $errorMessage;
-//     }
-//     if (strpos($error, $duplicate) !== false && strpos($error, $uuidError) !== false){
-//         $errorMessage = "UUID utente già presente";
-//         return $errorMessage;
-//     }
-//     if (strpos($error, $duplicate) !== false && strpos($error, $loginError) !== false){
-//         $errorMessage = "Nome utente già presente";
-//         return $errorMessage;
-//     }
-//     if (strpos($error, $duplicate) !== false && strpos($error, $codiceFiscaleError) !== false){
-//         $errorMessage = "Codice fiscale già presente";
-//         return $errorMessage;
-//     }
-
-//     return $error;
-    
-// }
-
-
 }
+
+function wh_log($log_msg)
+{
+    $log_filename = "import.log";
+    if (!file_exists($log_filename)) 
+    {
+        // create directory/folder uploads.
+        mkdir($log_filename, 0777, true);
+    }
+    $log_file_data = $log_filename.'/log_' . date('d-M-Y') . '.log';
+    // if you don't add `FILE_APPEND`, the file will be erased each time you add a log
+    file_put_contents($log_file_data, date('d-M-Y h:i:s') . " + " . $log_msg, FILE_APPEND); //  . "\n"
+} 

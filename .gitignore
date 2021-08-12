@@ -3,3 +3,5 @@ area-riservata/prova.php
 wp-config.php
 .htaccess
 *.csv
+*.save
+*.log
