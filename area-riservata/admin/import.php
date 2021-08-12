@@ -35,7 +35,11 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato)
       $insertSubnamespace     = insert_into_nbn_subnamespace($dbNBN, $g_loginIstituzione, $g_nomeIstituzione);
       if ($insertSubnamespace != 1)
           // return "errore nell'inserimento del subnamespace $g_loginIstituzione";
-          return "-->".$insertSubnamespace;
+          // return "-->".$insertSubnamespace;
+          $error = check_db_error($dbNBN);
+          if (strpos($error, "Duplicate entry") === false )
+            return "2->".$error; //"Non posso inserire dtasource '$nomeDatasource'";
+  
     }
 
     $idDatasource = retrieve_id_datasource_for_istituzione($dbNBN, $subnamespaceID, $url);
@@ -47,7 +51,7 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato)
         {
         $error = check_db_error($dbNBN);
         if (strpos($error, "Duplicate entry") === false )
-          return "-->".$error; //"Non posso inserire dtasource '$nomeDatasource'";
+          return "3->".$error; //"Non posso inserire dtasource '$nomeDatasource'";
         }
       $idDatasource = retrieve_id_datasource_for_istituzione($dbNBN, $subnamespaceID, $url);
       }
@@ -61,7 +65,7 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato)
       {
         $error = check_db_error($dbNBN);
         if (strpos($error, "Duplicate entry") === false ){
-          return "-->".$error; //"Non posso inserire l'agent in NBN";
+          return "4->".$error; //"Non posso inserire l'agent in NBN";
         }    
       }
     }
@@ -74,7 +78,7 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato)
         $error = check_db_error($dbMD);
         if (strpos($error, "Duplicate entry") === false ){
           // return "Non posso inserire il servizio servizioAbilitato nella tabella dei servizi";
-          return "-->".$error;
+          return "5->".$error;
         }    
       }
 
@@ -86,7 +90,7 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato)
         $error = check_db_error($dbHarvest);
         if (strpos($error, "Duplicate entry") === false ){
           // return "Non posso inserire il record per il servizio in harvest.anagrafe ";
-          return "-->".$error;
+          return "6->".$error;
         }    
         }
   return "";
