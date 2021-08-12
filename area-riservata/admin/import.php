@@ -225,7 +225,8 @@ $_iduser=$_POST['argument'];
                       //if file already exists
                   if (file_exists(SITE_ROOT."/upload/" . $_FILES["file"]["name"])) {
                 //  echo "<div class='p-3 mb-2 bg-danger text-white'>".$_FILES["file"]["name"] . " already exists. </div> ";
-                 echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>".$_FILES["file"]["name"] . " already exists.</div>";
+                    echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>".$_FILES["file"]["name"] . " already exists.</div>";
+                    wh_log($_FILES["file"]["name"] . " already exists.");
                   }
                   else {
                          //Store file in directory "upload" with the name of "uploaded_file.txt"
