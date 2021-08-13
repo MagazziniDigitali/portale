@@ -275,7 +275,7 @@ $_iduser=$_POST['argument'];
                                     $servizio_failed = insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, 'ej' );
                                     if ($servizio_failed)
                                     {
-                                      wh_log($WH_LOG_ERROR, "Failed to insert: ".$raw_string);  
+                                      wh_log($WH_LOG_ERROR, "Failed to insert: ". $servizio_failed ." - ".$raw_string);  
                                       $almeno_un_servizio_in_errore = 1;
                                     }
                                     break;
@@ -283,7 +283,7 @@ $_iduser=$_POST['argument'];
                                       $servizio_failed = insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, 'eb' );
                                       if ($servizio_failed)
                                       {
-                                        wh_log($WH_LOG_ERROR, "Failed to insert: ".$raw_string);  
+                                        wh_log($WH_LOG_ERROR, "Failed to insert: ". $servizio_failed ." - ".$raw_string);  
                                         $almeno_un_servizio_in_errore = 1;
                                       }
                                         break;
