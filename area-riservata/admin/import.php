@@ -68,7 +68,8 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato)
       {
         $error = check_db_error($dbNBN);
         if (strpos($error, "Duplicate entry") === false ){
-          return "4->".$error; //"Non posso inserire l'agent in NBN";
+          
+          return "4->insert_into_nbn_agent ".$error  . "$nomeDatasource, $url, $userNBN, $pwdNBN, $ipNBN, $idDatasource, $subnamespaceID, $servizioAbilitato"; 
         }    
       }
     }
