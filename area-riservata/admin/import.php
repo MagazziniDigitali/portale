@@ -29,9 +29,9 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato)
     global $WH_LOG_INFO;
  
     // return ("Inserimento servizio fallito");
-    wh_log($WH_LOG_INFO, "g_loginIstituzione = $g_loginIstituzione");
+    // wh_log($WH_LOG_INFO, "g_loginIstituzione = $g_loginIstituzione");
     $subnamespaceID  = retrieve_id_subnamespace_for_istituzione($dbNBN, $g_loginIstituzione); 
-    wh_log($WH_LOG_INFO, "subnamespaceID = $subnamespaceID");
+    // wh_log($WH_LOG_INFO, "subnamespaceID = $subnamespaceID");
     if(empty($subnamespaceID))
     {
       // echo "subnamespaceID non presente in NBN. Inserisco il subnamespace (Istituto)";
@@ -68,7 +68,7 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato)
       {
         $error = check_db_error($dbNBN);
         if (strpos($error, "Duplicate entry") === false ){
-          
+
           return "4->insert_into_nbn_agent ".$error  . "$nomeDatasource, $url, $userNBN, $pwdNBN, $ipNBN, $idDatasource, $subnamespaceID, $servizioAbilitato"; 
         }    
       }

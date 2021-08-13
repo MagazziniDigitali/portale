@@ -28,15 +28,6 @@ $LOG_LEVEL_MSG = array (
     $WH_LOG_FATAL => "->FATAL: ",
     $WH_LOG_OFF => "->OFF: ",
 );
-// $LOG_LEVEL_MSG = array (
-//     "->ALL: ",
-//     "->DEBUG: ",
-//     "->INFO: ",
-//     "->WARN: ",
-//     "->ERROR: ",
-//     "->FATAL: ",
-//     "->INFO: ",
-// );
 
 
 function wh_log($log_level, $log_msg)
@@ -70,6 +61,7 @@ function wh_set_log_level($log_level)
 
 // TESTS
 // wh_set_log_level($WH_LOG_DEBUG);
+// --------------------------------
 // 
 // wh_log($WH_LOG_DEBUG, "Message 2");
 // wh_log($WH_LOG_INFO, "Message 2");
