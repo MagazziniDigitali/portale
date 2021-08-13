@@ -2,6 +2,7 @@
 
 
 <?php
+require("../src/debug.php");
 
 $g_loginIstituzione="";
 $g_nomeIstituzione="";
@@ -25,10 +26,12 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato)
     $pwdNBN          = $row[10];
     // $servizioAbilitato='td';
     $ipNBN            = '*.*.*.*';
+    global $WH_LOG_INFO;
  
     // return ("Inserimento servizio fallito");
-
+    wh_log($WH_LOG_INFO, "g_loginIstituzione = $g_loginIstituzione");
     $subnamespaceID  = retrieve_id_subnamespace_for_istituzione($dbNBN, $g_loginIstituzione); 
+    wh_log($WH_LOG_INFO, "subnamespaceID = $subnamespaceID");
     if(empty($subnamespaceID))
     {
       // echo "subnamespaceID non presente in NBN. Inserisco il subnamespace (Istituto)";
@@ -168,6 +171,8 @@ function insert_istituzione($row, $dbMD)
    require("../src/functions.php");
    define ('SITE_ROOT', realpath(dirname(__FILE__)));
 
+  //  global $WH_LOG_ERROR;
+
          if(!isset($_SESSION)) 
     { 
         session_start(); 
@@ -230,7 +235,7 @@ $_iduser=$_POST['argument'];
                   if (file_exists(SITE_ROOT."/upload/" . $_FILES["file"]["name"])) {
                 //  echo "<div class='p-3 mb-2 bg-danger text-white'>".$_FILES["file"]["name"] . " already exists. </div> ";
                     echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>".$_FILES["file"]["name"] . " already exists.</div>";
-                    wh_log($_FILES["file"]["name"] . " already exists.");
+                    wh_log($WH_LOG_ERROR, $_FILES["file"]["name"] . " already exists.");
                   }
                   else {
                          //Store file in directory "upload" with the name of "uploaded_file.txt"
@@ -262,7 +267,7 @@ $_iduser=$_POST['argument'];
                                     $servizio_failed = insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, 'td' );
                                     if ($servizio_failed)
                                       {
-                                      wh_log("Failed to insert: ". $servizio_failed ." - " .$raw_string);  
+                                      wh_log($WH_LOG_ERROR, "Failed to insert: ". $servizio_failed ." - " .$raw_string);  
                                       $almeno_un_servizio_in_errore = 1;
                                       }
                                     break;
@@ -270,7 +275,7 @@ $_iduser=$_POST['argument'];
                                     $servizio_failed = insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, 'ej' );
                                     if ($servizio_failed)
                                     {
-                                      wh_log("Failed to insert: ".$raw_string);  
+                                      wh_log($WH_LOG_ERROR, "Failed to insert: ".$raw_string);  
                                       $almeno_un_servizio_in_errore = 1;
                                     }
                                     break;
@@ -278,7 +283,7 @@ $_iduser=$_POST['argument'];
                                       $servizio_failed = insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, 'eb' );
                                       if ($servizio_failed)
                                       {
-                                        wh_log("Failed to insert: ".$raw_string);  
+                                        wh_log($WH_LOG_ERROR, "Failed to insert: ".$raw_string);  
                                         $almeno_un_servizio_in_errore = 1;
                                       }
                                         break;
