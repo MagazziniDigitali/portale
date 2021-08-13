@@ -2,3 +2,6 @@ area-riservata/prova.php
 .vscode/*
 wp-config.php
 .htaccess
+*.csv
+*.save
+*.log

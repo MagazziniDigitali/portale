@@ -1,0 +1,34 @@
+#|Numero campi per struttura|Nome istituto|Indirizzo|Telefono|Nome Contatto|URL Istituto|Partita IVA o Codice Fiscale|Regione|Nome breve istituzione|Password (https://www.clavesegura.org/it/)|Cognome utente|Nome utente|CF|E-mail|
+ISTITUZIONE|16|Università degli Studi dell'Insubria|Via Ravasi, 2, 21100 Varese VA|+39 800 011 398|Daniela Cermesoni|https://www.uninsubria.it/|02481820120|9|uninsubria|password|cogn_unisubria|nome_uninsubria||utente@www.uninsubria.it
+
+
+#||Cognome utente|Nome utente|Codice Fiscale| E-mail
+#||newUserCognome|newUserNome|newUserPassword|userMail
+#UTENTE|6||||||
+
+
+#||Nome datasource|URL sito OAI|Contatti|Format dei metadati|Set dei metadati||||
+SERVIZIO_TD|11|Tesi uninsubria|http://insubriaspace.cineca.it/dspace-oai/request|daniela.cermesoni@uninsubria.it|didl|hdl_10277_2|||userUninsubriaNBN|pwdUninsubriaNBN
+
+
+#||Nome Datasource (campo nbn.datasource.datsourceName)|URL sito OAI|Contatti|Format dei metadati|Set dei metadati||||	
+SERVIZIO_EJ|7|uninsubria.promoitaly1|https://riviste.uninsubria.it/1/index.php/promoitaly/oai|riviste@uninsubria1|oai_dc|all|||userUninsubriaNBN1|pwdUninsubriaNBN1
+SERVIZIO_EJ|7|uninsubria.promoitaly2|https://riviste.uninsubria.it/2/index.php/promoitaly/oai|riviste@uninsubria2|oai_dc|all|||userUninsubriaNBN2|pwdUninsubriaNBN2
+	
+#||Nome Datasource|URL sito OAI|||||||	
+SERVIZIO_EB|12|Alpha-ebooks1|https://www.alpha.it/1|contatto_uninsubria1|||||userUninsubriaNBN1|pwdUninsubriaNBN1
+SERVIZIO_EB|12|Alpha-ebooks2|https://www.alpha.it/2|contatto_uninsubria2|||||userUninsubriaNBN2|pwdUninsubriaNBN2
+
+
+# Gestito contestialmente all'adesione per ognuno dei servizi
+#||User per API NBN (campo nbn.agent.agent_name)|Password per API NBN|IP per API NBN||||||
+#SERVIZIO_NBN||||||||||
+
+
+#||Valorizzare MDServizi||||||||
+#||Iscritto SI/NO|Da caricare in base dati|||||||
+# Non gestito
+#ISCRITTO_SERVIZIO_NBN|4|SI|NO|||||||
+#ISCRITTO_SERVIZIO_TD|4|SI|SI|||||||
+#ISCRITTO_SERVIZIO_EJ|4|SI|NO|||||||
+#ISCRITTO_SERVIZIO_EB|4|NO|NO|||||||
