@@ -47,19 +47,27 @@
 
       <?php
 $_isviewonly=true;
- include_once("signup-services.php");
- ?>
+include_once("signup-services.php");
   
-
+?>
+ 
+ 
       <div id="signupServices">
          <h5>Registra l'istituzione ai servizi:</h5>
          <div class="row">
+
+         <?php if (empty($tesiServizioAttivo)) { ?>
           <div class="col-md-4"><input style="background: cadetblue;" name="gotosignupTesiDottorato" type="button" value="Tesi di Dottorato" class="col-md-12 mt-3 float-left" onclick="location.href='signup-services#tesiDottorato';" /></div>
+         <?php } ?>
+
           <div class="col-md-4"><input style="background: cadetblue;" name="gotosignupEJournal" type="button" value="e-Journal" class="col-md-12 mt-3 float-left" onclick="location.href='signup-services#eJournal';" /></div>
+
           <div class="col-md-4"><input style="background: cadetblue;" name="gotosignupEBook" type="button" value="e-Book" class="col-md-12 mt-3 float-left" onclick="location.href='signup-services#eBook';" /></div>
+
           </div>
            <!-- <a  href="signup-services#tesiDottorato">Tesi di Dottorato</a>, <a href="signup-services#eJournal">e-Journal</a>, <a href="signup-services#eBook">e-Book</a> -->
       </div>
+
       
   
 

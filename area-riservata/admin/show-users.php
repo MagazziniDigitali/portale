@@ -18,13 +18,20 @@ function PreOpeninsertUserModal(idIstituzione) {
 }
 </script>
 <?php
+include_once("../istituzione/modifica-servizio.php");
+
+
 if(isset($isImport)&&$isImport==1){
 $uniqueIdIst = $dbMD->get_results("SELECT ID_ISTITUZIONE FROM MDUtenti WHERE SUPERADMIN <> 1 AND SUPERADMIN <> 2 and ID_ISTITUZIONE in (SELECT `ID_Istituto` FROM   `MDIstituzioneImport` where `Inviato`=0 and `Approvato`=0  GROUP BY `ID_Istituto`) GROUP BY ID_ISTITUZIONE");
 }else{ 
   $uniqueIdIst = $dbMD->get_results("SELECT ID_ISTITUZIONE FROM MDUtenti WHERE SUPERADMIN <> 1 AND SUPERADMIN <> 2 and ID_ISTITUZIONE not in (SELECT `ID_Istituto` FROM   `MDIstituzioneImport` where `Inviato`=0 and `Approvato`=0  GROUP BY `ID_Istituto`) GROUP BY ID_ISTITUZIONE"); 
 //  $uniqueIdIst = $dbMD->get_results("SELECT ID_ISTITUZIONE FROM MDUtenti WHERE SUPERADMIN <> 1 AND SUPERADMIN <> 2 GROUP BY ID_ISTITUZIONE");
 }
-  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+$allRegions = retrieve_regions($dbMD);
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_POST['removeUser'])) {
 
@@ -138,190 +145,23 @@ $uniqueIdIst = $dbMD->get_results("SELECT ID_ISTITUZIONE FROM MDUtenti WHERE SUP
       }
     }
  
-    if (isset($_POST['modificaTesi'])){
 
-      if (isset($_POST['nomeDatasource'])){
-        $nomeDatasource = $_POST['nomeDatasource'];
-      }
-      if (isset($_POST['url'])){
-        $url = $_POST['url'];
-      }
-      if (isset($_POST['contatti'])){
-        $contatti = $_POST['contatti'];
-      }
-      if (isset($_POST['format'])){
-        $format = $_POST['format'];
-      }
-      if (isset($_POST['set'])){
-        $set = $_POST['set'];
-      }
-      if (isset($_POST['userEmbargo'])){
-        $userEmbargo = $_POST['userEmbargo'];
-      }
-      if (isset($_POST['pwdEmbargo'])){
-        $pwdEmbargo = $_POST['pwdEmbargo'];
-      }
-      if (isset($_POST['userNBN'])){
-        $userNBN = $_POST['userNBN'];
-      }
-      if (isset($_POST['pwdNBN'])){
-        $pwdNBN = $_POST['pwdNBN'];
-      }
-      if (isset($_POST['ipNBN'])){
-        $ipNBN = $_POST['ipNBN'];
-      }
-      if (isset($_POST['idSubNamespace'])){
-        $idSubNamespace = $_POST['idSubNamespace'];
-      }
-      if (isset($_POST['idDatasource'])){
-        $idDatasource = $_POST['idDatasource'];
-      }
-      if (isset($_POST['id_Ist'])){
-        $idIst = $_POST['id_Ist'];
-      }
-      if (isset($_POST['harvest_name'])){
-        $loginIstLogin = $_POST['harvest_name'];
-      }
-      $updateDatasource   = update_datasource_nbn_mod($dbNBN, $nomeDatasource, $url, $idSubNamespace, $idDatasource);
-  
-      if ($updateDatasource == 1) {
-  
-        $updateAgent      = update_agent_nbn_mod($dbNBN, $nomeDatasource, $url, $userNBN, $pwdNBN, $ipNBN, 'td', $idSubNamespace, $idDatasource);
-  
-        if ($updateAgent  == 1){
-  
-          $updateHarvest  = update_anagrafe_harvest_mod($dbHarvest, $idIst, $loginIstLogin, $nomeDatasource, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $url, 'td', $idDatasource);
-          
-          if ($updateHarvest == 1){
-  
-            echo "<script>window.location.href = '/area-riservata/admin/'</script>";
-           // echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/istituzione/signup-services'</script>";
-  
-          }
-  
-        }
-  
-      }
-  
+    if (isset($_POST['modificaTesi'])){
+      $id_istituzione  = $_POST['id_Ist_td'];
+      $subnamespace  = $_POST['userNBN_td'];
+      modificaServizio($dbHarvest, $dbNBN, $id_istituzione, $subnamespace, 'td');
     }
   
     if (isset($_POST['modificaJournal'])){
-  
-      if (isset($_POST['nomeDatasource'])){
-        $nomeDatasource = $_POST['nomeDatasource'];
-      }
-      if (isset($_POST['url'])){
-        $url = $_POST['url'];
-      }
-      if (isset($_POST['contatti'])){
-        $contatti = $_POST['contatti'];
-      }
-      if (isset($_POST['format'])){
-        $format = $_POST['format'];
-      }
-      if (isset($_POST['set'])){
-        $set = $_POST['set'];
-      }
-      if (isset($_POST['userEmbargo'])){
-        $userEmbargo = $_POST['userEmbargo'];
-      }
-      if (isset($_POST['pwdEmbargo'])){
-        $pwdEmbargo = $_POST['pwdEmbargo'];
-      }
-      if (isset($_POST['userNBN'])){
-        $userNBN = $_POST['userNBN'];
-      }
-      if (isset($_POST['pwdNBN'])){
-        $pwdNBN = $_POST['pwdNBN'];
-      }
-      if (isset($_POST['ipNBN'])){
-        $ipNBN = $_POST['ipNBN'];
-      }
-      if (isset($_POST['idSubNamespace'])){
-        $idSubNamespace = $_POST['idSubNamespace'];
-      }
-      if (isset($_POST['idDatasource'])){
-        $idDatasource = $_POST['idDatasource'];
-      }
-      if (isset($_POST['id_Ist'])){
-        $idIst = $_POST['id_Ist'];
-      }
-      if (isset($_POST['harvest_name'])){
-        $loginIstLogin = $_POST['harvest_name'];
-      }
-  
-      $updateDatasource   = update_datasource_nbn_mod($dbNBN, $nomeDatasource, $url, $idSubNamespace, $idDatasource);
-  
-      if ($updateDatasource == 1) {
-  
-        $updateAgent      = update_agent_nbn_mod($dbNBN, $nomeDatasource, $url, $userNBN, $pwdNBN, $ipNBN, 'ej', $idSubNamespace, $idDatasource);
-  
-        if ($updateAgent == 1){
-  
-          $updateHarvest  = update_anagrafe_harvest_mod($dbHarvest, $idIst, $loginIstLogin, $nomeDatasource, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $url, 'ej', $idDatasource);
-          
-          if ($updateHarvest == 1){
-  
-            echo "<script>window.location.href = '/area-riservata/admin/'</script>";
-           // echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/istituzione/signup-services'</script>";
-  
-          }
-  
-        }
-  
-      }
-  
+      $id_istituzione  = $_POST['id_Ist_ej'];
+      $subnamespace  = $_POST['userNBN_ej'];
+      modificaServizio($dbHarvest, $dbNBN, $id_istituzione, $subnamespace, 'ej');
     }
   
     if (isset($_POST['modificaBook'])){
-  
-      if (isset($_POST['nomeDatasourceBook'])){
-        $nomeDatasourceBook = $_POST['nomeDatasourceBook'];
-      }
-      if (isset($_POST['urlBook'])){
-        $urlBook = $_POST['urlBook'];
-      }
-      if (isset($_POST['userNBNBook'])){
-        $userNBNBook = $_POST['userNBNBook'];
-      }
-      if (isset($_POST['pwdNBNBook'])){
-        $pwdNBNBook = $_POST['pwdNBNBook'];
-      }
-      if (isset($_POST['ipNBNBook'])){
-        $ipNBNBook = $_POST['ipNBNBook'];
-      }
-      if (isset($_POST['idSubNamespaceBook'])){
-        $idSubNamespaceBook = $_POST['idSubNamespaceBook'];
-      }
-      if (isset($_POST['idDatasourceBook'])){
-        $idDatasourceBook = $_POST['idDatasourceBook'];
-      }
-  
-      $checkNameDatasource = check_nbn_datasourceName_exists_modify($dbNBN, $nomeDatasourceBook, $idDatasourceBook);
-  
-      if ($checkNameDatasource == 0) {
-  
-        $updateDatasource   = update_datasource_nbn_mod($dbNBN, $nomeDatasourceBook, $urlBook, $idSubNamespaceBook, $idDatasourceBook);
-  
-        if ($updateDatasource == 1) {
-  
-          $updateAgent      = update_agent_nbn_mod($dbNBN, $nomeDatasourceBook, $urlBook, $userNBNBook, $pwdNBNBook, $ipNBNBook, 'eb', $idSubNamespaceBook, $idDatasourceBook);
-  
-          if ($updateAgent == 1){
-  
-            echo "<script>window.location.href = '/area-riservata/admin/'</script>";
-          //  echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/istituzione/signup-services'</script>";
-  
-          }
-  
-        }
-  
-      } else {
-  
-        $alertBookModify = 'Nome Datasource già in uso';
-        
-      }
-  
+      $id_istituzione  = $_POST['id_Ist_eb'];
+      $subnamespace  = $_POST['userNBN_eb'];
+      modificaServizio($dbHarvest, $dbNBN, $id_istituzione, $subnamespace, 'eb');
     }
 
 
@@ -527,20 +367,17 @@ $uniqueIdIst = $dbMD->get_results("SELECT ID_ISTITUZIONE FROM MDUtenti WHERE SUP
 
     $subnamespaceID = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstLogin, $loginIstName);
     $idDatasource   = retrieve_id_datasource($dbNBN, $subnamespaceID, 'ej');
-
     if($idDatasource){
       $journalAll   = select_agent_ngn_and_anagrafe_harvest($dbNBN, $dbHarvest, 'ej', $subnamespaceID, $idDatasource);
       }
-    
   }
 
   if (!empty($bookServizioAttivo)) {
-
     $subnamespaceID = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstLogin, $loginIstName);
     $idDatasource   = retrieve_id_datasource($dbNBN, $subnamespaceID, 'eb');
-
     if($idDatasource){
-      $bookAll      = select_agent_ngn($dbNBN, 'eb', $subnamespaceID);
+      // $bookAll      = select_agent_ngn($dbNBN, 'eb', $subnamespaceID);
+      $bookAll      = select_agent_ngn_and_anagrafe_harvest($dbNBN, $dbHarvest, 'eb', $subnamespaceID, $idDatasource);
       }
     
   }
@@ -729,27 +566,27 @@ if(isset($isImport)&&$isImport==1){?>
         <h5>Tesi di Dottorato </h5>
 
         <?php foreach($tesiAll as $key=>$results) {
-          $nomeDatasource     = $results->agent_name;
-          $url                = $results->baseurl;
-          $contatti           = $results->harvest_contact;
-          $format             = $results->harvest_format;
-          $set                = $results->harvest_set;
-          $userEmbargo        = $results->harvest_userEmbargo;
-          $pwdEmbargo         = $results->harvest_pwdEmbargo;
-          $userNBN            = $results->user;
-          $pwdNBN             = $results->pass;
-          $ipNBN              = $results->IP;
-          $idSubNamespace     = $results->subNamespaceID;
-          $idDatasource       = $results->datasourceID;
-          $id_Ist             = $results->id_istituzione;
-          $harvest_name       = $results->harvest_name;
+          $nomeDatasource_td     = $results->agent_name;
+          $url_td                = $results->baseurl;
+          $contatti_td           = $results->harvest_contact;
+          $format_td             = $results->harvest_format;
+          $set_td                = $results->harvest_set;
+          $userEmbargo_td        = $results->harvest_userEmbargo;
+          $pwdEmbargo_td         = $results->harvest_pwdEmbargo;
+          $userNBN_td            = $results->user;
+          $pwdNBN_td             = $results->pass;
+          $ipNBN_td              = $results->IP;
+          $idSubNamespace_td     = $results->subNamespaceID;
+          $idDatasource_td       = $results->datasourceID;
+          $id_Ist_td             = $results->id_istituzione;
+          $harvest_name_td       = $results->harvest_name;
         ?>
               
           <div class="card">            
             <div class="card-header" id="heading<?php echo $key ?>">
                 
               <button class="btn" data-toggle="collapse" data-target="#collapse_tesi<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_tesi<?php echo $key ?>">
-                <h5 class="m-0"><?php echo $nomeDatasource ?></h5>
+                <h5 class="m-0"><?php echo $nomeDatasource_td ?></h5>
               </button>
                 
             </div>
@@ -757,58 +594,62 @@ if(isset($isImport)&&$isImport==1){?>
             <div id="collapse_tesi<?php echo $key ?>" class="collapse" aria-labelledby="heading<?php echo $key ?>">
               <div class="card-body">
                 <form action="" method="post">
-                <input type="hidden" name="idSubNamespace" value="<?php echo $idSubNamespace ?>">
-                <input type="hidden" name="idDatasource" value="<?php echo $idDatasource ?>">
-                <input type="hidden" name="id_Ist" value="<?php echo $id_Ist ?>">
-                <input type="hidden" name="harvest_name" value="<?php echo $harvest_name ?>">
+                
+                <input type="hidden" name="idSubNamespace_td" value="<?php echo $idSubNamespace_td ?>">
+                <input type="hidden" name="idDatasource_td" value="<?php echo $idDatasource_td ?>">
+                <input type="hidden" name="id_Ist_td" value="<?php echo $id_Ist_td ?>">
+                <input type="hidden" name="harvest_name_td" value="<?php echo $harvest_name_td ?>">
+
+
+
                   <div class="row">
                     <div class="col-md-6">
-                      <label for="nomeDatasource">Nome Datasource</label>
-                      <input name="nomeDatasource" value="<?php echo $nomeDatasource ?>" type="text">
+                      <label for="nomeDatasource_td">Nome Datasource</label>
+                      <input name="nomeDatasource_td" value="<?php echo $nomeDatasource_td ?>" type="text">
                     </div>
                     <div class="col-md-6">
-                      <label for="url">URL sito OAI</label>
-                      <input name="url" value="<?php echo $url ?>" type="text">
+                      <label for="url_td">URL sito OAI</label>
+                      <input name="url_td" value="<?php echo $url_td ?>" type="text">
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-6">
-                      <label for="contatti">Contatti</label>
-                      <input name="contatti" value="<?php echo $contatti ?>" type="text">
+                      <label for="contatti_td">Contatti</label>
+                      <input name="contatti_td" value="<?php echo $contatti_td ?>" type="text">
                     </div>
                     <div class="col-md-6">
-                      <label for="format">Format dei metadati</label>
-                      <input name="format" value="<?php echo $format ?>" type="text">
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <label for="set">Set dei metadati</label>
-                      <input name="set" value="<?php echo $set ?>" type="text">
-                    </div>
-                    <div class="col-md-6">
-                      <label for="userEmbargo">Utenza per accesso embargo</label>
-                      <input name="userEmbargo" value="<?php echo $userEmbargo ?>" type="text">
+                      <label for="format_td">Format dei metadati</label>
+                      <input name="format_td" value="<?php echo $format_td ?>" type="text">
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-6">
-                      <label for="pwdEmbargo">Password per accesso embargo</label>
-                      <input name="pwdEmbargo" value="<?php echo $pwdEmbargo ?>" type="text">
+                      <label for="set_td">Set dei metadati</label>
+                      <input name="set_td" value="<?php echo $set_td ?>" type="text">
                     </div>
                     <div class="col-md-6">
-                      <label for="userNBN">User per API NBN</label>
-                      <input name="userNBN" value="<?php echo $userNBN ?>" type="text">
+                      <label for="userEmbargo_td">Utenza per accesso embargo</label>
+                      <input name="userEmbargo_td" value="<?php echo $userEmbargo_td ?>" type="text">
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-6">
-                      <label for="pwdNBN">Password per API NBN</label>
-                      <input name="pwdNBN" value="<?php echo $pwdNBN ?>" type="text">
+                      <label for="pwdEmbargo_td">Password per accesso embargo</label>
+                      <input name="pwdEmbargo_td" value="<?php echo $pwdEmbargo_td ?>" type="text">
                     </div>
                     <div class="col-md-6">
-                      <label for="ipNBN">IP per API NBN</label>
-                      <input name="ipNBN" value="<?php echo $ipNBN ?>" type="text">
+                      <label for="userNBN_td">User per API NBN</label>
+                      <input name="userNBN_td" value="<?php echo $userNBN_td ?>" type="text">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label for="pwdNBN_td">Password per API NBN</label>
+                      <input name="pwdNBN_td" value="<?php echo $pwdNBN_td ?>" type="text">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="ipNBN_td">IP per API NBN</label>
+                      <input name="ipNBN_td" value="<?php echo $ipNBN_td ?>" type="text">
                     </div>
                   </div>
 
@@ -831,26 +672,27 @@ if(isset($isImport)&&$isImport==1){?>
 
         <?php foreach($journalAll as $key=>$results) {
 
-          $nomeDatasource     = $results->agent_name;
-          $url                = $results->baseurl;
-          $contatti           = $results->harvest_contact;
-          $format             = $results->harvest_format;
-          $set                = $results->harvest_set;
-          $userEmbargo        = $results->harvest_userEmbargo;
-          $pwdEmbargo         = $results->harvest_pwdEmbargo;
-          $userNBN            = $results->user;
-          $pwdNBN             = $results->pass;
-          $ipNBN              = $results->IP;
-          $idSubNamespace     = $results->subNamespaceID;
-          $idDatasource       = $results->datasourceID;
-
+          $nomeDatasource_ej     = $results->agent_name;
+          $url_ej                = $results->baseurl;
+          $contatti_ej           = $results->harvest_contact;
+          $format_ej             = $results->harvest_format;
+          $set_ej                = $results->harvest_set;
+          $userEmbargo_ej        = $results->harvest_userEmbargo;
+          $pwdEmbargo_ej         = $results->harvest_pwdEmbargo;
+          $userNBN_ej            = $results->user;
+          $pwdNBN_ej             = $results->pass;
+          $ipNBN_ej              = $results->IP;
+          $idSubNamespace_ej     = $results->subNamespaceID;
+          $idDatasource_ej       = $results->datasourceID;
+          $id_Ist_ej          = $results->id_istituzione;
+          $harvest_name_ej    = $results->harvest_name;
         ?>
               
           <div class="card">            
             <div class="card-header" id="heading<?php echo $key ?>">
                 
               <button class="btn" data-toggle="collapse" data-target="#collapse_journal<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_journal<?php echo $key ?>">
-                <h5 class="m-0"><?php echo $nomeDatasource ?></h5>
+                <h5 class="m-0"><?php echo $nomeDatasource_ej ?></h5>
               </button>
                 
             </div>
@@ -858,58 +700,58 @@ if(isset($isImport)&&$isImport==1){?>
             <div id="collapse_journal<?php echo $key ?>" class="collapse" aria-labelledby="heading<?php echo $key ?>">
               <div class="card-body">
                 <form action="" method="post">
-                <input type="hidden" name="idSubNamespace" value="<?php echo $idSubNamespace ?>">
-                <input type="hidden" name="idDatasource" value="<?php echo $idDatasource ?>">
-                <input type="hidden" name="id_Ist" value="<?php echo $id_Ist ?>">
-                <input type="hidden" name="harvest_name" value="<?php echo $harvest_name ?>">
+                <input type="hidden" name="idSubNamespace_ej" value="<?php echo $idSubNamespace_ej ?>">
+                <input type="hidden" name="idDatasource_ej" value="<?php echo $idDatasource_ej ?>">
+                <input type="hidden" name="id_Ist_ej" value="<?php echo $id_Ist_ej ?>">
+                <input type="hidden" name="harvest_name_ej" value="<?php echo $harvest_name_ej ?>">
                   <div class="row">
                     <div class="col-md-6">
-                      <label for="nomeDatasource">Nome Datasource</label>
-                      <input name="nomeDatasource" value="<?php echo $nomeDatasource ?>" type="text">
+                      <label for="nomeDatasource_ej">Nome Datasource</label>
+                      <input name="nomeDatasource_ej" value="<?php echo $nomeDatasource_ej ?>" type="text">
                     </div>
                     <div class="col-md-6">
-                      <label for="url">URL sito OAI</label>
-                      <input name="url" value="<?php echo $url ?>" type="text">
+                      <label for="url_ej">URL sito OAI</label>
+                      <input name="url_ej" value="<?php echo $url_ej ?>" type="text">
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-6">
-                      <label for="contatti">Contatti</label>
-                      <input name="contatti" value="<?php echo $contatti ?>" type="text">
+                      <label for="contatti_ej">Contatti</label>
+                      <input name="contatti_ej" value="<?php echo $contatti_ej ?>" type="text">
                     </div>
                     <div class="col-md-6">
-                      <label for="format">Format dei metadati</label>
-                      <input name="format" value="<?php echo $format ?>" type="text">
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <label for="set">Set dei metadati</label>
-                      <input name="set" value="<?php echo $set ?>" type="text">
-                    </div>
-                    <div class="col-md-6">
-                      <label for="userEmbargo">Utenza per accesso embargo</label>
-                      <input name="userEmbargo" value="<?php echo $userEmbargo ?>" type="text">
+                      <label for="format_ej">Format dei metadati</label>
+                      <input name="format_ej" value="<?php echo $format_ej ?>" type="text">
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-6">
-                      <label for="pwdEmbargo">Password per accesso embargo</label>
-                      <input name="pwdEmbargo" value="<?php echo $pwdEmbargo ?>" type="text">
+                      <label for="set_ej">Set dei metadati</label>
+                      <input name="set_ej" value="<?php echo $set_ej ?>" type="text">
                     </div>
                     <div class="col-md-6">
-                      <label for="userNBN">User per API NBN</label>
-                      <input name="userNBN" value="<?php echo $userNBN ?>" type="text">
+                      <label for="userEmbargo_ej">Utenza per accesso embargo</label>
+                      <input name="userEmbargo_ej" value="<?php echo $userEmbargo_ej ?>" type="text">
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-6">
-                      <label for="pwdNBN">Password per API NBN</label>
-                      <input name="pwdNBN" value="<?php echo $pwdNBN ?>" type="text">
+                      <label for="pwdEmbargo_ej">Password per accesso embargo</label>
+                      <input name="pwdEmbargo_ej" value="<?php echo $pwdEmbargo_ej ?>" type="text">
                     </div>
                     <div class="col-md-6">
-                      <label for="ipNBN">IP per API NBN</label>
-                      <input name="ipNBN" value="<?php echo $ipNBN ?>" type="text">
+                      <label for="userNBN_ej">User per API NBN</label>
+                      <input name="userNBN_ej" value="<?php echo $userNBN_ej ?>" type="text">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label for="pwdNBN_ej">Password per API NBN</label>
+                      <input name="pwdNBN_ej" value="<?php echo $pwdNBN_ej ?>" type="text">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="ipNBN_ej">IP per API NBN</label>
+                      <input name="ipNBN_ej" value="<?php echo $ipNBN_ej ?>" type="text">
                     </div>
                   </div>
 
@@ -930,19 +772,21 @@ if(isset($isImport)&&$isImport==1){?>
       <div id="infoBook">
         <h5>e-Book </h5>
         <?php foreach($bookAll as $keyBook=>$results) {
-          $nomeDatasourceBook     = $results->agent_name;
-          $urlBook                = $results->baseurl;
-          $userNBNBook            = $results->user;
-          $pwdNBNBook             = $results->pass;
-          $ipNBNBook              = $results->IP;
-          $idSubNamespaceBook     = $results->subNamespaceID;
-          $idDatasourceBook       = $results->datasourceID;
-          
-          ?>
+          $nomeDatasource_eb     = $results->agent_name;
+          $url_eb                = $results->baseurl;
+          $userNBN_eb            = $results->user;
+          $pwdNBN_eb             = $results->pass;
+          $ipNBN_eb              = $results->IP;
+          $idSubNamespace_eb  = $results->subNamespaceID;
+          $idDatasource_eb    = $results->datasourceID;
+          $id_Ist_eb              = $results->id_istituzione;
+          $harvest_name_eb        = $results->harvest_name;
+        ?>
+
         <div class="card">
           <div class="card-header" id="heading<?php echo $keyBook ?>">
             <button class="btn" data-toggle="collapse" data-target="#collapse_Book<?php echo $keyBook ?>" aria-expanded="false" aria-controls="collapse_Book<?php echo $keyBook ?>">
-              <h5 class="m-0"><?php echo $nomeDatasourceBook ?></h5>
+              <h5 class="m-0"><?php echo $nomeDatasource_eb ?></h5>
             </button>
           </div>
           <div id="collapse_Book<?php echo $keyBook ?>" class="collapse" aria-labelledby="heading<?php echo $keyBook ?>">
@@ -953,32 +797,34 @@ if(isset($isImport)&&$isImport==1){?>
             <?php } ?>
 
               <form action="" method="post">
-                <input type="hidden" name="idSubNamespaceBook" value="<?php echo $idSubNamespaceBook ?>">
-                <input type="hidden" name="idDatasourceBook" value="<?php echo $idDatasourceBook ?>">
+                <input type="hidden" name="idSubNamespace_eb" value="<?php echo $idSubNamespace_eb ?>">
+                <input type="hidden" name="idDatasource_eb" value="<?php echo $idDatasource_eb ?>">
+                <input type="hidden" name="id_Ist_eb" value="<?php echo $id_Ist_eb ?>">
+                <input type="hidden" name="harvest_name_eb" value="<?php echo $harvest_name_eb ?>">
                 <div class="row">
                   <div class="col-md-6">
-                    <label for="nomeDatasourceBook">Nome Datasource</label>
-                    <input name="nomeDatasourceBook" value="<?php echo $nomeDatasourceBook ?>" type="text">
+                    <label for="nomeDatasource_eb">Nome Datasource</label>
+                    <input name="nomeDatasource_eb" value="<?php echo $nomeDatasource_eb ?>" type="text">
                   </div>
                   <div class="col-md-6">
-                    <label for="urlBook">URL sito OAI</label>
-                    <input name="urlBook" value="<?php echo $urlBook ?>" type="text">
+                    <label for="url_eb">URL sito OAI</label>
+                    <input name="url_eb" value="<?php echo $url_eb ?>" type="text">
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md-6">
-                    <label for="userNBNBook">User per API NBN</label>
-                    <input name="userNBNBook" value="<?php echo $userNBNBook ?>" type="text">
+                    <label for="userNBN_eb">User per API NBN</label>
+                    <input name="userNBN_eb" value="<?php echo $userNBN_eb ?>" type="text">
                   </div>
                   <div class="col-md-6">
-                    <label for="pwdNBNBook">Password per API NBN</label>
-                    <input name="pwdNBNBook" value="<?php echo $pwdNBNBook ?>" type="text">
+                    <label for="pwdNBN_eb">Password per API NBN</label>
+                    <input name="pwdNBN_eb" value="<?php echo $pwdNBN_eb ?>" type="text">
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md-6">
-                    <label for="ipNBNBook">IP per API NBN</label>
-                    <input name="ipNBNBook" value="<?php echo $ipNBNBook ?>" type="text">
+                    <label for="ipNBN_eb">IP per API NBN</label>
+                    <input name="ipNBN_eb" value="<?php echo $ipNBN_eb ?>" type="text">
                   </div>
                   <div class="col-md-6"></div>
                 </div>
