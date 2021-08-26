@@ -184,7 +184,7 @@ if ($_SESSION['role'] == 'superadmin') {
 
             <div id="showAllUser">
                 <h5>Lista Istituzioni:
-                    <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#insertIstituModal" onclick="PreOpeninsertIstituModal('<?php echo $idIst ?>')">
+                    <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#insertIstituModal" onclick="PreOpeninsertIstituModal()"> <!-- '< PreOpeninsertIstituModal(?php echo $idIst ?>')"> -->
                         <i class="icon-plus icon-2x" title="Aggiungi un nuovo Istituto"></i>
                     </button>
                 </h5>
@@ -193,7 +193,7 @@ if ($_SESSION['role'] == 'superadmin') {
         </div>
     </section>
 
-    <!-- Modal inserisci user -->
+    <!-- Modal inserisci istituto -->
     <div class="modal fade" id="insertIstituModal" tabindex="-1" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="insertIstModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">

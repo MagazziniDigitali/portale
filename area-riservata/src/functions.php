@@ -10,8 +10,8 @@ require 'mailer-parm.php';//hassan vado a includele  il modulo mailer-local per 
 
 function check_db_error($db){
 
-    $error = $db->last_error;
     $last_query = $db->last_query;        
+    $error = $db->last_error;
 
     return $error;
 }
@@ -19,18 +19,20 @@ function check_db_error($db){
 function connect_to_md(){
     //$dbMD = new wpdb('newuser','password','md','localhost');
     $dbMD = new wpdb(DB_USER_MD,DB_PASSWORD_MD,DB_NAME_MD,DB_HOST_MD);
+    // $dbMD->show_errors(true);
     return $dbMD;
 }
 
 function connect_to_harvest(){
-  //  $dbHarvest = new wpdb('newuser','password','harvest','localhost');
     $dbHarvest = new wpdb(DB_USER_HARVEST,DB_PASSWORD_HARVEST,DB_NAME_HARVEST,DB_HOST_HARVEST);
+    // $dbHarvest->show_errors(true);
     return $dbHarvest;
 }
 
 function connect_to_nbn(){
   //  $dbNBN = new wpdb('newuser','password','nbn','localhost');
     $dbNBN = new wpdb(DB_USER_NBN,DB_PASSWORD_NBN,DB_NAME_NBN,DB_HOST_NBN);
+    // $dbNBN->show_errors(true);
     return $dbNBN;
 }
 
@@ -1373,7 +1375,7 @@ function retrieve_id_datasource_for_istituzione($dbNBN, $subnamespaceID, $url) {
    
 }
 
-function insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $loginIstituzione, $urlOai, $contatti, $formatMetadati, $setMetadati, $utenzaEmbargo, $pwdEmbargo, $servizioAbilitato){
+function insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $contatti, $formatMetadati, $setMetadati, $utenzaEmbargo, $pwdEmbargo, $servizioAbilitato, $loginIstituzione, $urlOai ){
 
     $selectID   = $dbHarvest->get_row("SELECT MAX(ID) AS 'MaximumValue' FROM anagrafe");
     $id         = intval($selectID->MaximumValue);

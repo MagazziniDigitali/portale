@@ -4,7 +4,6 @@
     $result = show_istituzioni_to_be_approved($dbMD);
 
     if (isset($_POST['rejectSubmission'])) {
-
         if (isset($_POST['preRegUuid'])) {
             $preRegID = $_POST['preRegUuid'];
         }
@@ -17,14 +16,10 @@
         if (isset($_POST['preRegUtenteCognome'])) {
             $preRegUtenteCognome = $_POST['preRegUtenteCognome'];
         }
-
         reject_submission($dbMD, $preRegID, $preRegUtenteEmail, $preRegUtenteNome, $preRegUtenteCognome);
-
-        //echo "<script>window.location.href = 'http://localhost/local/area-riservata/admin/'</script>";
         echo "<script>window.location.href = '/area-riservata/admin/'</script>";
 
     } elseif (isset($_POST['acceptSubmission'])) {
-
         // Utente
         if (isset($_POST['preRegUtenteEmail'])) {
             $preRegUtenteEmail = $_POST['preRegUtenteEmail'];
@@ -38,7 +33,6 @@
         if (isset($_POST['preRegUtenteCodicefiscale'])) {
             $preRegUtenteCodicefiscale = $_POST['preRegUtenteCodicefiscale'];
         }
-
         // Istituzione
         if (isset($_POST['preRegIstituzionePiva'])) {
             $preRegIstituzionePiva = $_POST['preRegIstituzionePiva'];
@@ -98,13 +92,9 @@
         else {
             $alertPwd = "Password errata";
         }
-
         if (($preRegNomeLogin != '') && ($preRegPassword != '')) {
-
             $checkLogin = check_login_istituzione($dbMD, $preRegNomeLogin);
-            
             if($checkLogin==0){
-
                 $uuidIstituzione            = generate_uuid($dbMD);
                 $uuidUtente                 = generate_uuid($dbMD);
                 $admin                      = 1;
@@ -114,62 +104,32 @@
                 $ipAutorizzati              = '*.*.*.*';
 
                 $insertIstituzione = insert_new_istituzione($dbMD, $uuidIstituzione, $preRegNomeLogin, $preRegPassword, $preRegIstituzioneNome, $preRegIstituzioneIndirizzo, $preRegIstituzioneTelefono, $preRegIstituzioneNomeContatto, $preRegIstituzioneNote, $preRegIstituzioneUrl, $preRegIdRegione, $preRegIstituzionePiva, $preRegAltaRisoluzione);
-
                 if ($insertIstituzione != 1){
-
                     $errorIstituzione = insert_new_istituzione_check_errors($dbMD);
-
                 } else {
-
                     $insertGestoreIstituzione = insert_new_gestore_istituzione($dbMD, $uuidUtente, $preRegNomeLogin, $preRegPassword, $preRegUtenteCognome, $preRegUtenteNome, $admin, $uuidIstituzione, $preRegUtenteCodicefiscale, $preRegUtenteEmail, $superadmin, $ipAutorizzati);
-
                     if ($insertGestoreIstituzione != 1){
-
                         $errorUtente = insert_new_gestore_istituzione_check_errors($dbMD);
-
                     } else {
-
                         $uuidSoftware = generate_uuid($dbMD);
-
                         $insertSoftware = insert_new_software($dbMD, $uuidSoftware, $uuidIstituzione, $preRegNomeLogin, $preRegPassword, $preRegIstituzioneNome);
-
-
                         if ($insertGestoreIstituzione == 1){
-
                             $insertSoftwareConfig = insert_new_software_config($dbMD, $uuidSoftware, $preRegPassword, $preRegIstituzionePiva);
-
                         }
-
                     }
-
-                    
                 }
-
                 if ($insertIstituzione && $insertGestoreIstituzione){
-
                     set_checkdifase_to_approved($dbMD, $preRegUuid);
-
                     send_approved_signup_email($preRegUtenteEmail, $preRegUtenteNome, $preRegUtenteCognome, $preRegNomeLogin, $preRegPassword);
-
-                    //echo "<script>window.location.href = 'http://localhost/local/area-riservata/admin/'</script>";
                     echo "<script>window.location.href = '/area-riservata/admin/'</script>";
-
                 }
-
             } else {
-
                 $errorUtente = 'Nome per il login già in uso';
-
             }
-
-            
-
         } else {
             $errorIstituzione = "Inserire nome per il login e/o password";
         }
-
     }
-    
 ?>
 
     <div class="container">
