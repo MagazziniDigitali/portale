@@ -92,7 +92,7 @@
         <div class="row">
             <div class="col-md-6">
                 <label for="newUserIpAutorizzati">IP Autorizzati</label>
-                <input type="text" name="newUserIpAutorizzati" placeholder="Seprare gli IP con una virgola">
+                <input type="text" name="newUserIpAutorizzati" placeholder="Separare gli IP con una virgola">
             </div>
             <div class="col-md-6"></div>
         </div>

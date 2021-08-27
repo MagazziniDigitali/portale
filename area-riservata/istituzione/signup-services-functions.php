@@ -109,3 +109,42 @@ function modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzion
 } // End modifica_servizio
 
 
+
+// 26/08/2021  Argentino
+// Questo f7unziona solo in locale dove ho applicato il CASCADE sulla delete
+function rimuoviServizio($dbNBN, $dbHarvest, $servizio) // $dbMD, , $nomeIstituzione $uuidIstituzione, $loginIstituzione,  , $nomeServizio = null
+{
+  global $WH_LOG_INFO;
+
+  if (isset($_POST["userNBN_$servizio"]))
+    $userNBN = $_POST["userNBN_$servizio"];
+  if (isset($_POST["idSubNamespace_$servizio"]))
+    $idSubNamespace = $_POST["idSubNamespace_$servizio"];
+  if (isset($_POST["nomeDatasource_$servizio"]))
+    $nomeDatasource = $_POST["nomeDatasource_$servizio"];
+  if (isset($_POST["idDatasource_$servizio"]))
+    $idDatasource = $_POST["idDatasource_$servizio"];  
+
+  // Dobbiamo rimuovere dati da NBN
+  // Dobbiamo rimuovere dati da HARVEST
+  $deleteDatasource = delete_datasource($dbNBN, $dbHarvest, $idDatasource);
+  if (!$deleteDatasource)
+  {
+    $error = check_db_error($dbNBN);
+    $error = check_db_error($dbHarvest);
+
+    echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Rimozione datasource fallita per servizio '$nomeDatasource' con idDatasource $idDatasource.</div>";
+    return;
+  }
+
+  // Dobbiamo rimuovere dati da utenza apacache per la basic authentication
+  $htpasswd = new Htpasswd('../passwd/.htpasswd_nbn');
+  $ret = $htpasswd->deleteUser($userNBN);
+  wh_log($WH_LOG_INFO, "NBN apache managed basic authentication - Deleted user $userNBN ret='$ret'");
+  
+
+  wh_log($WH_LOG_INFO, "Rimuovi servizio  '$nomeDatasource' con idDatasource $idDatasource");
+  echo "<div class='alert alert-success alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Rimozione andata a buon fine per servizio '$nomeDatasource' con idDatasource $idDatasource.</div>";
+
+  
+} // End rimuoviServizio

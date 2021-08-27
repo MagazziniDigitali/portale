@@ -3,7 +3,7 @@ include_once("../../wp-load.php");;
 include_once("../src/functions.php");
 include_once("../src/Htpasswd.php");
 include_once("../src/debug.php");
-include_once("modifica-servizio.php");
+include_once("signup-services-functions.php");
 
 if (!isset($_SESSION)) {
   session_start();
@@ -41,6 +41,14 @@ if ($_SESSION['role'] == 'admin_istituzione') {
     modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzione, "ej");
   elseif (isset($_POST['modificaBook']))
     modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzione, "eb");
+
+  elseif (isset($_POST['rimuoviTesi']))
+    rimuoviServizio($dbNBN, $dbHarvest, "td"); // $uuidIstituzione, $loginIstituzione, 
+  elseif (isset($_POST['rimuoviJournal']))
+    rimuoviServizio($dbNBN, $dbHarvest, "ej");
+  elseif (isset($_POST['rimuoviBook']))
+    rimuoviServizio($dbNBN, $dbHarvest, "eb");
+
 
 
   $tesiServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'td');
@@ -396,7 +404,18 @@ if ($_SESSION['role'] == 'admin_istituzione') {
                       </div>
 
                       <div class="row">
-                        <div class="col-md-12"><input type="submit" name="modificaTesi" value="Modifica" class="mt-3 float-right"></div>
+                        <div class="col-md-12">
+
+                        <?php
+                        // 26/08/2021 Only omy dev D B for naow since I've implemented cascade on NBN db 
+                        $ambiente = getenv('AMBIENTE_APPLICATIVO'); // Get Il Nome Del AMBIENTE  \r\n
+                        if($ambiente == "local")
+                        {?>
+                          <input type="submit" name="rimuoviTesi" value="Rimuovi tesi" class="mt-3 btnRejectSub mr-3" />
+                        <?php } ?>
+  
+                        <input type="submit" name="modificaTesi" value="Modifica" class="mt-3 float-right">
+                        </div>
                       </div>
                     </form>
                   </div>
@@ -557,7 +576,17 @@ if ($_SESSION['role'] == 'admin_istituzione') {
                       </div>
 
                       <div class="row">
-                        <div class="col-md-12"><input type="submit" name="modificaJournal" value="Modifica" class="mt-3 float-right"></div>
+                        <div class="col-md-12">
+                          <?php
+                          // 26/08/2021 Only omy dev D B for naow since I've implemented cascade on NBN db 
+                          $ambiente = getenv('AMBIENTE_APPLICATIVO'); // Get Il Nome Del AMBIENTE  \r\n
+                          if($ambiente == "local")
+                          {?>
+                            <input type="submit" name="rimuoviJournal" value="Rimuovi Journal" class="mt-3 btnRejectSub mr-3" />
+                          <?php } ?>
+
+                          <input type="submit" name="modificaJournal" value="Modifica" class="mt-3 float-right">
+                        </div>
                       </div>
                     </form>
                   </div>
@@ -668,7 +697,17 @@ if ($_SESSION['role'] == 'admin_istituzione') {
                         <div class="col-md-6"></div>
                       </div>
                       <div class="row">
-                        <div class="col-md-12"><input type="submit" name="modificaBook" value="Modifica" class="mt-3 float-right"></div>
+                        <div class="col-md-12">
+                          <?php
+                          // 26/08/2021 Only omy dev D B for naow since I've implemented cascade on NBN db 
+                          $ambiente = getenv('AMBIENTE_APPLICATIVO'); // Get Il Nome Del AMBIENTE  \r\n
+                          if($ambiente == "local")
+                          {?>
+                            <input type="submit" name="rimuoviBook" value="Rimuovi e-Book" class="mt-3 btnRejectSub mr-3" />
+                          <?php } ?>
+
+                          <input type="submit" name="modificaBook" value="Modifica" class="mt-3 float-right">
+                        </div>
                       </div>
                     </form>
                   </div>

@@ -95,8 +95,9 @@ get_footer();
       $("#buttons").hide();
     }
   });
+
   $(".utente-mail").click(function(e) {
-    console.log(this);
+    console.log(this);4
     console.log(this.id);
     jQuery.ajax({
       type: "POST",
@@ -109,6 +110,7 @@ get_footer();
 
     });
   });
+
   $(".utente-approva").click(function(e) {
     console.log(this);
     console.log(this.id);

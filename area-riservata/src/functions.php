@@ -1802,3 +1802,29 @@ function send_change_password_email($dbMD, $nameUser, $surnameUser, $mailUser, $
 //    $GLOBALS['debugku'] = $sql_text; //intercept and store the sql<br/>
 //    return $sql_text; 
 // }
+
+
+function delete_datasource($dbNBN, $dbHarvest, $datasourceID){
+    //  Remove CASCADE datasource from NBN
+    $query   = $dbNBN->delete(
+        'datasource',
+        array(
+            'datasourceID'    => $datasourceID,
+        )
+    );
+    if (!$query)
+        return $query;
+
+
+    $query   = $dbHarvest->delete(
+        'anagrafe',
+        array(
+            'id_datasource'    => $datasourceID,
+        )
+    );
+
+    return $query;
+
+
+}
+

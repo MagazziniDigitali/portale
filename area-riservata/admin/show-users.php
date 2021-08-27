@@ -19,7 +19,7 @@
   }
 </script>
 <?php
-include_once("../istituzione/modifica-servizio.php");
+include_once("../istituzione/signup-services-functions.php");
 include_once("show-users-functions.php");
 
 
@@ -27,33 +27,53 @@ include_once("show-users-functions.php");
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  if (isset($_POST['removeUser']))
-    removeUser($dbMD);
-  elseif (isset($_POST['updateUser']))
-    updateUser($dbMD);
-  if (isset($_POST['modificaTesi'])) {
-    $id_istituzione  = $_POST['id_Ist_td'];
-    $subnamespace  = $_POST['userNBN_td'];
-    modificaServizio($dbHarvest, $dbNBN, $id_istituzione, $subnamespace, 'td');
-  }
-  if (isset($_POST['modificaJournal'])) {
-    $id_istituzione  = $_POST['id_Ist_ej'];
-    $subnamespace  = $_POST['userNBN_ej'];
-    modificaServizio($dbHarvest, $dbNBN, $id_istituzione, $subnamespace, 'ej');
-  }
-  if (isset($_POST['modificaBook'])) {
-    $id_istituzione  = $_POST['id_Ist_eb'];
-    $subnamespace  = $_POST['userNBN_eb'];
-    modificaServizio($dbHarvest, $dbNBN, $id_istituzione, $subnamespace, 'eb');
-  }
+
+  // ========
+  // UTENTI
   if (isset($_POST['inseriscinewUserLoginModal'])) {
     if (isset($_POST['newUserPassword']) && $_POST['newUserPassword'] != '') {
       addUser($dbMD); // , $newUserLogin
     } // End addUser
   }
-  if (isset($_POST['inserisciServizio'])) {
+  if (isset($_POST['removeUser']))
+    removeUser($dbMD);
+  elseif (isset($_POST['updateUser']))
+    updateUser($dbMD);
+
+  // ========
+  // SERVIZI
+  else if (isset($_POST['inserisciServizio']))
     inserisciServizio($dbMD, $dbNBN, $dbHarvest);
-  } // End inserisci Servizio
+  
+  else if (isset($_POST['modificaTesi'])) {
+    $id_istituzione  = $_POST['id_Ist_td'];
+    $subnamespace  = $_POST['userNBN_td'];
+    modificaServizio($dbHarvest, $dbNBN, $id_istituzione, $subnamespace, 'td');
+  }
+  else if (isset($_POST['modificaJournal'])) {
+    $id_istituzione  = $_POST['id_Ist_ej'];
+    $subnamespace  = $_POST['userNBN_ej'];
+    modificaServizio($dbHarvest, $dbNBN, $id_istituzione, $subnamespace, 'ej');
+  }
+  else if (isset($_POST['modificaBook'])) {
+    $id_istituzione  = $_POST['id_Ist_eb'];
+    $subnamespace  = $_POST['userNBN_eb'];
+    modificaServizio($dbHarvest, $dbNBN, $id_istituzione, $subnamespace, 'eb');
+  }
+  // elseif (isset($_POST['rimuoviTesi']))
+  // {
+  //   $id_istituzione  = $_POST['id_Ist_td'];
+  //   rimuoviServizio($dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzione, "td");
+  // }
+
+  elseif (isset($_POST['rimuoviTesi']))
+    rimuoviServizio($dbNBN, $dbHarvest, "td"); // $uuidIstituzione, $loginIstituzione, 
+    // echo "<div class='alert alert-warning mt-3'>FINGO di rimuovere tesi</div>";
+  elseif (isset($_POST['rimuoviJournal']))
+    rimuoviServizio($dbNBN, $dbHarvest, "ej");
+  elseif (isset($_POST['rimuoviBook']))
+    rimuoviServizio($dbNBN, $dbHarvest, "eb");
+
 
 } // End if POST
 
@@ -83,6 +103,8 @@ foreach ($uniqueIdIst as $key => $results) {
       if ($idDatasource) {
         $tesiAll        = select_agent_ngn_and_anagrafe_harvest($dbNBN, $dbHarvest, 'td', $subnamespaceID, $idDatasource);
       }
+      else
+        $tesiAll = null;
     }
     if (!empty($journalServizioAttivo)) {
       $subnamespaceID = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstLogin, $loginIstName);
@@ -90,6 +112,8 @@ foreach ($uniqueIdIst as $key => $results) {
       if ($idDatasource) {
         $journalAll   = select_agent_ngn_and_anagrafe_harvest($dbNBN, $dbHarvest, 'ej', $subnamespaceID, $idDatasource);
       }
+      else
+        $journalAll = null;
     }
     if (!empty($bookServizioAttivo)) {
       $subnamespaceID = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstLogin, $loginIstName);
@@ -97,6 +121,8 @@ foreach ($uniqueIdIst as $key => $results) {
       if ($idDatasource) {
         $bookAll      = select_agent_ngn_and_anagrafe_harvest($dbNBN, $dbHarvest, 'eb', $subnamespaceID, $idDatasource);
       }
+      else
+        $bookAll = null;
     }
     $users = retrieve_user_by_id_istituzione($dbMD, $idIst);
   } // End !empty($loginIst))
@@ -257,7 +283,7 @@ foreach ($uniqueIdIst as $key => $results) {
           <?php } ?>
         </h4>
 
-        <?php if (!empty($tesiServizioAttivo)) { ?>
+        <?php if (!empty($tesiServizioAttivo) && $tesiAll) { ?>
           <div id="infotesi">
 
             <h5>Tesi di Dottorato </h5>
@@ -351,8 +377,21 @@ foreach ($uniqueIdIst as $key => $results) {
                       </div>
 
                       <div class="row">
-                        <div class="col-md-12"><input type="submit" name="modificaTesi" value="Modifica" class="mt-3 float-right"></div>
+
+                        <div class="col-md-12">
+                        <?php
+                        // 26/08/2021 Only omy dev D B for naow since I've implemented cascade on NBN db 
+                        $ambiente = getenv('AMBIENTE_APPLICATIVO'); // Get Il Nome Del AMBIENTE  \r\n
+                        if($ambiente == "local")
+                        {?>
+                          <input type="submit" name="rimuoviTesi" value="Rimuovi tesi" class="mt-3 btnRejectSub mr-3" />
+                          <?php } ?>
+
+                          <input type="submit" name="modificaTesi" value="Modifica" class="mt-3 float-right">
+                        </div>
                       </div>
+
+
                     </form>
                   </div>
                 </div>
@@ -362,7 +401,7 @@ foreach ($uniqueIdIst as $key => $results) {
           </div>
         <?php } // End if (!empty($tesiServizioAttivo))?>
 
-        <?php if (!empty($journalServizioAttivo)) { ?>
+        <?php if (!empty($journalServizioAttivo) and $journalAll) { ?>
           <div id="infoJournal">
 
             <h5>e-Journal </h5>
@@ -453,7 +492,17 @@ foreach ($uniqueIdIst as $key => $results) {
                       </div>
 
                       <div class="row">
-                        <div class="col-md-12"><input type="submit" name="modificaJournal" value="Modifica" class="mt-3 float-right"></div>
+                        <div class="col-md-12">
+                        <?php
+                          // 26/08/2021 Only omy dev D B for naow since I've implemented cascade on NBN db 
+                          $ambiente = getenv('AMBIENTE_APPLICATIVO'); // Get Il Nome Del AMBIENTE  \r\n
+                          if($ambiente == "local")
+                          {?>
+                            <input type="submit" name="rimuoviJournal" value="Rimuovi Journal" class="mt-3 btnRejectSub mr-3" />
+                          <?php } ?>
+
+                          <input type="submit" name="modificaJournal" value="Modifica" class="mt-3 float-right">
+                          </div>
                       </div>
                     </form>
                   </div>
@@ -465,7 +514,7 @@ foreach ($uniqueIdIst as $key => $results) {
         <?php }  // End if (!empty($journalServizioAttivo))?>
 
 
-        <?php if (!empty($bookServizioAttivo)) { ?>
+        <?php if (!empty($bookServizioAttivo) && $bookAll) { ?>
           <div id="infoBook">
             <h5>e-Book </h5>
             <?php foreach ($bookAll as $keyBook => $results) {
@@ -526,7 +575,17 @@ foreach ($uniqueIdIst as $key => $results) {
                         <div class="col-md-6"></div>
                       </div>
                       <div class="row">
-                        <div class="col-md-12"><input type="submit" name="modificaBook" value="Modifica" class="mt-3 float-right"></div>
+                        <div class="col-md-12">
+                        <?php
+                          // 26/08/2021 Only omy dev D B for naow since I've implemented cascade on NBN db 
+                          $ambiente = getenv('AMBIENTE_APPLICATIVO'); // Get Il Nome Del AMBIENTE  \r\n
+                          if($ambiente == "local")
+                          {?>
+                            <input type="submit" name="rimuoviBook" value="Rimuovi e-Book" class="mt-3 btnRejectSub mr-3" />
+                          <?php } ?>
+
+                        <input type="submit" name="modificaBook" value="Modifica" class="mt-3 float-right">
+                        </div>
                       </div>
                     </form>
                   </div>
@@ -684,7 +743,7 @@ foreach ($uniqueIdIst as $key => $results) {
             <div class="row">
               <div class="col-md-6">
                 <label for="newUserIpAutorizzati">IP Autorizzati</label>
-                <input type="text" name="newUserIpAutorizzati" placeholder="Seprare gli IP con una virgola">
+                <input type="text" name="newUserIpAutorizzati" placeholder="Separare gli IP con una virgola">
               </div>
             </div>
             <!-- </form> -->
@@ -700,6 +759,23 @@ foreach ($uniqueIdIst as $key => $results) {
       </div>
     </div>
   </div>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <?php } // End foreach($uniqueIdIst 
 ?>
