@@ -8,35 +8,31 @@ require 'send-email/PHPMailer.php';
 require 'send-email/SMTP.php';
 require 'mailer-parm.php';//hassan vado a includele  il modulo mailer-local per mandare le mail tramite mailtrap
 
-// function insert_check_errors($db){
-    function check_db_error($db){
+function check_db_error($db){
 
-        $error = $db->last_error;
-        $last_query = $db->last_query;        
-        $duplicate = "Duplicate entry";
+    $last_query = $db->last_query;        
+    $error = $db->last_error;
 
-        // if (strpos($error, $duplicate) !== false ){
-        //     $errorMessage = "Record già presente";
-        //     return $errorMessage;
-        // }    
-        return $error;
-    }
+    return $error;
+}
     
 function connect_to_md(){
     //$dbMD = new wpdb('newuser','password','md','localhost');
     $dbMD = new wpdb(DB_USER_MD,DB_PASSWORD_MD,DB_NAME_MD,DB_HOST_MD);
+    // $dbMD->show_errors(true);
     return $dbMD;
 }
 
 function connect_to_harvest(){
-  //  $dbHarvest = new wpdb('newuser','password','harvest','localhost');
     $dbHarvest = new wpdb(DB_USER_HARVEST,DB_PASSWORD_HARVEST,DB_NAME_HARVEST,DB_HOST_HARVEST);
+    // $dbHarvest->show_errors(true);
     return $dbHarvest;
 }
 
 function connect_to_nbn(){
   //  $dbNBN = new wpdb('newuser','password','nbn','localhost');
     $dbNBN = new wpdb(DB_USER_NBN,DB_PASSWORD_NBN,DB_NAME_NBN,DB_HOST_NBN);
+    // $dbNBN->show_errors(true);
     return $dbNBN;
 }
 
@@ -547,7 +543,6 @@ function check_user_exists($dbMD, $string){
 }
 
 function check_login_istituzione($dbMD, $login){
-
     $preparedQuery = $dbMD->prepare("SELECT count(*) FROM MDIstituzione WHERE LOGIN='%s';", $login);
     $result = $dbMD->get_results($preparedQuery);
     foreach ($result as $value) {
@@ -556,9 +551,7 @@ function check_login_istituzione($dbMD, $login){
             return $val;
         }
     }
-
     return $result;
-
 }
 
 function generateRandomString() {
@@ -1176,7 +1169,6 @@ function insert_into_nbn_datasource($dbNBN, $nomeDatasource, $urlOai, $subnamesp
 }
 
 function update_datasource_nbn($dbNBN, $loginIstituzione, $nomeIstituzione, $nomeDatasource, $url, $subnamespaceID, $idDatasource){
-      
     $query = $dbNBN->update(
       'datasource',
       array(
@@ -1189,9 +1181,19 @@ function update_datasource_nbn($dbNBN, $loginIstituzione, $nomeIstituzione, $nom
 
       )
     );
-
     return $query;
 }
+
+function update_datasource_nbn_test($dbNBN, $nomeDatasource, $url, $subnamespaceID, $idDatasource){ // $loginIstituzione, $nomeIstituzione, 
+
+    $sql="UPDATE datasource SET datasourceName='" .$nomeDatasource. "', baseurl='" .$url."' WHERE subNamespaceID='".$subnamespaceID. "' and datasourceID='" .$idDatasource."'";
+
+    $query = $dbNBN->query($sql);
+    return $query;
+
+}
+
+
 function update_datasource_nbn_mod($dbNBN, $nomeDatasource, $url, $subnamespaceID, $idDatasource){ // add by Hassan
       
     $query = $dbNBN->update(
@@ -1230,7 +1232,7 @@ function insert_into_nbn_agent($dbNBN, $nomeDatasource, $urlOai, $userApiNBN, $p
 
 }
 
-function update_agent_nbn($dbNBN, $loginIstituzione, $nomeIstituzione, $nomeDatasource, $url, $userNBN, $pwdNBN, $ipNBN, $servizioAbilitato, $subnamespaceID, $idDatasource){
+function update_agent_nbn($dbNBN, $nomeDatasource, $url, $userNBN, $pwdNBN, $ipNBN, $servizioAbilitato, $subnamespaceID, $idDatasource){ // , $loginIstituzione, $nomeIstituzione
 
     $query = $dbNBN->update(
       'agent',
@@ -1337,15 +1339,22 @@ function retrieve_id_agent_nbn($dbNBN, $subnamespaceID, $idDatasource) {
 
     $prepareQuery       = $dbNBN->prepare("SELECT agentID FROM agent WHERE subNamespaceID='%s' and datasourceID='%s'", $subnamespaceID, $idDatasource);
     $result             = $dbNBN->get_results($prepareQuery);
-
     if($result){
         $agentID       = $result[0]->agentID;
         return $agentID;
     }
-
     return $result;
-    
 }
+
+// 20/09/2021 
+function retrieve_agent_nbn($dbNBN, $subnamespaceID, $idDatasource) {
+
+    $prepareQuery       = $dbNBN->prepare("SELECT * FROM agent WHERE subNamespaceID='%s' and datasourceID='%s'", $subnamespaceID, $idDatasource);
+    $result             = $dbNBN->get_results($prepareQuery);
+    return $result;
+}
+
+
 
 
 
@@ -1366,7 +1375,7 @@ function retrieve_id_datasource_for_istituzione($dbNBN, $subnamespaceID, $url) {
    
 }
 
-function insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $loginIstituzione, $urlOai, $contatti, $formatMetadati, $setMetadati, $utenzaEmbargo, $pwdEmbargo, $servizioAbilitato){
+function insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $contatti, $formatMetadati, $setMetadati, $utenzaEmbargo, $pwdEmbargo, $servizioAbilitato, $loginIstituzione, $urlOai ){
 
     $selectID   = $dbHarvest->get_row("SELECT MAX(ID) AS 'MaximumValue' FROM anagrafe");
     $id         = intval($selectID->MaximumValue);
@@ -1393,7 +1402,7 @@ function insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasourc
 
 }
 
-function update_anagrafe_harvest($dbHarvest, $uuidIstituzione, $loginIstituzione, $nomeIstituzione, $nomeDatasource, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $url, $servizioAbilitato, $idDatasource){
+function update_anagrafe_harvest($dbHarvest, $uuidIstituzione, $loginIstituzione, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $url, $servizioAbilitato, $idDatasource){ // , $nomeIstituzione, $nomeDatasource
 
     $query = $dbHarvest->update(
       'anagrafe',
@@ -1784,5 +1793,38 @@ function send_change_password_email($dbMD, $nameUser, $surnameUser, $mailUser, $
     if(!$mail->send()){
         echo "Mailer Error: " . $mail->ErrorInfo;
     }
+}
+
+// 20/08/2021
+// To debug WP queries
+// add_filter('posts_request','debug_post_request'); // debugging sql query of a post
+// function debug_post_request($sql_text) {
+//    $GLOBALS['debugku'] = $sql_text; //intercept and store the sql<br/>
+//    return $sql_text; 
+// }
+
+
+function delete_datasource($dbNBN, $dbHarvest, $datasourceID){
+    //  Remove CASCADE datasource from NBN
+    $query   = $dbNBN->delete(
+        'datasource',
+        array(
+            'datasourceID'    => $datasourceID,
+        )
+    );
+    if (!$query)
+        return $query;
+
+
+    $query   = $dbHarvest->delete(
+        'anagrafe',
+        array(
+            'id_datasource'    => $datasourceID,
+        )
+    );
+
+    return $query;
+
+
 }
 
