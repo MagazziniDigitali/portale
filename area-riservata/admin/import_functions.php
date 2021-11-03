@@ -179,14 +179,19 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato, $h
 
 
   //INSERT service INTO MD services 
-  $insertServizio     = insert_into_md_servizi($dbMD, $g_idIstituzione, $servizioAbilitato);
-  if ($insertServizio != 1) {
-    $error = check_db_error($dbMD);
-    if (strpos($error, "Duplicate entry") === false) {
-      // return "Non posso inserire il servizio servizioAbilitato nella tabella dei servizi";
-      return "5->" . $error;
+
+  $idIstituzione = retrieve_id_servizio($dbMD, $g_idIstituzione, $servizioAbilitato);
+  if (empty ($idIstituzione)) {
+    $insertServizio     = insert_into_md_servizi($dbMD, $g_idIstituzione, $servizioAbilitato);
+    if ($insertServizio != 1) {
+      $error = check_db_error($dbMD);
+      if (strpos($error, "Duplicate entry") === false) {
+        // return "Non posso inserire il servizio servizioAbilitato nella tabella dei servizi";
+        return "5->" . $error;
+      }
     }
   }
+
 
   //INSERT service INTO HARVEST
   if ($servizioAbilitato == "ej")
