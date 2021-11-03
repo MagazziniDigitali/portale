@@ -138,8 +138,8 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato, $h
       // return "errore nell'inserimento del subnamespace $g_loginIstituzione";
       // return "-->".$insertSubnamespace;
       $error = check_db_error($dbNBN);
-	if ($error && strpos($error, "Duplicate entry") === false)
-		return "2->" . $error; //"Non posso inserire dtasource '$nomeDatasource'";
+	    if ($error && strpos($error, "Duplicate entry") === false)
+		    return "2->" . $error; //"Non posso inserire dtasource '$nomeDatasource'";
 
   }
 
@@ -189,7 +189,12 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato, $h
   }
 
   //INSERT service INTO HARVEST
-  $insertAnagrafe         = insert_into_harvest_anagrafe(
+  if ($servizioAbilitato == "ej")
+    $ds_name = $g_loginIstituzione . "." . str_replace(" ", "_", $nomeDatasource);
+  else
+    $ds_name = $g_loginIstituzione;
+
+  $insertAnagrafe  = insert_into_harvest_anagrafe(
     $dbHarvest,
     $g_idIstituzione,
     $idDatasource,
@@ -199,7 +204,7 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato, $h
     $userEmbargo,
     $pwdEmbargo,
     $servizioAbilitato,
-    $g_loginIstituzione,
+    $ds_name, // $g_loginIstituzione,
     $url
   );
   if ($insertAnagrafe != 1) {
@@ -300,7 +305,7 @@ function upload_file($dbNBN, $dbMD, $dbHarvest)
 			  else if (!empty($almeno_un_servizio_in_errore))
 				echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Fallito inserimento di almeno uno dei servizi (vedere import.log).</div>";
 			  else
-				echo "<div class='alert alert-success alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>The file has been inserted successfully.</div>";
+				echo "<div class='alert alert-success alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Import eseguito correttamente.</div>";
 			}
 		  }
 		}

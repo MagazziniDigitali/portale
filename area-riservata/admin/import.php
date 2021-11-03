@@ -1,6 +1,44 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
+<script>
+
+  function PreOpenDeleteServiceModal(rimuoviServizio, userNBN, idSubNamespace, nomeDatasource, idDatasource) {
+    $(".modal-body #rimuoviServizio_modalDeleteService").val($userNBN);
+    $(".modal-body #userNBN_modalDeleteService").val($userNBN);
+    $(".modal-body #idSubNamespace_modalDeleteService").val($idSubNamespace);
+    $(".modal-body #nomeDatasource_modalDeleteService").val($nomeDatasource);
+    $(".modal-body #idDatasource_modalDeleteService").val($idDatasource);
+  }
+
+  $("#aprovaCancellazioneServizio").click(function(e) {
+    console.log(this);
+    console.log("aprovaCancellazioneServizio");
+    
+    var _rimuoviServizio=$(".modal-body #rimuoviServizio_modalDeleteService").val(rimuoviServizio);
+    var _userNBN=$(".modal-body #userNBN_modalDeleteService").val(userNBN);
+    var _idSubNamespace=$(".modal-body #idSubNamespace_modalDeleteService").val(idSubNamespace);
+    var _nomeDatasource=$(".modal-body #nomeDatasource_modalDeleteService").val(nomeDatasource);
+    var _idDatasource=$(".modal-body #idDatasource_modalDeleteService").val(idDatasource);
+
+    jQuery.ajax({
+      type: "POST",
+      url: 'import.php',
+      dataType: 'json',
+      data: {
+        _rimuovi_servizio: _rimuovi_servizio, // eg "rimuoviTesi"
+        userNBN: _userNBN,
+        idSubNamespace: _idSubNamespace,
+        nomeDatasource: _nomeDatasource,
+        idDatasource: _idDatasource,
+      },
+    });
+  });
+
+
+</script>
+
+
 <?php
 include("../../wp-load.php");
 require("../src/functions.php");
@@ -125,4 +163,8 @@ get_footer();
 
     });
   });
+
+
+
+
 </script>

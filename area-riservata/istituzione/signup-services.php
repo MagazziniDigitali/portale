@@ -412,6 +412,19 @@ if ($_SESSION['role'] == 'admin_istituzione') {
                         if($ambiente == "local")
                         {?>
                           <input type="submit" name="rimuoviTesi" value="Rimuovi tesi" class="mt-3 btnRejectSub mr-3" />
+  
+                          <!-- <button type="button" class="btn btn-outline-secondary utente-cancella" data-toggle="modal" 
+                            data-target="#deleteServiceModal" id="idRimuoviTesi" 
+                            onclick="PreOpenDeleteServiceModal(
+                              '<?php echo "rimuoviTesi" ?>', 
+                              '<?php echo $userNBN_td ?>', 
+                              '<?php echo $idSubNamespace_td ?>', 
+                              '<?php echo $nomeDatasource_td ?>', 
+                              '<?php echo $idDatasource__td ?>')">
+                            <i class="icon-remove icon-2x " title="cancella Servizio"></i>
+                          </button>   -->
+
+  
                         <?php } ?>
   
                         <input type="submit" name="modificaTesi" value="Modifica" class="mt-3 float-right">

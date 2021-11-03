@@ -385,6 +385,17 @@ foreach ($uniqueIdIst as $key => $results) {
                         if($ambiente == "local")
                         {?>
                           <input type="submit" name="rimuoviTesi" value="Rimuovi tesi" class="mt-3 btnRejectSub mr-3" />
+                          <!-- <button type="button" class="btn btn-outline-secondary utente-cancella" data-toggle="modal" 
+                            data-target="#deleteServiceModal" id="idRimuoviTesi" 
+                            onclick="PreOpenDeleteServiceModal(
+                              '<?php echo "rimuoviTesi" ?>', 
+                              '<?php echo $userNBN_td ?>', 
+                              '<?php echo $idSubNamespace_td ?>', 
+                              '<?php echo $nomeDatasource_td ?>', 
+                              '<?php echo $idDatasource__td ?>')">
+                            <i class="icon-remove icon-2x " title="cancella Servizio"></i>
+                          </button>   -->
+
                           <?php } ?>
 
                           <input type="submit" name="modificaTesi" value="Modifica" class="mt-3 float-right">
@@ -760,17 +771,37 @@ foreach ($uniqueIdIst as $key => $results) {
     </div>
   </div>
 
-  
-
-
-
-
-
-
-
-
-
-
+  <!-- Modal Delete service -->
+  <div class="modal fade" id="deleteServiceModal" tabindex="-1" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="insertIstModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="deleteModalService" style="margin-right: 2.5rem;margin-bottom: 2rem;">WARNING!!!!</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                      <!-- <form action="" method="post"> -->
+                      <input type="hidden" name="rimuoviServizio_modalDeleteService" id="rimuoviServizio_modalDeleteService" value="">
+                      <input type="hidden" name="userNBN_modalDeleteService" id="userNBN_modalDeleteService" value="">
+                      <input type="hidden" name="idSubNamespace_modalDeleteService" id="idSubNamespace_modalDeleteService" value="">
+                      <input type="hidden" name="nomeDatasource_modalDeleteService" id="nomeDatasource_modalDeleteService" value="">
+                      <input type="hidden" name="idDatasource_modalDeleteService" id="idDatasource_modalDeleteService" value="">
+                      <div class="row">
+                          <div class="col-md-12">Sei sicuro di voler cancellare il servizio? </div>
+                      </div>
+                      <br>
+                  </div>
+                  <div class="modal-footer">
+                      <div class="row col-md-12">
+                          <div class="col-md-6"><input style="background: darkgrey;" type="button" data-dismiss="modal" name="Chiudi" value="No" class="mt-3 float-left"></div>
+                          <div class="col-md-6"><input style="background: darkred;" type="button" data-dismiss="modal" name="aprovaCancellazioneServizio" id="aprovaCancellazioneServizio" value="Si" class="mt-3 float-right"></div>
+                      </div>
+                  </div>
+          </div>
+      </div>
+  </div>
 
 
 
