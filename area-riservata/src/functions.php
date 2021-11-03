@@ -1356,7 +1356,7 @@ function retrieve_agent_nbn($dbNBN, $subnamespaceID, $idDatasource) {
 
 
 function retrieve_id_servizio($dbMD, $id_istituzione, $servizio)  {
-    $prepareQuery = $dbMD->prepare("SELECT ID FROM MDServizio WHERE id_istituzione='%s' and servizio abilitato = '%s'", $id_istituzione, $servizio);
+    $prepareQuery = $dbMD->prepare("SELECT ID FROM MDServizio WHERE id_istituzione='%s' and servizio_abilitato = '%s'", $id_istituzione, $servizio);
     $result        = $dbMD->get_results($prepareQuery);
     if($result){
         return $result[0]->ID;
