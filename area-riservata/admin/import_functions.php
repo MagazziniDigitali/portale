@@ -135,12 +135,15 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato, $h
     // echo "subnamespaceID non presente in NBN. Inserisco il subnamespace (Istituto)";
     $insertSubnamespace     = insert_into_nbn_subnamespace($dbNBN, $g_loginIstituzione, $g_nomeIstituzione);
     if ($insertSubnamespace != 1)
+      {
       // return "errore nell'inserimento del subnamespace $g_loginIstituzione";
       // return "-->".$insertSubnamespace;
       $error = check_db_error($dbNBN);
 	    if ($error && strpos($error, "Duplicate entry") === false)
 		    return "2->" . $error; //"Non posso inserire dtasource '$nomeDatasource'";
-
+      }
+  
+    $subnamespaceID  = retrieve_id_subnamespace_for_istituzione($dbNBN, $g_loginIstituzione);
   }
 
   $idDatasource = retrieve_id_datasource_for_istituzione($dbNBN, $subnamespaceID, $url);
