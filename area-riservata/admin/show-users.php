@@ -392,7 +392,7 @@ foreach ($uniqueIdIst as $key => $results) {
                               '<?php echo $userNBN_td ?>', 
                               '<?php echo $idSubNamespace_td ?>', 
                               '<?php echo $nomeDatasource_td ?>', 
-                              '<?php echo $idDatasource__td ?>')">
+                              '<?php echo $idDatasource_td ?>')">
                             <i class="icon-remove icon-2x " title="cancella Servizio"></i>
                           </button>   -->
 

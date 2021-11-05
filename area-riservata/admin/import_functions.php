@@ -181,47 +181,51 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato, $h
   }
 
 
-  //INSERT service INTO MD services 
-
-  $idIstituzione = retrieve_id_servizio($dbMD, $g_idIstituzione, $servizioAbilitato);
-  if (empty ($idIstituzione)) {
-    $insertServizio     = insert_into_md_servizi($dbMD, $g_idIstituzione, $servizioAbilitato);
-    if ($insertServizio != 1) {
-      $error = check_db_error($dbMD);
-      if (strpos($error, "Duplicate entry") === false) {
-        // return "Non posso inserire il servizio servizioAbilitato nella tabella dei servizi";
-        return "5->" . $error;
-      }
-    }
-  }
-
 
   //INSERT service INTO HARVEST
-  if ($servizioAbilitato == "ej")
-    $ds_name = $g_loginIstituzione . "." . str_replace(" ", "_", $nomeDatasource);
-  else
-    $ds_name = $g_loginIstituzione;
+  if ($servizioAbilitato != "nbn") 
+    {
 
-  $insertAnagrafe  = insert_into_harvest_anagrafe(
-    $dbHarvest,
-    $g_idIstituzione,
-    $idDatasource,
-    $contatti,
-    $format,
-    $set,
-    $userEmbargo,
-    $pwdEmbargo,
-    $servizioAbilitato,
-    $ds_name, // $g_loginIstituzione,
-    $url
-  );
-  if ($insertAnagrafe != 1) {
-    $error = check_db_error($dbHarvest);
-    if (strpos($error, "Duplicate entry") === false) {
-      // return "Non posso inserire il record per il servizio in harvest.anagrafe ";
-      return "6->" . $error;
+    //INSERT service INTO MD services 
+    $idIstituzione = retrieve_id_servizio($dbMD, $g_idIstituzione, $servizioAbilitato);
+    if (empty ($idIstituzione)) {
+      $insertServizio     = insert_into_md_servizi($dbMD, $g_idIstituzione, $servizioAbilitato);
+      if ($insertServizio != 1) {
+        $error = check_db_error($dbMD);
+        if (strpos($error, "Duplicate entry") === false) {
+          // return "Non posso inserire il servizio servizioAbilitato nella tabella dei servizi";
+          return "5->" . $error;
+        }
+      }
     }
-  }
+
+
+    if ($servizioAbilitato == "ej")
+      $ds_name = $g_loginIstituzione . "." . str_replace(" ", "_", $nomeDatasource);
+    else
+      $ds_name = $g_loginIstituzione;
+  
+    $insertAnagrafe  = insert_into_harvest_anagrafe(
+      $dbHarvest,
+      $g_idIstituzione,
+      $idDatasource,
+      $contatti,
+      $format,
+      $set,
+      $userEmbargo,
+      $pwdEmbargo,
+      $servizioAbilitato,
+      $ds_name, // $g_loginIstituzione,
+      $url
+    );
+    if ($insertAnagrafe != 1) {
+      $error = check_db_error($dbHarvest);
+      if (strpos($error, "Duplicate entry") === false) {
+        // return "Non posso inserire il record per il servizio in harvest.anagrafe ";
+        return "6->" . $error;
+      }
+      }
+    } // End if servizio diverso da NBN
 
   // 20/08/2021
   // Insert user and password in Apache2 managed basic autentication
@@ -295,7 +299,14 @@ function upload_file($dbNBN, $dbMD, $dbHarvest)
 					  if ($servizio_failed) {
 						wh_log($WH_LOG_ERROR, "Failed to insert: " . $servizio_failed . " - " . $raw_string);
 						$almeno_un_servizio_in_errore = 1;
-					  }
+            }
+          case "SERVIZIO_NBN":
+            $servizio_failed = insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, 'nbn', $htpasswd);
+            if ($servizio_failed) {
+            wh_log($WH_LOG_ERROR, "Failed to insert: " . $servizio_failed . " - " . $raw_string);
+            $almeno_un_servizio_in_errore = 1;
+            }
+              
 					  break;
 					default:
 					  break;
