@@ -1385,6 +1385,17 @@ function retrieve_id_datasource_for_istituzione($dbNBN, $subnamespaceID, $url) {
    
 }
 
+function retrieve_url_harvest_anagrafe($dbHarvest, $url)  {
+    $prepareQuery = $dbHarvest->prepare("SELECT harvest_url FROM anagrafe WHERE harvest_url='%s'", $url);
+    $result        = $dbHarvest->get_results($prepareQuery);
+    if($result){
+        return $result[0]->harvest_url;
+    }
+    return $result;
+}
+
+
+
 function insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $contatti, $formatMetadati, $setMetadati, $utenzaEmbargo, $pwdEmbargo, $servizioAbilitato, $loginIstituzione, $urlOai ){
 
     $selectID   = $dbHarvest->get_row("SELECT MAX(ID) AS 'MaximumValue' FROM anagrafe");
