@@ -32,6 +32,105 @@ function test()
   wh_log($WH_LOG_INFO, "Deleted user $user is '$ret'");
 } // end test
 
+function upload_file($dbNBN, $dbMD, $dbHarvest)
+{
+  global $WH_LOG_ERROR;
+
+  if (isset($_FILES["file"])) {
+    if ($_FILES["file"]["error"] > 0) {
+      echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>No file selected.</div>";
+    } else {
+      //   if (!file_exists(SITE_ROOT . "/upload/")) {
+      // 	mkdir(SITE_ROOT . "/upload/", 0777, true);
+      //   }
+      //   if (file_exists(SITE_ROOT . "/upload/" . $_FILES["file"]["name"])) {
+      // 	//  echo "<div class='p-3 mb-2 bg-danger text-white'>".$_FILES["file"]["name"] . " already exists. </div> ";
+      // 	echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>" . $_FILES["file"]["name"] . " already exists.</div>";
+      // 	wh_log($WH_LOG_ERROR, $_FILES["file"]["name"] . " already exists.");
+      //   } else 
+      {
+        //Store file in directory "upload" with the name of "uploaded_file.txt"
+        $storagename = SITE_ROOT . "/upload/" . $_FILES["file"]["name"];
+        move_uploaded_file($_FILES["file"]["tmp_name"], $storagename);
+
+        if (isset($storagename) && $file = fopen($storagename, "r")) {
+          $handle = fopen($storagename, "r");
+          // Optionally, you can keep the number of the line where
+          // the loop its currently iterating over
+          $lineNumber = 1;
+          $lineInsert = 1;
+          $idIstituzione   = "";
+          $loginIstituzione = "";
+          $nomeIstituzione  = "";
+
+          $istituzione_failed = "";
+          $almeno_un_servizio_in_errore = "";
+//          $htpasswd = new Htpasswd('../passwd/.htpasswd_nbn');
+          $htpasswd = new Htpasswd('../passwd/md_passwd_basic_auth');
+          while (($raw_string = fgets($handle)) !== false) {
+            if ($lineNumber > 1) {
+              // Parse the raw csv string: "1, a, b, c"
+              $row = str_getcsv($raw_string, "|");
+              $tipo          = $row[0];
+              switch ($tipo) {
+                case "ISTITUZIONE":
+                  $istituzione_failed = insert_istituzione($row, $dbMD);
+                  break;
+                case "SERVIZIO_HARVEST_TD":
+                  $servizio_failed = insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, 'td', $htpasswd);
+                  if ($servizio_failed) {
+                    wh_log($WH_LOG_ERROR, "Failed to insert: " . $servizio_failed . " - " . $raw_string);
+                    $almeno_un_servizio_in_errore = 1;
+                  }
+                  break;
+                case "SERVIZIO_HARVEST_EJ":
+                  $servizio_failed = insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, 'ej', $htpasswd);
+                  if ($servizio_failed) {
+                    wh_log($WH_LOG_ERROR, "Failed to insert: " . $servizio_failed . " - " . $raw_string);
+                    $almeno_un_servizio_in_errore = 1;
+                  }
+                  break;
+                case "SERVIZIO_HARVEST_EB":
+                  $servizio_failed = insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, 'eb', $htpasswd);
+                  if ($servizio_failed) {
+                    wh_log($WH_LOG_ERROR, "Failed to insert: " . $servizio_failed . " - " . $raw_string);
+                    $almeno_un_servizio_in_errore = 1;
+                  }
+                  break;
+                case "SERVIZIO_NBN":
+                  $servizio_failed = insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, 'nbn', $htpasswd);
+                  if ($servizio_failed) {
+                    wh_log($WH_LOG_ERROR, "Failed to insert: " . $servizio_failed . " - " . $raw_string);
+                    $almeno_un_servizio_in_errore = 1;
+                  }
+
+                  break;
+                default:
+                  break;
+              } // End switch $tipo
+              if (!empty($istituzione_failed))
+                break; // exit wihle
+            } // end if ($lineNumber > 1 ) 
+            $lineNumber++;
+          } // end while
+
+          fclose($handle);
+
+          if (!empty($istituzione_failed))
+            echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Fallito l'insertimento dell'Istituzione: " . $istituzione_failed . ".</div>";
+          else if (!empty($almeno_un_servizio_in_errore))
+            echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Fallito inserimento di almeno uno dei servizi (vedere import.log).</div>";
+          else
+            echo "<div class='alert alert-success alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Import eseguito correttamente.</div>";
+        }
+      }
+    }
+  } else {
+    // echo "<div class='p-3 mb-2 bg-danger text-white'> No file selected </div> <br />";
+    echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>No file selected.</div>";
+  }
+} // End upload_file()
+
 
 function insert_istituzione($row, $dbMD)
 {
@@ -132,12 +231,15 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato, $h
   if ($servizioAbilitato == "nbn")  // 16/11/2021
   {
     // return ("Inserimento servizio fallito");
-    // wh_log($WH_LOG_INFO, "g_loginIstituzione = $g_loginIstituzione");
-    $subnamespaceID  = retrieve_id_subnamespace_for_istituzione($dbNBN, $g_loginIstituzione);
+    wh_log($WH_LOG_INFO, "g_loginIstituzione = $g_loginIstituzione");
+    // $subnamespaceID  = retrieve_id_subnamespace_for_istituzione($dbNBN, $g_loginIstituzione);
+    $subnamespaceID  = retrieve_id_subnamespace_for_istituzione($dbNBN, $nomeDatasource);
+    
     // wh_log($WH_LOG_INFO, "subnamespaceID = $subnamespaceID");
     if (empty($subnamespaceID)) {
       // echo "subnamespaceID non presente in NBN. Inserisco il subnamespace (Istituto)";
-      $insertSubnamespace     = insert_into_nbn_subnamespace($dbNBN, $g_loginIstituzione, $g_nomeIstituzione);
+      // $insertSubnamespace     = insert_into_nbn_subnamespace($dbNBN, $g_loginIstituzione, $g_nomeIstituzione);
+      $insertSubnamespace     = insert_into_nbn_subnamespace($dbNBN, $nomeDatasource, $g_nomeIstituzione);
       if ($insertSubnamespace != 1) {
         // return "errore nell'inserimento del subnamespace $g_loginIstituzione";
         // return "-->".$insertSubnamespace;
@@ -146,7 +248,7 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato, $h
           return "2->" . $error; //"Non posso inserire dtasource '$nomeDatasource'";
       }
 
-      $subnamespaceID  = retrieve_id_subnamespace_for_istituzione($dbNBN, $g_loginIstituzione);
+      $subnamespaceID  = retrieve_id_subnamespace_for_istituzione($dbNBN, $nomeDatasource);
     }
 
     $idDatasource = retrieve_id_datasource_for_istituzione($dbNBN, $subnamespaceID, $url);
@@ -191,7 +293,7 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato, $h
   else { // Servizio NON nbn
     $harvest_url = retrieve_url_harvest_anagrafe($dbHarvest, $url);
     if (empty($harvest_url)) {
-      if ($servizioAbilitato == "ej")
+      if ($servizioAbilitato == "ej" || $servizioAbilitato == "eb")
         $ds_name = $g_loginIstituzione . "." . str_replace(" ", "_", $nomeDatasource);
       else
         $ds_name = $g_loginIstituzione;
@@ -237,103 +339,6 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato, $h
   return "";
 } // end insert_servizio
 
-function upload_file($dbNBN, $dbMD, $dbHarvest)
-{
-  global $WH_LOG_ERROR;
-
-  if (isset($_FILES["file"])) {
-    if ($_FILES["file"]["error"] > 0) {
-      echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>No file selected.</div>";
-    } else {
-      //   if (!file_exists(SITE_ROOT . "/upload/")) {
-      // 	mkdir(SITE_ROOT . "/upload/", 0777, true);
-      //   }
-      //   if (file_exists(SITE_ROOT . "/upload/" . $_FILES["file"]["name"])) {
-      // 	//  echo "<div class='p-3 mb-2 bg-danger text-white'>".$_FILES["file"]["name"] . " already exists. </div> ";
-      // 	echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>" . $_FILES["file"]["name"] . " already exists.</div>";
-      // 	wh_log($WH_LOG_ERROR, $_FILES["file"]["name"] . " already exists.");
-      //   } else 
-      {
-        //Store file in directory "upload" with the name of "uploaded_file.txt"
-        $storagename = SITE_ROOT . "/upload/" . $_FILES["file"]["name"];
-        move_uploaded_file($_FILES["file"]["tmp_name"], $storagename);
-
-        if (isset($storagename) && $file = fopen($storagename, "r")) {
-          $handle = fopen($storagename, "r");
-          // Optionally, you can keep the number of the line where
-          // the loop its currently iterating over
-          $lineNumber = 1;
-          $lineInsert = 1;
-          $idIstituzione   = "";
-          $loginIstituzione = "";
-          $nomeIstituzione  = "";
-
-          $istituzione_failed = "";
-          $almeno_un_servizio_in_errore = "";
-//          $htpasswd = new Htpasswd('../passwd/.htpasswd_nbn');
-          $htpasswd = new Htpasswd('../passwd/md_passwd_basic_auth');
-          while (($raw_string = fgets($handle)) !== false) {
-            if ($lineNumber > 1) {
-              // Parse the raw csv string: "1, a, b, c"
-              $row = str_getcsv($raw_string, "|");
-              $tipo          = $row[0];
-              switch ($tipo) {
-                case "ISTITUZIONE":
-                  $istituzione_failed = insert_istituzione($row, $dbMD);
-                  break;
-                case "SERVIZIO_HARVEST_TD":
-                  $servizio_failed = insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, 'td', $htpasswd);
-                  if ($servizio_failed) {
-                    wh_log($WH_LOG_ERROR, "Failed to insert: " . $servizio_failed . " - " . $raw_string);
-                    $almeno_un_servizio_in_errore = 1;
-                  }
-                  break;
-                case "SERVIZIO_HARVEST_EJ":
-                  $servizio_failed = insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, 'ej', $htpasswd);
-                  if ($servizio_failed) {
-                    wh_log($WH_LOG_ERROR, "Failed to insert: " . $servizio_failed . " - " . $raw_string);
-                    $almeno_un_servizio_in_errore = 1;
-                  }
-                  break;
-                case "SERVIZIO_HARVEST_EB":
-                  $servizio_failed = insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, 'eb', $htpasswd);
-                  if ($servizio_failed) {
-                    wh_log($WH_LOG_ERROR, "Failed to insert: " . $servizio_failed . " - " . $raw_string);
-                    $almeno_un_servizio_in_errore = 1;
-                  }
-                case "SERVIZIO_NBN":
-                  $servizio_failed = insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, 'nbn', $htpasswd);
-                  if ($servizio_failed) {
-                    wh_log($WH_LOG_ERROR, "Failed to insert: " . $servizio_failed . " - " . $raw_string);
-                    $almeno_un_servizio_in_errore = 1;
-                  }
-
-                  break;
-                default:
-                  break;
-              } // End switch $tipo
-              if (!empty($istituzione_failed))
-                break; // exit wihle
-            } // end if ($lineNumber > 1 ) 
-            $lineNumber++;
-          } // end while
-
-          fclose($handle);
-
-          if (!empty($istituzione_failed))
-            echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Fallito l'insertimento dell'Istituzione: " . $istituzione_failed . ".</div>";
-          else if (!empty($almeno_un_servizio_in_errore))
-            echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Fallito inserimento di almeno uno dei servizi (vedere import.log).</div>";
-          else
-            echo "<div class='alert alert-success alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Import eseguito correttamente.</div>";
-        }
-      }
-    }
-  } else {
-    // echo "<div class='p-3 mb-2 bg-danger text-white'> No file selected </div> <br />";
-    echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>No file selected.</div>";
-  }
-} // End upload_file()
 
 function send_mail_to_user($dbMD)
 {
