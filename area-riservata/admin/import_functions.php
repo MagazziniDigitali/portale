@@ -12,7 +12,8 @@ function test()
   // append_user_password_to_htpasswd($user.":".$pwd);
   // wh_log($WH_LOG_INFO, "Set apache htpasswd: '$user:$pwd' ");
 
-  $htpasswd = new Htpasswd('../passwd/.htpasswd_nbn');
+  // $htpasswd = new Htpasswd('../passwd/.htpasswd_nbn');
+  $htpasswd = new Htpasswd('../passwd/md_passwd_basic_auth');
 
   $user = "argetest5";
   $user_plain_pwd = "argetest5_pwd";
@@ -218,7 +219,7 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato, $h
     }
   } // End if servizio diverso da NBN
 
-  //INSERT service INTO MD services 
+  //INSERT service INTO MD services regardless of service
   $idIstituzione = retrieve_id_servizio($dbMD, $g_idIstituzione, $servizioAbilitato);
   if (empty($idIstituzione)) {
     $insertServizio     = insert_into_md_servizi($dbMD, $g_idIstituzione, $servizioAbilitato);
@@ -269,7 +270,8 @@ function upload_file($dbNBN, $dbMD, $dbHarvest)
 
           $istituzione_failed = "";
           $almeno_un_servizio_in_errore = "";
-          $htpasswd = new Htpasswd('../passwd/.htpasswd_nbn');
+//          $htpasswd = new Htpasswd('../passwd/.htpasswd_nbn');
+          $htpasswd = new Htpasswd('../passwd/md_passwd_basic_auth');
           while (($raw_string = fgets($handle)) !== false) {
             if ($lineNumber > 1) {
               // Parse the raw csv string: "1, a, b, c"

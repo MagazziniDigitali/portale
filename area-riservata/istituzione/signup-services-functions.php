@@ -86,7 +86,8 @@ function modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzion
     $old_user = $agent[0]->user;
     $old_pwd = $agent[0]->pass;
 
-    $htpasswd = new Htpasswd('../passwd/.htpasswd_nbn');
+    // $htpasswd = new Htpasswd('../passwd/.htpasswd_nbn');
+    $htpasswd = new Htpasswd('../passwd/md_passwd_basic_auth');
     if ($old_user != $userNBN) { // change of user and pwd
       // Delete old user
       $ret = $htpasswd->deleteUser($old_user);
@@ -138,7 +139,8 @@ function rimuoviServizio($dbNBN, $dbHarvest, $servizio) // $dbMD, , $nomeIstituz
   }
 
   // Dobbiamo rimuovere dati da utenza apacache per la basic authentication
-  $htpasswd = new Htpasswd('../passwd/.htpasswd_nbn');
+  // $htpasswd = new Htpasswd('../passwd/.htpasswd_nbn');
+  $htpasswd = new Htpasswd('../passwd/md_passwd_basic_auth');
   $ret = $htpasswd->deleteUser($userNBN);
   wh_log($WH_LOG_INFO, "NBN apache managed basic authentication - Deleted user $userNBN ret='$ret'");
   

@@ -999,7 +999,8 @@ function signupBook($dbMD, $dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzio
 //     $old_user = $agent[0]->user;
 //     $old_pwd = $agent[0]->pass;
 
-//     $htpasswd = new Htpasswd('../passwd/.htpasswd_nbn');
+//     // $htpasswd = new Htpasswd('../passwd/.htpasswd_nbn');
+//     $htpasswd = new Htpasswd('../passwd/md_passwd_basic_auth');
 //     if ($old_user != $userNBN) { // change of user and pwd
 //       // Delete old user
 //       $ret = $htpasswd->deleteUser($old_user);
