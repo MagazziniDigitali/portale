@@ -162,23 +162,31 @@ function inserisciServizio($dbMD, $dbNBN, $dbHarvest)
 
 
   $tesiServizioAttivo ='';
+  $isNbn = false;
+  $isSendEmail = false;
+  $idDatasource = null;
   if($servizioAbilitato=='td'){
     $tesiServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'td');
   }else if($servizioAbilitato=='ej'){
     $tesiServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'ej');
   }else if($servizioAbilitato=='eb'){
     $tesiServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'eb');
+  } else if ($servizioAbilitato =='nbn') {
+    //AlmavivA 17/11/2021
+    $tesiServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'nbn');
+    $isNbn = true;
   }
  
-  //INSERT INTO MD
-  if (empty($tesiServizioAttivo)) {
-    $insertServizio     = insert_into_md_servizi($dbMD, $uuidIstituzione, $servizioAbilitato);
-  }
+ 
   //INSERT INTO NBN
+  //AlmavivA 17/11/2021
+  //Se NBN non deve eseguire le istruzioni di harvesting
+  if($isNbn) {
   $checkSubnamespace      = check_istituzione_exist_nbn_subnamespace($dbNBN, $loginIstituzione, $nomeIstituzione);
   if($checkSubnamespace == 0){
     $insertSubnamespace     = insert_into_nbn_subnamespace($dbNBN, $loginIstituzione, $nomeIstituzione);
   }
+  
   $subnamespaceID         = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstituzione, $nomeIstituzione);
   $checkDatasource        = check_datasource_into_nbn($dbNBN, $nomeDatasource, $url);
   if($checkDatasource == 0){
@@ -186,12 +194,20 @@ function inserisciServizio($dbMD, $dbNBN, $dbHarvest)
   } else {
     $alertTesi = 'Nome datasource e url datasource già presenti';
   }
-  $idDatasource           = retrieve_id_datasource_for_istituzione($dbNBN, $nomeDatasource, $subnamespaceID, $url);
+  //$nomeDatasource, 
+  $idDatasource           = retrieve_id_datasource_for_istituzione($dbNBN, $subnamespaceID, $url);
   $insertAgent            = insert_into_nbn_agent($dbNBN, $nomeDatasource, $url, $userNBN, $pwdNBN, $ipNBN, $idDatasource, $subnamespaceID, $servizioAbilitato);
+  $isSendEmail = ($insertAgent == 1);
+} else {
 
-  //INSERT INTO HARVEST
-  $insertAnagrafe         = insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $loginIstituzione, $url, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $servizioAbilitato);
-  if ($insertAnagrafe == 1) {
+    //INSERT INTO MD
+    if (empty($tesiServizioAttivo)) {
+      $insertServizio     = insert_into_md_servizi($dbMD, $uuidIstituzione, $servizioAbilitato);
+    }
+    //INSERT INTO HARVEST
+    $insertAnagrafe         = insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $servizioAbilitato, $loginIstituzione, $url );
+  }
+   if ($isSendEmail) {
     $journalUserApiNBN    = '';
     $journalPwdApiNBN     = '';
     $bookUserApiNBN       = '';

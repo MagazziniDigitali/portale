@@ -11,11 +11,15 @@
     $(".modal-body #Ist_name_modal").val(loginIstName);
     //  var loginIstNameHtml = document.getElementById('Ist_name_modal');
     //  loginIstNameHtml.value = loginIstName;
+   // hideAllFieldsServizio()
+   hideAllFieldsServizio();
   }
 
   function PreOpeninsertUserModal(idIstituzione) {
     document.getElementById("InsertUserForm").reset();
     $(".modal-body #id_Ist_modalNewUser").val(idIstituzione);
+    hideAllFieldsServizio()
+
   }
 </script>
 <?php
@@ -385,6 +389,17 @@ foreach ($uniqueIdIst as $key => $results) {
                         if($ambiente == "local")
                         {?>
                           <input type="submit" name="rimuoviTesi" value="Rimuovi tesi" class="mt-3 btnRejectSub mr-3" />
+                          <!-- <button type="button" class="btn btn-outline-secondary utente-cancella" data-toggle="modal" 
+                            data-target="#deleteServiceModal" id="idRimuoviTesi" 
+                            onclick="PreOpenDeleteServiceModal(
+                              '<?php echo "rimuoviTesi" ?>', 
+                              '<?php echo $userNBN_td ?>', 
+                              '<?php echo $idSubNamespace_td ?>', 
+                              '<?php echo $nomeDatasource_td ?>', 
+                              '<?php echo $idDatasource_td ?>')">
+                            <i class="icon-remove icon-2x " title="cancella Servizio"></i>
+                          </button>   -->
+
                           <?php } ?>
 
                           <input type="submit" name="modificaTesi" value="Modifica" class="mt-3 float-right">
@@ -620,61 +635,72 @@ foreach ($uniqueIdIst as $key => $results) {
               <div class="col-md-12">
                 <div class="form-group">
                   <label for="selectType">Tipo Servizio:</label>
-                  <select class="form-control" id="selectType" name="selectType" style="font-size: 100%;">
-                    <option selected>Seleziona Tipo Servizio...</option>
-                    <option value="td">Tesi di Dottorato</option>
-                    <option value="ej">E-Journal</option>
-                    <option value="eb">E-Book</option>
+                  <select class="form-control" id="selectType" name="selectType" style="font-size: 100%;"
+                  onchange="onChangeTipoServizio(this)">
+                    <option selected value="">Seleziona Tipo Servizio...</option>
+                    <option value="td">Harvesting Tesi di Dottorato</option>
+                    <option value="ej">Harvesting E-Journal</option>
+                    <option value="eb">Harvesting E-Book</option>
+                    <option value="nbn">National Bibliography Number</option>
                   </select>
                 </div>
               </div>
             </div>
+            <div class="row" id="alertSelezionaTipo">
+                <div class="col-md-12">
+                 Seleziona il Tipo di Servizio per inserire i dati
+                </div>
+            </div>
             <div class="row">
-              <div class="col-md-6">
-                <label for="nomeDatasource">Nome Datasource</label>
+              <div class="col-md-6" id="tsDataSource">
+                <label for="nomeDatasource" onchange="onChangeDataSource(this)" >Nome Datasource</label>
                 <input name="nomeDatasource" value="" type="text">
               </div>
-              <div class="col-md-6">
-                <label for="url">URL sito OAI</label>
+              <div class="col-md-6" id="tsSitoOai">
+                <label for="url">URL sito <span id="tsSitoOaiLabel">OAI</span></label>
                 <input name="url" value="" type="text">
               </div>
             </div>
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-6" id="tsContatti">
                 <label for="contatti">Contatti</label>
                 <input name="contatti" value="" type="text">
               </div>
-              <div class="col-md-6">
+              
+            </div>
+            <div class="row">
+            <div class="col-md-6" id="tsFormat">
                 <label for="format">Format dei metadati</label>
                 <input name="format" value="" type="text">
               </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-6" id="tsSet">
                 <label for="set">Set dei metadati</label>
                 <input name="set" value="" type="text">
               </div>
-              <div class="col-md-6">
+             
+            </div>
+            <div class="row">
+            <div class="col-md-6" id="tsEmbargo">
                 <label for="userEmbargo">Utenza per accesso embargo</label>
                 <input name="userEmbargo" value="" type="text">
               </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <label for="pwdEmbargo">Password per accesso embargo</label>
+              <div class="col-md-6"  id="tsPwdEmbargo">
+                <label for="pwdEmbargo" id="tsPwdEmbargo">Password per accesso embargo</label>
                 <input name="pwdEmbargo" value="" type="text">
               </div>
-              <div class="col-md-6">
+            </div>
+            <div class="row">
+            <div class="col-md-6" id="tsNbnApi">
                 <label for="userNBN">User per API NBN</label>
                 <input name="userNBN" value="" type="text">
               </div>
             </div>
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-6" id="tsNbnPsw">
                 <label for="pwdNBN">Password per API NBN</label>
                 <input name="pwdNBN" value="" type="text">
               </div>
-              <div class="col-md-6">
+              <div class="col-md-6" id="tsNbnIp">
                 <label for="ipNBN">IP per API NBN</label>
                 <input name="ipNBN" value="" type="text">
               </div>
@@ -760,17 +786,37 @@ foreach ($uniqueIdIst as $key => $results) {
     </div>
   </div>
 
-  
-
-
-
-
-
-
-
-
-
-
+  <!-- Modal Delete service -->
+  <div class="modal fade" id="deleteServiceModal" tabindex="-1" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="insertIstModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="deleteModalService" style="margin-right: 2.5rem;margin-bottom: 2rem;">WARNING!!!!</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                      <!-- <form action="" method="post"> -->
+                      <input type="hidden" name="rimuoviServizio_modalDeleteService" id="rimuoviServizio_modalDeleteService" value="">
+                      <input type="hidden" name="userNBN_modalDeleteService" id="userNBN_modalDeleteService" value="">
+                      <input type="hidden" name="idSubNamespace_modalDeleteService" id="idSubNamespace_modalDeleteService" value="">
+                      <input type="hidden" name="nomeDatasource_modalDeleteService" id="nomeDatasource_modalDeleteService" value="">
+                      <input type="hidden" name="idDatasource_modalDeleteService" id="idDatasource_modalDeleteService" value="">
+                      <div class="row">
+                          <div class="col-md-12">Sei sicuro di voler cancellare il servizio? </div>
+                      </div>
+                      <br>
+                  </div>
+                  <div class="modal-footer">
+                      <div class="row col-md-12">
+                          <div class="col-md-6"><input style="background: darkgrey;" type="button" data-dismiss="modal" name="Chiudi" value="No" class="mt-3 float-left"></div>
+                          <div class="col-md-6"><input style="background: darkred;" type="button" data-dismiss="modal" name="aprovaCancellazioneServizio" id="aprovaCancellazioneServizio" value="Si" class="mt-3 float-right"></div>
+                      </div>
+                  </div>
+          </div>
+      </div>
+  </div>
 
 
 
@@ -782,7 +828,7 @@ foreach ($uniqueIdIst as $key => $results) {
 
 
 <script>
-  passwordToggle = document.getElementById('newUserPasswordShow');
+ var passwordToggle = document.getElementById('newUserPasswordShow');
   passwordInput = document.getElementById('newUserPassword');
 
   passwordToggle.addEventListener('change', function() {
@@ -794,4 +840,85 @@ foreach ($uniqueIdIst as $key => $results) {
     }
 
   });
+  function onChangeTipoServizio(tipoServizioField) {
+     let tipoServizio = tipoServizioField.value;
+     showAllFieldsServizio()
+
+    switch (tipoServizio) {
+      case "nbn": //Lasciare visibili solo campi NBN e Nome Datasource
+        hideFields([
+                  "tsSitoOaiLabel",
+                  "tsContatti",
+                  "tsFormat",
+                  "tsSet",
+                  "tsEmbargo",
+                  "tsPwdEmbargo",
+                  ]);
+        break;
+      case "td":
+      case "ej":
+      case "eb":
+        hideFields([
+                  "tsNbnApi",
+                  "tsNbnPsw",
+                  "tsNbnIp"
+                  ]);
+      break;
+      default:
+      //hideAllFieldsServizio()
+      showAllFieldsServizio()
+        break;
+    }
+  }
+  function hideFields(fieldIds) {
+    if(fieldIds == null || fieldIds == undefined || fieldIds.length == 0)
+      return;
+    fieldIds.forEach(id => {
+      setDisplay(id, "none")
+    });
+  }
+  function showAllFieldsServizio() {
+    hideFields(["alertSelezionaTipo"])
+    showFields([  "tsSitoOaiLabel",
+                  "tsDataSource",
+                  "tsSitoOai",
+                  "tsContatti",
+                  "tsFormat",
+                  "tsSet",
+                  "tsEmbargo",
+                  "tsPwdEmbargo",
+                  "tsNbnApi",
+                  "tsNbnPsw",
+                  "tsNbnIp"]);
+  }
+  function hideAllFieldsServizio() {
+    showFields(["alertSelezionaTipo"])
+    hideFields(["tsDataSource",
+                 "tsSitoOaiLabel",
+                  "tsSitoOai",
+                  "tsContatti",
+                  "tsFormat",
+                  "tsSet",
+                  "tsEmbargo",
+                  "tsPwdEmbargo",
+                  "tsNbnApi",
+                  "tsNbnPsw",
+                  "tsNbnIp"]);
+  }
+  function showFields(fieldIds) {
+    if(fieldIds == null || fieldIds == undefined || fieldIds.length == 0)
+      return;
+    fieldIds.forEach(id => {
+      setDisplay(id, "inline")
+    });
+  }
+  function setDisplay(id, cssAction) {
+    var x = document.getElementById(id);
+    x.style.display = cssAction;
+  }
+ function onChangeDataSource(dataSourceField) {
+  let nomeDataSource = dataSourceField.value;
+
+  //TODO: chiamata php per verica campo in database
+  }
 </script>

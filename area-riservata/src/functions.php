@@ -1355,6 +1355,16 @@ function retrieve_agent_nbn($dbNBN, $subnamespaceID, $idDatasource) {
 }
 
 
+function retrieve_id_servizio($dbMD, $id_istituzione, $servizio)  {
+    $prepareQuery = $dbMD->prepare("SELECT ID FROM MDServizi WHERE id_istituzione='%s' and servizio_abilitato = '%s'", $id_istituzione, $servizio);
+    $result        = $dbMD->get_results($prepareQuery);
+    if($result){
+        return $result[0]->ID;
+    }
+    return $result;
+}
+
+
 
 
 
@@ -1374,6 +1384,17 @@ function retrieve_id_datasource_for_istituzione($dbNBN, $subnamespaceID, $url) {
     return $result;
    
 }
+
+function retrieve_url_harvest_anagrafe($dbHarvest, $url)  {
+    $prepareQuery = $dbHarvest->prepare("SELECT harvest_url FROM anagrafe WHERE harvest_url='%s'", $url);
+    $result        = $dbHarvest->get_results($prepareQuery);
+    if($result){
+        return $result[0]->harvest_url;
+    }
+    return $result;
+}
+
+
 
 function insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $contatti, $formatMetadati, $setMetadati, $utenzaEmbargo, $pwdEmbargo, $servizioAbilitato, $loginIstituzione, $urlOai ){
 
