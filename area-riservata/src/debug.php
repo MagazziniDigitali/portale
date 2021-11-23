@@ -37,14 +37,14 @@ function wh_log($log_level, $log_msg)
 		return;
 
 
-
-    $log_filename = "import.log";
-    if (!file_exists($log_filename)) 
+    // ABSPATH = base url del sito (eg: /var/www/depositolegale.it)
+    $log_dir = ABSPATH ."/area-riservata/log";
+    if (!file_exists($log_dir)) 
     {
         // create directory/folder uploads.
-        mkdir($log_filename, 0777, true);
+        mkdir($log_dir, 0777, true);
     }
-    $log_file_data = $log_filename.'/log_' . date('d-M-Y') . '.log';
+    $log_file_data = $log_dir.'/log_' . date('d-M-Y') . '.log';
     // if you don't add `FILE_APPEND`, the file will be erased each time you add a log
     file_put_contents($log_file_data, $LOG_LEVEL_MSG[intval($log_level)] . date('d-M-Y h:i:s') . " + " . $log_msg . "\n", FILE_APPEND); //  
 } 
