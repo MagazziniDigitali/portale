@@ -161,23 +161,16 @@ function inserisciServizio($dbMD, $dbNBN, $dbHarvest)
     $loginIstituzione = $_POST['Ist_login_modal'];
 
 
-  $tesiServizioAttivo ='';
-  $isNbn = false;
+  $isServizioAttivo = '';
+  $isNbn = ($servizioAbilitato =='nbn');
   $isSendEmail = false;
   $idDatasource = null;
-  if($servizioAbilitato=='td'){
-    $tesiServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'td');
-  }else if($servizioAbilitato=='ej'){
-    $tesiServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'ej');
-  }else if($servizioAbilitato=='eb'){
-    $tesiServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'eb');
-  } else if ($servizioAbilitato =='nbn') {
-    //AlmavivA 17/11/2021
-    $tesiServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'nbn');
-    $isNbn = true;
-  }
- 
- 
+  $isServizioAttivo   = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, $servizioAbilitato);
+   
+      //INSERT INTO MD
+  if (empty($isServizioAttivo)) {
+        $insertServizio     = insert_into_md_servizi($dbMD, $uuidIstituzione, $servizioAbilitato);
+   }
   //INSERT INTO NBN
   //AlmavivA 17/11/2021
   //Se NBN non deve eseguire le istruzioni di harvesting
@@ -197,13 +190,9 @@ function inserisciServizio($dbMD, $dbNBN, $dbHarvest)
   //$nomeDatasource, 
   $idDatasource           = retrieve_id_datasource_for_istituzione($dbNBN, $subnamespaceID, $url);
   $insertAgent            = insert_into_nbn_agent($dbNBN, $nomeDatasource, $url, $userNBN, $pwdNBN, $ipNBN, $idDatasource, $subnamespaceID, $servizioAbilitato);
+
   $isSendEmail = ($insertAgent == 1);
 } else {
-
-    //INSERT INTO MD
-    if (empty($tesiServizioAttivo)) {
-      $insertServizio     = insert_into_md_servizi($dbMD, $uuidIstituzione, $servizioAbilitato);
-    }
     //INSERT INTO HARVEST
     $insertAnagrafe         = insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $servizioAbilitato, $loginIstituzione, $url );
   }
