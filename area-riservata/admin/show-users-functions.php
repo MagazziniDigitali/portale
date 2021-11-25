@@ -194,7 +194,7 @@ function inserisciServizio($dbMD, $dbNBN, $dbHarvest)
   $isSendEmail = ($insertAgent == 1);
 } else {
     //INSERT INTO HARVEST
-    $insertAnagrafe         = insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $servizioAbilitato, $loginIstituzione, $url );
+    $insertAnagrafe         = insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $servizioAbilitato, $loginIstituzione, $url, $nomeDatasource );
   }
    if ($isSendEmail) {
     $journalUserApiNBN    = '';

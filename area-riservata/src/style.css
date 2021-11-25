@@ -67,3 +67,7 @@
 #showUsers .card-body {
     border-top: 1px solid rgba(0,0,0,.125);
 }
+.disabilitato {
+    cursor: not-allowed;
+    background: #a9a9a9 !important;
+}

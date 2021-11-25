@@ -1151,7 +1151,20 @@ function retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstituzione) { /
     return $result;
     
 }
+function retrieve_id_login_for_istituzione($dbMD, $uuid) { // , $nomeIstituzione
 
+    $prepareQuery       = $dbMD->prepare("SELECT * FROM `MDIstituzione` WHERE ID='%s'  ", $uuid); // AND inst_name='%s', $nomeIstituzione
+    $result             = $dbMD->get_results($prepareQuery);
+
+    // $error = $dbNBN->last_error;
+    // $last_query = $dbNBN->last_query;        
+
+    if($result){
+        $loginInst     = $result[0]->LOGIN;
+        return $loginInst;
+    }
+    return $result;
+}
 function insert_into_nbn_datasource($dbNBN, $nomeDatasource, $urlOai, $subnamespaceID, $servizioAbilitato) {
 
     $insert = $dbNBN->insert(
@@ -1323,7 +1336,14 @@ function retrieve_id_datasource($dbNBN, $subnamespaceID, $servizioAbilitato) {
     }
     return $result;
 }
-
+function retrieve_ids_datasources($dbNBN, $subnamespaceID, $servizioAbilitato) {
+    $prepareQuery       = $dbNBN->prepare("SELECT datasourceID FROM datasource WHERE materiale='%s' AND subNamespaceID='%s' ", $servizioAbilitato, $subnamespaceID);
+   $result             = $dbNBN->get_results($prepareQuery);
+    if($result){
+        return $result;
+    }
+    return null;
+}
 function retrieve_id_istituzione($dbMD, $login) {
     $prepareQuery = $dbMD->prepare("SELECT ID FROM MDIstituzione WHERE login='%s'", $login);
     $result        = $dbMD->get_results($prepareQuery);
@@ -1396,11 +1416,30 @@ function retrieve_url_harvest_anagrafe($dbHarvest, $url)  {
 
 
 
-function insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $contatti, $formatMetadati, $setMetadati, $utenzaEmbargo, $pwdEmbargo, $servizioAbilitato, $loginIstituzione, $urlOai ){
+function insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $contatti, $formatMetadati, $setMetadati, $utenzaEmbargo, $pwdEmbargo, $servizioAbilitato, $loginIstituzione, $urlOai, $nomeDatasource ){
 
     $selectID   = $dbHarvest->get_row("SELECT MAX(ID) AS 'MaximumValue' FROM anagrafe");
     $id         = intval($selectID->MaximumValue);
     $id        += 1;
+    $datasource = '';
+    //eb -> testo utente
+    //ej -> login . testo
+    //td -> solo login (campo disabilitato)
+    switch ($servizioAbilitato) {
+        case 'ej':
+            # code...
+            $datasource = $loginIstituzione.'.'.$nomeDatasource;
+            break;
+            
+        case 'td':
+            $datasource = $loginIstituzione;
+            break;
+        
+        default:
+            # code...
+            $datasource = $nomeDatasource;
+            break;
+    }
 
     $insert = $dbHarvest->insert(
         'anagrafe',
@@ -1414,7 +1453,7 @@ function insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasourc
             'harvest_userEmbargo'       => $utenzaEmbargo,
             'harvest_pwdEmbargo'        => $pwdEmbargo,
             'harvest_materiale'         => $servizioAbilitato,
-            'harvest_name'              => $loginIstituzione,
+            'harvest_name'              => $datasource,
             'harvest_url'               => $urlOai
         )
     );
@@ -1501,6 +1540,25 @@ function select_agent_ngn_and_anagrafe_harvest($dbNBN, $dbHarvest, $servizioAbil
 
     return $results;
         
+}
+
+function select_anagrafe_harvest($dbHarvest, $idIstituzione, $tipoServizio){
+
+    $query = $dbHarvest->prepare("SELECT * FROM anagrafe WHERE id_istituzione='%s' AND harvest_materiale = '%s' ",  $idIstituzione, $tipoServizio);
+
+    $results = $dbHarvest->get_results($query);
+
+    return $results;
+    
+}
+function select_agent_nbn($dbHarvest, $idIstituzione, $tipoServizio){
+
+    $query = $dbHarvest->prepare("SELECT * FROM anagrafe WHERE id_istituzione='%s' AND harvest_materiale = '%s' ",  $idIstituzione, $tipoServizio);
+
+    $results = $dbHarvest->get_results($query);
+
+    return $results;
+    
 }
 
 function select_agent_ngn($dbNBN, $servizioAbilitato, $subnamespaceID){
