@@ -71,3 +71,6 @@
     cursor: not-allowed;
     background: #a9a9a9 !important;
 }
+.card {
+    margin-top: 5px;
+}

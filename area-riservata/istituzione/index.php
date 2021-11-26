@@ -21,7 +21,7 @@ if ($_SESSION['role'] != 'admin_istituzione') {
       <div class="container">
          <p>Benvenuto <strong><?php echo $_SESSION['name'] . ' ' . $_SESSION['surname']; ?></strong></p>
          <?php if ($_SESSION['istituzione'] != 'istituzioneBase') { ?>
-            <p>Istituzione di appartenenza: <?php echo $_SESSION['istituzione'] ?></p>
+            <p>Istituzione di appartenenza: <strong><?php echo $_SESSION['istituzione'] ?></strong></p>
          <?php } ?>
 
          <div id="addUser">
@@ -50,12 +50,13 @@ if ($_SESSION['role'] != 'admin_istituzione') {
             <div class="row">
 
                <?php if (empty($tesiServizioAttivo)) { ?>
-                  <div class="col-md-4"><input style="background: cadetblue;" name="gotosignupTesiDottorato" type="button" value="Tesi di Dottorato" class="col-md-12 mt-3 float-left" onclick="location.href='signup-services#tesiDottorato';" /></div>
+                  <div class="col-md-3"><input style="background: cadetblue;" name="gotosignupTesiDottorato" type="button" value="Tesi di Dottorato" class="col-md-12 mt-3 float-left" onclick="location.href='signup-services#tesiDottorato';" /></div>
                <?php } ?>
 
-               <div class="col-md-4"><input style="background: cadetblue;" name="gotosignupEJournal" type="button" value="e-Journal" class="col-md-12 mt-3 float-left" onclick="location.href='signup-services#eJournal';" /></div>
+               <div class="col-md-3"><input style="background: cadetblue;" name="gotosignupEJournal" type="button" value="e-Journal" class="col-md-12 mt-3 float-left" onclick="location.href='signup-services#eJournal';" /></div>
 
-               <div class="col-md-4"><input style="background: cadetblue;" name="gotosignupEBook" type="button" value="e-Book" class="col-md-12 mt-3 float-left" onclick="location.href='signup-services#eBook';" /></div>
+               <div class="col-md-3"><input style="background: cadetblue;" name="gotosignupEBook" type="button" value="e-Book" class="col-md-12 mt-3 float-left" onclick="location.href='signup-services#eBook';" /></div>
+               <div class="col-md-3"><input style="background: cadetblue;" name="gotosignupNbn" type="button" value="NBN" class="col-md-12 mt-3 float-left" onclick="location.href='signup-services#NBN';" /></div>
 
             </div>
             <!-- <a  href="signup-services#tesiDottorato">Tesi di Dottorato</a>, <a href="signup-services#eJournal">e-Journal</a>, <a href="signup-services#eBook">e-Book</a> -->

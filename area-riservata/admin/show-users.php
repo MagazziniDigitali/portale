@@ -142,11 +142,11 @@ foreach ($uniqueIdIst as $key => $results) {
 ?>
 
   <div class="card">
-    <div class="card-header" id="heading<?php echo $key ?>">
+    <div class="card-header" id="heading<?php echo $idIst ?>">
       <?php if (isset($isImport) && $isImport == 1) { ?>
         <input class="form-check-input" type="checkbox" value="" id="<?php echo $idIst ?>">
       <?php } ?>
-      <button class="btn" data-toggle="collapse" data-target="#collapse_ist<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_ist<?php echo $key ?>">
+      <button class="btn" data-toggle="collapse" data-target="#collapse_ist<?php echo $idIst ?>" aria-expanded="false" aria-controls="collapse_ist<?php echo $idIst ?>">
         <?php if ($loginIstLogin == 'istituzioneBase') { ?>
           <h5 class="m-0">Utenti non appartenenti a un'istituzione</h5>
         <?php } else { ?>
@@ -167,7 +167,7 @@ foreach ($uniqueIdIst as $key => $results) {
       <?php } ?>
     </div>
 
-    <div id="collapse_ist<?php echo $key ?>" class="collapse" aria-labelledby="heading<?php echo $key ?>">
+    <div id="collapse_ist<?php echo $idIst ?>" class="collapse" aria-labelledby="heading<?php echo $idIst ?>">
       <div class="card-body">
 
         <h4>Utenti:
