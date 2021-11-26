@@ -134,20 +134,20 @@ if ($_SESSION['role'] == 'superadmin') {
     get_header();
 ?>
 
-    <header class="entry-header has-text-align-center header-footer-group" style="background: white;">
+  <!--  <header class="entry-header has-text-align-center header-footer-group" style="background: white;">
 
 
         <div class="entry-header-inner section-inner medium">
 
             <h1 class="entry-title">Home SuperAdmin</h1>
-        </div><!-- .entry-header-inner -->
+        </div>
 
-    </header>
+    </header> -->
     <section>
         <div class="container">
-            <p>Benvenuto <strong><?php echo $_SESSION['name'] . ' ' . $_SESSION['surname']; ?></strong></p>
+            <p class="text-center">Benvenuto <strong><?php echo ($_SESSION['name'] . ' ' . $_SESSION['surname']); ?></strong> (SuperAdmin)</p>
             <?php if ($_SESSION['istituzione'] != 'istituzioneBase') { ?>
-                <p>Istituzione di appartenenza: <?php echo $_SESSION['istituzione'] ?></p>
+                <p class="text-center">Istituzione di appartenenza: <?php echo $_SESSION['istituzione'] ?></p>
             <?php } ?>
 
             <div id="accordionRichiesteSignup">

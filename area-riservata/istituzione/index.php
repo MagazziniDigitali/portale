@@ -19,23 +19,26 @@ if ($_SESSION['role'] != 'admin_istituzione') {
 
    <section>
       <div class="container">
-         <p>Benvenuto <strong><?php echo $_SESSION['name'] . ' ' . $_SESSION['surname']; ?></strong></p>
+         <p class="text-center">Benvenuto <strong><?php echo $_SESSION['name'] . ' ' . $_SESSION['surname']; ?></strong></p>
          <?php if ($_SESSION['istituzione'] != 'istituzioneBase') { ?>
-            <p>Istituzione di appartenenza: <strong><?php echo $_SESSION['istituzione'] ?></strong></p>
+            <p class="text-center">Istituzione di appartenenza: <strong><?php echo $_SESSION['istituzione'] ?></strong></p>
          <?php } ?>
 
          <div id="addUser">
-            <h5>Aggiungi un utente</h5>
+            <h6>Aggiungi un utente</h6>
             <?php include("add-user.php"); ?>
          </div>
 
          <div id="showUsers">
-            <h5>Utenti registrati:</h5>
+            <h5>Utenti registrati</h5>
+            <div class="divServizi">
+
             <?php if ($checkUserPerIstituzione == 0) { ?>
-               <h6>Non ci sono utenti da mostrare</h6>
+               <p>Non ci sono utenti da mostrare</p>
             <?php } else {
                include("show-users.php");
             } ?>
+            </div>
          </div>
 
          <?php
@@ -46,7 +49,7 @@ if ($_SESSION['role'] != 'admin_istituzione') {
 
 
          <div id="signupServices">
-            <h5>Registra l'istituzione ai servizi:</h5>
+            <h6>Registra l'istituzione ai servizi:</h6>
             <div class="row">
 
                <?php if (empty($tesiServizioAttivo)) { ?>

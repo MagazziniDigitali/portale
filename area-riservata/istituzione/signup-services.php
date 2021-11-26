@@ -119,15 +119,15 @@ if(!empty($nbnServizioAttivo)) {
   get_header();
 ?>
 
-  <section>
-    <div class="container">
+  
+    <div class="">
 
       <!-- <div id="tesiDottorato">
 
       <?php if (empty($tesiServizioAttivo)) {  ?>
         <?php if (!$_isviewonly) { ?>
 
-        <h5>Registra l'istituzione al servizio di Tesi di Dottorato</h5>
+        <h6>Registra l'istituzione al servizio di Tesi di Dottorato</h6>
 
         <?php if (isset($alertTesi)) { ?>
             <div class='alert alert-warning'><?php echo $alertTesi ?></div>
@@ -192,7 +192,7 @@ if(!empty($nbnServizioAttivo)) {
         <?php } ?>
         <?php } else { ?>
 
-        <h5>Sei già iscritto al servizio di Tesi di Dottorato</h5>
+        <h6>Sei già iscritto al servizio di Tesi di Dottorato</h6>
 
         <?php foreach ($tesiAll as $key => $results) {
        $nomeDatasource     = $results->harvest_name;
@@ -264,15 +264,15 @@ if(!empty($nbnServizioAttivo)) {
 
    <!--   <?php if ($_isviewonly) { ?>
 
-        <h5>Servizi registrati:</h5>
+        <h6>Servizi registrati:</h6>
 
       <?php } ?> -->
 
-      <div id="tesiDottorato">
+      <div id="ServiziShowup">
         <?php if ((!$_isviewonly) && (empty($tesiServizioAttivo))) { ?>
           <div id="tesi" class="mb-5">
 
-            <h5>Registra l'istituzione al servizio Tesi di Dottorato</h5>
+            <h6>Registra l'istituzione al servizio Tesi di Dottorato</h6>
 
             <?php if (isset($alertTesi)) { ?>
               <div class='alert alert-warning'><?php echo $alertTesi ?></div>
@@ -338,14 +338,14 @@ if(!empty($nbnServizioAttivo)) {
 
 
         <?php if (!empty($tesiServizioAttivo) || !empty($journalServizioAttivo) || !empty($bookServizioAttivo) || !empty($nbnServizioAttivo)) { ?>
-          <h4>Servizi: </h4>
+          <h5>Servizi </h5>
         <?php } ?>
 
           <!-- nbn -->
           <?php if (!empty($nbnServizioAttivo) && $nbnAll) { ?>
-          <div id="infonbn">
+          <div class="divServizi" id="infonbn">
 
-            <h5>NBN - National Bibliography Number </h5>
+            <h6>NBN - National Bibliography Number </h6>
 
             <?php foreach ($nbnAll as $key => $results) {
              $nomeDatasource_nbn     = $results->agent_name;
@@ -363,7 +363,7 @@ if(!empty($nbnServizioAttivo)) {
                 <div class="card-header" id="heading<?php echo $key ?>">
 
                   <button class="btn" data-toggle="collapse" data-target="#collapse_nbn<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_tesi<?php echo $key ?>">
-                    <h5 class="m-0"><?php echo $nomeDatasource_nbn ?></h5>
+                    <h6 class="m-0"><?php echo $nomeDatasource_nbn ?></h6>
                   </button>
 
                 </div>
@@ -443,9 +443,9 @@ if(!empty($nbnServizioAttivo)) {
         <?php } // End if (!empty($nbnServizioAttivo))?>
 
         <?php if (!empty($tesiServizioAttivo)) { ?>
-          <div id="infotesi">
+          <div class="divServizi"  id="infotesi">
 
-            <h5>Tesi di Dottorato </h5>
+            <h6>Tesi di Dottorato </h6>
 
             <?php foreach ($tesiAll as $key => $results) {
                 $nomeDatasource_td     = $results->harvest_name;
@@ -464,7 +464,7 @@ if(!empty($nbnServizioAttivo)) {
                 <div class="card-header" id="heading<?php echo $key ?>">
 
                   <button class="btn" data-toggle="collapse" data-target="#collapse_tesi<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_tesi<?php echo $key ?>">
-                    <h5 class="m-0"><?php echo $nomeDatasource_td ?></h5>
+                    <h6 class="m-0"><?php echo $nomeDatasource_td ?></h6>
                   </button>
 
                 </div>
@@ -570,7 +570,7 @@ if(!empty($nbnServizioAttivo)) {
         <?php if (!$_isviewonly) { ?>
           <div id="eJournal" class="mb-5">
 
-            <h5>Registra l'istituzione al servizio e-Journal</h5>
+            <h6>Registra l'istituzione al servizio e-Journal</h6>
 
             <?php if (isset($alertJournal)) { ?>
               <div class='alert alert-warning'><?php echo $alertJournal ?></div>
@@ -624,9 +624,9 @@ if(!empty($nbnServizioAttivo)) {
         <?php } ?>
 
         <?php if (!empty($journalServizioAttivo)) { ?>
-          <div id="infoJournal">
+          <div id="infoJournal" class="divServizi" >
 
-            <h5>e-Journal </h5>
+            <h6>e-Journal </h6>
 
             <?php foreach ($journalAll as $key => $results) {
 
@@ -651,7 +651,7 @@ if(!empty($nbnServizioAttivo)) {
                 <div class="card-header" id="heading<?php echo $key ?>">
 
                   <button class="btn" data-toggle="collapse" data-target="#collapse_journal<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_journal<?php echo $key ?>">
-                    <h5 class="m-0"><?php echo $nomeDatasource_ej ?></h5>
+                    <h6 class="m-0"><?php echo $nomeDatasource_ej ?></h6>
                   </button>
 
                 </div>
@@ -735,7 +735,7 @@ if(!empty($nbnServizioAttivo)) {
         <?php } ?>
         <?php if (!$_isviewonly) { ?>
           <div id="eBook" class="mb-5">
-            <h5>Registra l'istituzione al servizio e-Book</h5>
+            <h6>Registra l'istituzione al servizio e-Book</h6>
             <?php if (isset($alertBook)) { ?>
               <div class='alert alert-warning'><?php echo $alertBook ?></div>
             <?php } ?>
@@ -775,8 +775,8 @@ if(!empty($nbnServizioAttivo)) {
         <?php } ?>
 
         <?php if (!empty($bookServizioAttivo)) { ?>
-          <div id="infoBook">
-            <h5>e-Book </h5>
+          <div id="infoBook" class="divServizi" >
+            <h6>e-Book </h6>
             <?php foreach ($bookAll as $keyBook => $results) {
                 $nomeDatasource_eb     = $results->harvest_name;
                 $url_eb                = $results->harvest_url;
@@ -792,7 +792,7 @@ if(!empty($nbnServizioAttivo)) {
               <div class="card">
                 <div class="card-header" id="heading<?php echo $keyBook ?>">
                   <button class="btn" data-toggle="collapse" data-target="#collapse_Book<?php echo $keyBook ?>" aria-expanded="false" aria-controls="collapse_Book<?php echo $keyBook ?>">
-                    <h5 class="m-0"><?php echo $nomeDatasource_eb ?></h5>
+                    <h6 class="m-0"><?php echo $nomeDatasource_eb ?></h6>
                   </button>
                 </div>
                 <div id="collapse_Book<?php echo $keyBook ?>" class="collapse" aria-labelledby="heading<?php echo $keyBook ?>">
@@ -855,8 +855,6 @@ if(!empty($nbnServizioAttivo)) {
             <?php } ?>
           </div>
         <?php } ?>
-
-  </section>
 
 <?php
   if (!$_isviewonly) {
