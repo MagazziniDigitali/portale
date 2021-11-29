@@ -16,13 +16,17 @@ if ($_SESSION['role'] != 'admin_istituzione') {
    $checkUserPerIstituzione = check_users_for_istituzione($dbMD);
    get_header();
 ?>
-
-   <section>
-      <div class="container">
-         <p class="text-center">Benvenuto <strong><?php echo $_SESSION['name'] . ' ' . $_SESSION['surname']; ?></strong></p>
+<header id="homeHeader" class="entry-header welcomePad has-text-align-center">
+        <div class="entry-header-inner section-inner medium">
+        <h5 class="entry-title"><?php echo $_SESSION['istituzione'] ?></h5>
+         <h4 class="entry-title">Benvenuto <?php echo ($_SESSION['name'] . ' ' . $_SESSION['surname']); ?></h4>
+        </div>
+    </header>
+      <div class="container margin-top-15">
+      <!--   <p class="text-center">Benvenuto <strong><?php echo $_SESSION['name'] . ' ' . $_SESSION['surname']; ?></strong></p>
          <?php if ($_SESSION['istituzione'] != 'istituzioneBase') { ?>
             <p class="text-center">Istituzione di appartenenza: <strong><?php echo $_SESSION['istituzione'] ?></strong></p>
-         <?php } ?>
+         <?php } ?> -->
 
          <div id="addUser">
             <h6>Aggiungi un utente</h6>
@@ -69,8 +73,6 @@ if ($_SESSION['role'] != 'admin_istituzione') {
 
 
       </div>
-   </section>
-
 
 
 <?php }

@@ -80,14 +80,14 @@ if ($_SESSION['role'] == 'superadmin') {
 
 get_header();
 ?>
-<header class="entry-header has-text-align-center header-footer-group" style="background: white;">
-  <div class="entry-header-inner section-inner medium">
-    <h1 class="entry-title">Import Istituzioni</h1>
-  </div>
-</header>
-<section>
-  <div class="container">
-    <p>Benvenuto <strong><?php echo $_SESSION['name'] . ' ' . $_SESSION['surname']; ?></strong></p>
+ <header id="homeHeader" class="entry-header welcomePad has-text-align-center">
+        <div class="entry-header-inner section-inner medium">
+           <!-- <h4 class="entry-title">Benvenuto <strong><?php echo ($_SESSION['name'] . ' ' . $_SESSION['surname']); ?></strong> (SuperAdmin)</h4> -->
+            <h5 class="text-center">Import Istituzioni</h5>
+        </div>
+    </header>
+  <div class="container margin-top-15">
+   <!-- <p>Benvenuto <strong><?php echo $_SESSION['name'] . ' ' . $_SESSION['surname']; ?></strong></p> -->
     <form action="" method="post" enctype="multipart/form-data">
       Seleziona un file* da caricare:
       <input type="file" accept=".csv" name="file" id="file">
@@ -119,7 +119,6 @@ get_header();
       include("show-users.php"); ?>
     </div>
   </div>
-</section>
 <?php
 get_footer();
 ?>

@@ -91,9 +91,15 @@
       get_header();
 
 ?>
+<header id="homeHeader" class="entry-header welcomePad has-text-align-center">
+        <div class="entry-header-inner section-inner medium">
+        <h5 class="entry-title">Gestione profilo</h5>
 
-<section>
-   <div class="container">
+<h6 class="entry-title"><?php echo ($_SESSION['name'] . ' ' . $_SESSION['surname']); ?></h6>
+
+        </div>
+    </header>
+   <div class="container margin-top-15">
       <form action="" method="post">
          <div class="row">
             <div class="col-md-6">
@@ -136,7 +142,6 @@
             </div>
       </form>
    </div>
-</section>
 
 <?php
    }
