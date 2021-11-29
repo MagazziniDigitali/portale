@@ -50,19 +50,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     inserisciServizio($dbMD, $dbNBN, $dbHarvest);
   
   else if (isset($_POST['modificaTesi'])) {
-    $id_istituzione  = $_POST['id_Ist_td'];
-    $subnamespace  = $_POST['userNBN_td'];
-    modificaServizio($dbHarvest, $dbNBN, $id_istituzione, $subnamespace, 'td');
+   $id_istituzione  = $_POST['id_Ist_td'];
+   modificaServizio($dbHarvest, $dbNBN, $id_istituzione, 'td');
   }
   else if (isset($_POST['modificaJournal'])) {
-    $id_istituzione  = $_POST['id_Ist_ej'];
-    $subnamespace  = $_POST['userNBN_ej'];
-    modificaServizio($dbHarvest, $dbNBN, $id_istituzione, $subnamespace, 'ej');
+   $id_istituzione  = $_POST['id_Ist_ej'];
+    modificaServizio($dbHarvest, $dbNBN, $id_istituzione, 'ej');
   }
   else if (isset($_POST['modificaBook'])) {
     $id_istituzione  = $_POST['id_Ist_eb'];
-    $subnamespace  = $_POST['userNBN_eb'];
-    modificaServizio($dbHarvest, $dbNBN, $id_istituzione, $subnamespace, 'eb');
+    modificaServizio($dbHarvest, $dbNBN, $id_istituzione, 'eb');
+  } 
+  else if (isset($_POST['modificaNBN'])) {
+    $id_istituzione  = $_POST['id_Ist_nbn'];
+    modificaServizio($dbHarvest, $dbNBN, $id_istituzione, 'nbn');
   }
   // elseif (isset($_POST['rimuoviTesi']))
   // {
@@ -194,7 +195,7 @@ foreach ($uniqueIdIst as $key => $results) {
             <div class="card-header" id="heading<?php echo $key ?>">
 
               <button class="btn" data-toggle="collapse" data-target="#collapse_utente<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_utente<?php echo $key ?>">
-                <h5 class="m-0"> <?php if ($admin == 1) { ?>
+                <h5 class="m-0"> <?php if ($admin == 1) { $gestoreIstituzioneUser = $login; ?>
                     <h5 class="mt-0">Gestore d'istituzione: <?php echo $login ?></h5>
                   <?php } else { ?>
                     <h5 class="mt-0"><?php echo $login ?></h5>
@@ -304,18 +305,15 @@ foreach ($uniqueIdIst as $key => $results) {
             <?php foreach ($nbnAll as $key => $results) {
              $nomeDatasource_nbn     = $results->agent_name;
              $url_nbn                = $results->baseurl;
-             // $contatti_nbn           = $results->harvest_contact;
-             // $format_nbn             = $results->harvest_format;
-             // $set_nbn                = $results->harvest_set;
-             // $userEmbargo_nbn        = $results->harvest_userEmbargo;
-             // $pwdEmbargo_nbn         = $results->harvest_pwdEmbargo;
-          $userNBN_nbn            = $results->user;
+             $userNBN_nbn            = $results->user;
              $pwdNBN_nbn             = $results->pass;
              $ipNBN_nbn              = $results->IP;
              $idSubNamespace_nbn     = $results->subNamespaceID;
-              $idDatasource_nbn       = $results->datasourceID;
-              $id_Ist_nbn             = $results->id_istituzione;
-              $agent_name_nbn       = $results->agent_name;
+             $idDatasource_nbn       = $results->datasourceID;
+             $id_Ist_nbn             = $results->id_istituzione;
+             $agent_name_nbn       = $results->agent_name;
+             $idServizio =          $results->agentID;
+
             ?>
 
               <div class="card">
@@ -335,7 +333,8 @@ foreach ($uniqueIdIst as $key => $results) {
                       <input type="hidden" name="idDatasource_nbn" value="<?php echo $idDatasource_nbn ?>">
                       <input type="hidden" name="id_Ist_nbn" value="<?php echo $id_Ist_nbn ?>">
                       <input type="hidden" name="agent_name_nbn" value="<?php echo $agent_name_nbn ?>">
-
+                      <input type="hidden" name="gestoreIstituzioneUser" value="<?php echo $gestoreIstituzioneUser ?>">
+                      <input type="hidden" name="idServizio" value="<?php echo $idServizio ?>">
 
 
                       <div class="row">
@@ -387,7 +386,7 @@ foreach ($uniqueIdIst as $key => $results) {
 
                           <?php } ?>
 
-                          <input type="submit" name="modificaNbn" value="Modifica" class="mt-3 float-right">
+                          <input type="submit" name="modificaNBN" value="Modifica" class="mt-3 float-right">
                         </div>
                       </div>
 
@@ -421,6 +420,8 @@ foreach ($uniqueIdIst as $key => $results) {
             //  $idDatasource_td       = $results->datasourceID;
               $id_Ist_td             = $results->id_istituzione;
               $harvest_name_td       = $results->harvest_name;
+              $id = $results->id;
+
             ?>
 
               <div class="card">
@@ -436,12 +437,10 @@ foreach ($uniqueIdIst as $key => $results) {
                   <div class="card-body">
                     <form action="" method="post">
 
-                      <input type="hidden" name="idSubNamespace_td" value="<?php echo $idSubNamespace_td ?>">
-                      <input type="hidden" name="idDatasource_td" value="<?php echo $idDatasource_td ?>">
+                      <input type="hidden" name="gestoreIstituzioneUser" value="<?php echo $gestoreIstituzioneUser ?>">
+                      <input type="hidden" name="idServizio" value="<?php echo $id ?>">
                       <input type="hidden" name="id_Ist_td" value="<?php echo $id_Ist_td ?>">
                       <input type="hidden" name="harvest_name_td" value="<?php echo $harvest_name_td ?>">
-
-
 
                       <div class="row">
                         <div class="col-md-6">
@@ -551,6 +550,8 @@ foreach ($uniqueIdIst as $key => $results) {
              // $idDatasource_ej       = $results->datasourceID;
               $id_Ist_ej          = $results->id_istituzione;
               $harvest_name_ej    = $results->harvest_name;
+              $id = $results->id;
+
             ?>
 
               <div class="card">
@@ -565,10 +566,12 @@ foreach ($uniqueIdIst as $key => $results) {
                 <div id="collapse_journal<?php echo $key ?>" class="collapse" aria-labelledby="heading<?php echo $key ?>">
                   <div class="card-body">
                     <form action="" method="post">
-                      <input type="hidden" name="idSubNamespace_ej" value="<?php echo $idSubNamespace_ej ?>">
-                      <input type="hidden" name="idDatasource_ej" value="<?php echo $idDatasource_ej ?>">
+                    <!--  <input type="hidden" name="idSubNamespace_ej" value="<?php echo $idSubNamespace_ej ?>">
+                      <input type="hidden" name="idDatasource_ej" value="<?php echo $idDatasource_ej ?>"> -->
                       <input type="hidden" name="id_Ist_ej" value="<?php echo $id_Ist_ej ?>">
                       <input type="hidden" name="harvest_name_ej" value="<?php echo $harvest_name_ej ?>">
+                      <input type="hidden" name="gestoreIstituzioneUser" value="<?php echo $gestoreIstituzioneUser ?>">
+                      <input type="hidden" name="idServizio" value="<?php echo $id ?>">
                       <div class="row">
                         <div class="col-md-6">
                           <label for="nomeDatasource_ej">Nome Datasource</label>
@@ -654,6 +657,7 @@ foreach ($uniqueIdIst as $key => $results) {
              // $ipNBN_eb              = $results->IP;
              // $idSubNamespace_eb  = $results->subNamespaceID;
              // $idDatasource_eb    = $results->datasourceID;
+             $id = $results->id;
               $id_Ist_eb              = $results->id_istituzione;
               $harvest_name_eb        = $results->harvest_name;
             ?>
@@ -672,10 +676,14 @@ foreach ($uniqueIdIst as $key => $results) {
                     <?php } ?>
 
                     <form action="" method="post">
-                      <input type="hidden" name="idSubNamespace_eb" value="<?php echo $idSubNamespace_eb ?>">
-                      <input type="hidden" name="idDatasource_eb" value="<?php echo $idDatasource_eb ?>">
+                  <!--    <input type="hidden" name="idSubNamespace_eb" value="<?php echo $idSubNamespace_eb ?>">
+                      <input type="hidden" name="idDatasource_eb" value="<?php echo $idDatasource_eb ?>"> -->
                       <input type="hidden" name="id_Ist_eb" value="<?php echo $id_Ist_eb ?>">
+                      <input type="hidden" name="gestoreIstituzioneUser" value="<?php echo $gestoreIstituzioneUser ?>">
+                      <input type="hidden" name="idServizio" value="<?php echo $id ?>">
+
                       <input type="hidden" name="harvest_name_eb" value="<?php echo $harvest_name_eb ?>">
+
                       <div class="row">
                         <div class="col-md-6">
                           <label for="nomeDatasource_eb">Nome Datasource</label>

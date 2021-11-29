@@ -1462,7 +1462,7 @@ function insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasourc
 
 }
 
-function update_anagrafe_harvest($dbHarvest, $uuidIstituzione, $loginIstituzione, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $url, $servizioAbilitato, $idDatasource){ // , $nomeIstituzione, $nomeDatasource
+function update_anagrafe_harvest($dbHarvest, $uuidIstituzione, $nomeDatasource, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $url, $servizioAbilitato, $idDatasource){ // , $nomeIstituzione, $nomeDatasource
 
     $query = $dbHarvest->update(
       'anagrafe',
@@ -1472,7 +1472,7 @@ function update_anagrafe_harvest($dbHarvest, $uuidIstituzione, $loginIstituzione
         'harvest_set'               => $set,
         'harvest_userEmbargo'       => $userEmbargo,
         'harvest_pwdEmbargo'        => $pwdEmbargo,
-        'harvest_name'              => $loginIstituzione,
+        'harvest_name'              => $nomeDatasource,
         'harvest_url'               => $url
       ),
       array(
@@ -1484,8 +1484,49 @@ function update_anagrafe_harvest($dbHarvest, $uuidIstituzione, $loginIstituzione
 
     return $query;
 }
+function update_servizi_harvest($dbHarvest, $uuidIstituzione, $nomeDatasource, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $url, $servizioAbilitato, $idServizio){ // , $nomeIstituzione, $nomeDatasource
 
+    $query = $dbHarvest->update(
+      'anagrafe',
+      array(
+        'harvest_contact'           => $contatti,
+        'harvest_format'            => $format,
+        'harvest_set'               => $set,
+        'harvest_userEmbargo'       => $userEmbargo,
+        'harvest_pwdEmbargo'        => $pwdEmbargo,
+        'harvest_name'              => $nomeDatasource,
+        'harvest_url'               => $url
+      ),
+      array(
+        'id_istituzione'            => $uuidIstituzione,
+        'id'                        => $idServizio,
+        'harvest_materiale'         => $servizioAbilitato
+      )
+    );
 
+    return $query;
+}
+
+function update_servizi_nbn($dbNBN, $nomeDatasource, $user, $password, $ip, $url, $subnamespaceID, $idDatasource,  $idServizio){ // , $nomeIstituzione, $nomeDatasource
+
+    $query = $dbNBN->update(
+      'agent',
+      array(
+        'agent_name'                 => $nomeDatasource,
+        'user'            => $user,
+        'pass'               => $password,
+        'IP'       => $ip,
+        'baseurl'        => $url
+      ),
+      array(
+        'subnamespaceID'            => $subnamespaceID,
+        'datasourceID'                        => $idDatasource,
+        'agentID'         => $idServizio
+      )
+    );
+
+    return $query;
+}
 
 function update_anagrafe_harvest_mod($dbHarvest, $uuidIstituzione, $loginIstituzione, $nomeDatasource, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $url, $servizioAbilitato, $idDatasource){ // add by Hassan
 

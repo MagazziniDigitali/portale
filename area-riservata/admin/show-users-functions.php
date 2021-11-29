@@ -206,6 +206,3 @@ function inserisciServizio($dbMD, $dbNBN, $dbHarvest)
    // echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/istituzione/signup-services'</script>";
   }
 } // End inserisciServizio
-
-
-  
