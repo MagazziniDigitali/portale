@@ -59,7 +59,7 @@ function modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, $servizio) // $d
       case "ej":
         $descServizio = "e-journal";
         $datasource = $loginIstituzione.'.'.$nomeDatasource;
-        $updateResult  = update_servizi_harvest($dbHarvest, $uuidIstituzione, $datasource, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $url, $servizio, $idServizio); // , $nomeIstituzione
+        $updateResult  = update_servizi_harvest($dbHarvest, $uuidIstituzione, $datasource, $contatti, $format, $set, "", "", $url, $servizio, $idServizio); // , $nomeIstituzione
         break;
       case "eb":
         $descServizio = "e-book";
@@ -72,14 +72,16 @@ function modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, $servizio) // $d
     };
     if (!$updateResult) {
       $errorString = "Aggiornamento anagrafe harvest fallito per servizio ". $descServizio;
+      wh_log($WH_LOG_INFO, "Errore Aggiornamento abagrafe harvest: ".$updateResult);
+
     }
 
     //GestioneErrori
     if ($errorString != "") { // Signal some error
-      echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>". $errorString ."</div>";
+      echo "<div class='alert alert-danger alert-dismissible margin-top-15'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>". $errorString ."</div>";
       return;
     } else {
-      echo "<div class='alert alert-success alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Modifica andata a buon fine per servizio $descServizio.</div>";
+      echo "<div class='alert alert-success alert-dismissible margin-top-15'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Modifica andata a buon fine per servizio $descServizio.</div>";
     }
  /* // Prendiamo i dati dell'agent prima delle modifiche
   // per gestire basic authentication di apache

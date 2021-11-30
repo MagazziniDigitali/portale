@@ -1,4 +1,6 @@
 <?php
+include_once("../src/Htpasswd.php");
+include_once("../src/debug.php");
 
 function removeUser($dbMD)
 {
@@ -127,6 +129,8 @@ function addUser($dbMD)
 
 function inserisciServizio($dbMD, $dbNBN, $dbHarvest)
 {
+  global $WH_LOG_INFO;
+
   if (isset($_POST['nomeDatasource']))
     $nomeDatasource = $_POST['nomeDatasource'];
   if (isset($_POST['url']))
@@ -192,7 +196,25 @@ function inserisciServizio($dbMD, $dbNBN, $dbHarvest)
   $insertAgent            = insert_into_nbn_agent($dbNBN, $nomeDatasource, $url, $userNBN, $pwdNBN, $ipNBN, $idDatasource, $subnamespaceID, $servizioAbilitato);
 
   $isSendEmail = ($insertAgent == 1);
+  $htpasswd = new Htpasswd('../passwd/md_passwd_basic_auth');
+  if ($old_user != $userNBN) { // change of user and pwd
+    // Delete old user
+    $ret = $htpasswd->deleteUser($old_user);
+    wh_log($WH_LOG_INFO, "NBN apache managed basic authentication - Deleted user $old_user ret='$ret'");
+
+    // Add new user
+    $ret = $htpasswd->addUser($userNBN, $pwdNBN);
+    wh_log($WH_LOG_INFO, "NBN apache managed basic authentication - Added user $userNBN:$pwdNBN,  ret='$ret'");
+  } else if ($old_pwd != $pwdNBN) { // change password of old user
+    // update old user
+    $ret = $htpasswd->updateUser($userNBN, $pwdNBN);
+    wh_log($WH_LOG_INFO, "Updated user $userNBN:$pwdNBN, ret='$ret'");
+  }
 } else {
+  if( $servizioAbilitato == "ej" || $servizioAbilitato == "eb") {
+    $userEmbargo = "";
+     $pwdEmbargo = "";
+  }
     //INSERT INTO HARVEST
     $insertAnagrafe         = insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $servizioAbilitato, $loginIstituzione, $url, $nomeDatasource );
   }

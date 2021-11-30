@@ -606,17 +606,17 @@ foreach ($uniqueIdIst as $key => $results) {
                           <label for="set_ej">Set dei metadati</label>
                           <input name="set_ej" value="<?php echo $set_ej ?>" type="text">
                         </div>
-                        <div class="col-md-6">
+                       <!-- <div class="col-md-6">
                           <label for="userEmbargo_ej">Utenza per accesso embargo</label>
                           <input name="userEmbargo_ej" value="<?php echo $userEmbargo_ej ?>" type="text">
-                        </div>
+                        </div> -->
                       </div>
-                      <div class="row">
+                    <!--  <div class="row">
                         <div class="col-md-6">
                           <label for="pwdEmbargo_ej">Password per accesso embargo</label>
                           <input name="pwdEmbargo_ej" value="<?php echo $pwdEmbargo_ej ?>" type="text">
                         </div>
-                      <!--  <div class="col-md-6">
+                        <div class="col-md-6">
                           <label for="userNBN_ej">User per API NBN</label>
                           <input name="userNBN_ej" value="<?php echo $userNBN_ej ?>" type="text">
                         </div>
@@ -629,8 +629,9 @@ foreach ($uniqueIdIst as $key => $results) {
                         <div class="col-md-6">
                           <label for="ipNBN_ej">IP per API NBN</label>
                           <input name="ipNBN_ej" value="<?php echo $ipNBN_ej ?>" type="text">
-                        </div> -->
-                      </div>
+                        </div>
+                         </div> -->
+                     
 
                       <div class="row">
                         <div class="col-md-12">
@@ -993,7 +994,8 @@ foreach ($uniqueIdIst as $key => $results) {
       }
       case "ej":
       case "eb":
-        hideFields([
+        hideFields([ "tsEmbargo",
+                  "tsPwdEmbargo",
                   "tsNbnApi",
                   "tsNbnPsw",
                   "tsNbnIp"

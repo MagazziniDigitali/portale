@@ -7,6 +7,7 @@ require 'send-email/Exception.php';
 require 'send-email/PHPMailer.php';
 require 'send-email/SMTP.php';
 require 'mailer-parm.php';//hassan vado a includele  il modulo mailer-local per mandare le mail tramite mailtrap
+include_once("debug.php");
 
 function check_db_error($db){
 
@@ -1485,7 +1486,7 @@ function update_anagrafe_harvest($dbHarvest, $uuidIstituzione, $nomeDatasource, 
     return $query;
 }
 function update_servizi_harvest($dbHarvest, $uuidIstituzione, $nomeDatasource, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $url, $servizioAbilitato, $idServizio){ // , $nomeIstituzione, $nomeDatasource
-
+    
     $query = $dbHarvest->update(
       'anagrafe',
       array(
@@ -1503,6 +1504,10 @@ function update_servizi_harvest($dbHarvest, $uuidIstituzione, $nomeDatasource, $
         'harvest_materiale'         => $servizioAbilitato
       )
     );
+   
+    global $WH_LOG_INFO;
+
+    wh_log($WH_LOG_INFO, "$query Errori -> " .  $dbHarvest->show_errors );
 
     return $query;
 }
@@ -1948,8 +1953,8 @@ function delete_datasource($dbNBN, $dbHarvest, $datasourceID){
 
 }
 function delete_servizi_nbn($db, $idIstituzione, $idServizio) {
-   
- 
+
+
     $query   = $db->delete(
         'agent',
         array(
