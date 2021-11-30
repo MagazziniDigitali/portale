@@ -71,13 +71,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   //   rimuoviServizio($dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzione, "td");
   // }
 
-  elseif (isset($_POST['rimuoviTesi']))
-    rimuoviServizio($dbNBN, $dbHarvest, "td"); // $uuidIstituzione, $loginIstituzione, 
-    // echo "<div class='alert alert-warning mt-3'>FINGO di rimuovere tesi</div>";
-  elseif (isset($_POST['rimuoviJournal']))
-    rimuoviServizio($dbNBN, $dbHarvest, "ej");
-  elseif (isset($_POST['rimuoviBook']))
-    rimuoviServizio($dbNBN, $dbHarvest, "eb");
+  elseif (isset($_POST['rimuoviTesi'])) {
+    $id_istituzione  = $_POST['id_Ist_td'];
+    rimuoviServizio($dbNBN, $dbHarvest,   $id_istituzione,"td"); // $uuidIstituzione, $loginIstituzione, 
+
+  }  elseif (isset($_POST['rimuoviJournal'])) {
+    $id_istituzione  = $_POST['id_Ist_ej'];
+    rimuoviServizio($dbNBN, $dbHarvest,   $id_istituzione,"ej");
+  }
+  elseif (isset($_POST['rimuoviBook'])) {
+    $id_istituzione  = $_POST['id_Ist_eb'];
+    rimuoviServizio($dbNBN, $dbHarvest,   $id_istituzione,"eb");
+  }
+  elseif (isset($_POST['rimuoviNBN'])){
+    $id_istituzione  = $_POST['id_Ist_nbn'];
+    rimuoviServizio($dbNBN, $dbHarvest,   $id_istituzione,"nbn");
+  }
 
 
 } // End if POST

@@ -133,22 +133,52 @@ function modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, $servizio) // $d
 
 // 26/08/2021  Argentino
 // Questo f7unziona solo in locale dove ho applicato il CASCADE sulla delete
-function rimuoviServizio($dbNBN, $dbHarvest, $servizio) // $dbMD, , $nomeIstituzione $uuidIstituzione, $loginIstituzione,  , $nomeServizio = null
+function rimuoviServizio($dbNBN, $dbHarvest, $uuidIstituzione, $servizio) // $dbMD, , $nomeIstituzione $uuidIstituzione, $loginIstituzione,  , $nomeServizio = null
 {
   global $WH_LOG_INFO;
-
-  if (isset($_POST["userNBN_$servizio"]))
-    $userNBN = $_POST["userNBN_$servizio"];
+  $errorString = "";
+  $updateNBN = false;
+ if (isset($_POST["userNBN_$servizio"]))
+   $userNBN = $_POST["userNBN_$servizio"];
   if (isset($_POST["idSubNamespace_$servizio"]))
     $idSubNamespace = $_POST["idSubNamespace_$servizio"];
   if (isset($_POST["nomeDatasource_$servizio"]))
     $nomeDatasource = $_POST["nomeDatasource_$servizio"];
   if (isset($_POST["idDatasource_$servizio"]))
     $idDatasource = $_POST["idDatasource_$servizio"];  
+  if (isset($_POST["idServizio"]))
+    $idServizio = $_POST["idServizio"];
 
-  // Dobbiamo rimuovere dati da NBN
-  // Dobbiamo rimuovere dati da HARVEST
-  $deleteDatasource = delete_datasource($dbNBN, $dbHarvest, $idDatasource);
+  switch($servizio) {
+    case "nbn":
+      $descServizio = " National Bibliography Number";
+      $updateNBN = true;
+      $agent = retrieve_agent_nbn($dbNBN, $idSubNamespace, $idDatasource);
+      $deleteResult = delete_servizi_nbn($dbNBN, $uuidIstituzione, $idServizio);
+      break;
+
+    case "td":
+      $descServizio = "tesi di dottorato";
+      $deleteResult = delete_servizi_harvest($dbHarvest, $uuidIstituzione, $idServizio);
+      break;
+    case "ej":
+      $descServizio = "e-journal";
+      $deleteResult = delete_servizi_harvest($dbHarvest, $uuidIstituzione, $idServizio);
+      break;
+    case "eb":
+      $descServizio = "e-book";
+      $deleteResult = delete_servizi_harvest($dbHarvest, $uuidIstituzione, $idServizio);
+      break;
+    default:
+      $descServizio = "Servizio sconosciuto";
+      $errorString =  $descServizio . ". ". "Errore interno ";
+      break;
+  };
+  if (!$deleteResult) {
+    $errorString = "Cancellazione fallita per il servizio ". $descServizio . " di '" . $nomeDatasource ."'" ;
+  }
+
+  /*$deleteDatasource = delete_datasource($dbNBN, $dbHarvest, $idDatasource);
   if (!$deleteDatasource)
   {
     $error = check_db_error($dbNBN);
@@ -157,16 +187,22 @@ function rimuoviServizio($dbNBN, $dbHarvest, $servizio) // $dbMD, , $nomeIstituz
     echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Rimozione datasource fallita per servizio '$nomeDatasource' con idDatasource $idDatasource.</div>";
     return;
   }
-
+*/
   // Dobbiamo rimuovere dati da utenza apacache per la basic authentication
   // $htpasswd = new Htpasswd('../passwd/.htpasswd_nbn');
+  if($updateNBN) {
+    
   $htpasswd = new Htpasswd('../passwd/md_passwd_basic_auth');
   $ret = $htpasswd->deleteUser($userNBN);
   wh_log($WH_LOG_INFO, "NBN apache managed basic authentication - Deleted user $userNBN ret='$ret'");
   
 
   wh_log($WH_LOG_INFO, "Rimuovi servizio  '$nomeDatasource' con idDatasource $idDatasource");
-  echo "<div class='alert alert-success alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Rimozione andata a buon fine per servizio '$nomeDatasource' con idDatasource $idDatasource.</div>";
-
-  
+  }
+  if ($errorString != "") { // Signal some error
+    echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>". $errorString ."</div>";
+    return;
+  } else {
+    echo "<div class='alert alert-success alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Cancellazione andata a buon fine per servizio $descServizio di '$nomeDatasource' .</div>";
+  }
 } // End rimuoviServizio

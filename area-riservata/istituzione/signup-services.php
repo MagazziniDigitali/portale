@@ -51,13 +51,18 @@ if ($_SESSION['role'] == 'admin_istituzione') {
     modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, 'nbn');
   }
 
-  elseif (isset($_POST['rimuoviTesi']))
-    rimuoviServizio($dbNBN, $dbHarvest, "td"); // $uuidIstituzione, $loginIstituzione, 
-  elseif (isset($_POST['rimuoviJournal']))
-    rimuoviServizio($dbNBN, $dbHarvest, "ej");
-  elseif (isset($_POST['rimuoviBook']))
-    rimuoviServizio($dbNBN, $dbHarvest, "eb");
+  elseif (isset($_POST['rimuoviTesi'])) {
+    rimuoviServizio($dbNBN, $dbHarvest,   $uuidIstituzione,"td"); // $uuidIstituzione, $loginIstituzione, 
 
+  }  elseif (isset($_POST['rimuoviJournal'])) {
+    rimuoviServizio($dbNBN, $dbHarvest,   $uuidIstituzione,"ej");
+  }
+  elseif (isset($_POST['rimuoviBook'])) {
+    rimuoviServizio($dbNBN, $dbHarvest,   $uuidIstituzione,"eb");
+  }
+  elseif (isset($_POST['rimuoviNBN'])){
+    rimuoviServizio($dbNBN, $dbHarvest,   $uuidIstituzione,"nbn");
+  }
 
 /* old
   $tesiServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'td');
