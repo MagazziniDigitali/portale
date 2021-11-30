@@ -1947,4 +1947,27 @@ function delete_datasource($dbNBN, $dbHarvest, $datasourceID){
 
 
 }
-
+function delete_servizi_nbn($db, $idIstituzione, $idServizio) {
+   
+ 
+    $query   = $db->delete(
+        'agent',
+        array(
+            'agentID'                        => $idServizio
+        )
+    );
+    /*'subnamespaceID'            => $subnamespaceID,
+          'datasourceID'                        => $idDatasource,
+        */
+    return $query;
+}
+function delete_servizi_harvest($db, $idIstituzione, $idServizio) {
+    $query   = $db->delete(
+        'anagrafe',
+        array(
+            'id_istituzione'            => $idIstituzione,
+            'id'                        => $idServizio
+        )
+    );
+    return $query;
+}
