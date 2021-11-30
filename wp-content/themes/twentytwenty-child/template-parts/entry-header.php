@@ -22,8 +22,9 @@ if ( is_singular() ) {
 
 	<?php } else { ?>
 
-		<header class="entry-header has-text-align-center<?php echo esc_attr( $entry_header_classes ); ?>">
-
+		<header id="homeHeader" class="entry-header has-text-align-center welcomePad"> <!--<?php echo esc_attr( $entry_header_classes ); ?>-->
+		<!--		<header class="entry-header has-text-align-center<?php echo esc_attr( $entry_header_classes ); ?>">
+ -->
 	<?php } ?>
 
 	<div class="entry-header-inner section-inner medium">
@@ -52,7 +53,7 @@ if ( is_singular() ) {
 		}
 
 		if ( is_singular() ) {
-            the_title( '<h1 class="entry-title">', '</h1>' );
+            the_title( '<h5 class="entry-title">', '</h5>' );
 
             if ( is_front_page() || is_home() && ! is_page() ){
                 echo '<h2 style="font-size: 35px;">Servizio nazionale coordinato di conservazione e accesso a<br>lungo termine per le risorse digitali</h2>';
