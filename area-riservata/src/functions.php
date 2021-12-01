@@ -1505,9 +1505,9 @@ function update_servizi_harvest($dbHarvest, $uuidIstituzione, $nomeDatasource, $
       )
     );
    
-    global $WH_LOG_INFO;
+  //  global $WH_LOG_INFO;
 
-    wh_log($WH_LOG_INFO, "$query Errori -> " .  $dbHarvest->show_errors );
+    //wh_log($WH_LOG_INFO, "$query Errori -> " .  $dbHarvest->show_errors );
 
     return $query;
 }
