@@ -21,6 +21,7 @@ if ($_SESSION['role'] == 'admin_istituzione') {
   $istituzione        = retrieve_login_istituzione($dbMD, $uuidIstituzione);
   $loginIstituzione   = $istituzione[0]->LOGIN;
   $nomeIstituzione    = $istituzione[0]->NOME;
+  $gestoreIstituzioneUser = $loginIstituzione;
 
   if (!isset($_isviewonly)) {
     $_isviewonly = false;
@@ -95,7 +96,6 @@ if(!empty($nbnServizioAttivo)) {
     4. select agent where datasourceID == datasourceID retrieve_agent_nbn($dbNBN, $subnamespaceID, $idDatasource)
   */  
   $loginIstNameNbn = retrieve_id_login_for_istituzione($dbMD, $idIst);
-  $gestoreIstituzioneUser = $loginIstNameNbn;
   $subNspaceID = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstNameNbn);
   $dtsourcesID = retrieve_ids_datasources($dbNBN, $subNspaceID, 'nbn');
   $nbnAll = []; 
