@@ -1,4 +1,6 @@
 <?php
+include_once("../src/Htpasswd.php");
+include_once("../src/debug.php");
 
 function removeUser($dbMD)
 {
@@ -125,8 +127,10 @@ function addUser($dbMD)
   } // end else
 } // End addUser()
 
-function inserisciServizio($dbMD, $dbNBN, $dbHarvest)
+function inserisciServizio($dbMD, $dbNBN, $dbHarvest, $isSuperAdmin)
 {
+  global $WH_LOG_INFO;
+
   if (isset($_POST['nomeDatasource']))
     $nomeDatasource = $_POST['nomeDatasource'];
   if (isset($_POST['url']))
@@ -161,23 +165,16 @@ function inserisciServizio($dbMD, $dbNBN, $dbHarvest)
     $loginIstituzione = $_POST['Ist_login_modal'];
 
 
-  $tesiServizioAttivo ='';
-  $isNbn = false;
+  $isServizioAttivo = '';
+  $isNbn = ($servizioAbilitato =='nbn');
   $isSendEmail = false;
   $idDatasource = null;
-  if($servizioAbilitato=='td'){
-    $tesiServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'td');
-  }else if($servizioAbilitato=='ej'){
-    $tesiServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'ej');
-  }else if($servizioAbilitato=='eb'){
-    $tesiServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'eb');
-  } else if ($servizioAbilitato =='nbn') {
-    //AlmavivA 17/11/2021
-    $tesiServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'nbn');
-    $isNbn = true;
-  }
- 
- 
+  $isServizioAttivo   = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, $servizioAbilitato);
+   
+      //INSERT INTO MD
+  if (empty($isServizioAttivo)) {
+        $insertServizio     = insert_into_md_servizi($dbMD, $uuidIstituzione, $servizioAbilitato);
+   }
   //INSERT INTO NBN
   //AlmavivA 17/11/2021
   //Se NBN non deve eseguire le istruzioni di harvesting
@@ -197,15 +194,20 @@ function inserisciServizio($dbMD, $dbNBN, $dbHarvest)
   //$nomeDatasource, 
   $idDatasource           = retrieve_id_datasource_for_istituzione($dbNBN, $subnamespaceID, $url);
   $insertAgent            = insert_into_nbn_agent($dbNBN, $nomeDatasource, $url, $userNBN, $pwdNBN, $ipNBN, $idDatasource, $subnamespaceID, $servizioAbilitato);
-  $isSendEmail = ($insertAgent == 1);
-} else {
 
-    //INSERT INTO MD
-    if (empty($tesiServizioAttivo)) {
-      $insertServizio     = insert_into_md_servizi($dbMD, $uuidIstituzione, $servizioAbilitato);
-    }
+  $isSendEmail = ($insertAgent == 1);
+  $htpasswd = new Htpasswd('../passwd/md_passwd_basic_auth');
+
+    // Add new user
+    $ret = $htpasswd->addUser($userNBN, $pwdNBN);
+    wh_log($WH_LOG_INFO, "NBN apache managed basic authentication - Added user $userNBN:$pwdNBN,  ret='$ret'");
+} else {
+  if( $servizioAbilitato == "ej" || $servizioAbilitato == "eb") {
+    $userEmbargo = "";
+     $pwdEmbargo = "";
+  }
     //INSERT INTO HARVEST
-    $insertAnagrafe         = insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $servizioAbilitato, $loginIstituzione, $url );
+    $insertAnagrafe         = insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $servizioAbilitato, $loginIstituzione, $url, $nomeDatasource );
   }
    if ($isSendEmail) {
     $journalUserApiNBN    = '';
@@ -213,10 +215,10 @@ function inserisciServizio($dbMD, $dbNBN, $dbHarvest)
     $bookUserApiNBN       = '';
     $bookPwdApiNBN        = '';
     send_notice_nbn_email_to_admin($dbMD, $userNBN, $pwdNBN, $journalUserApiNBN, $journalPwdApiNBN, $bookUserApiNBN, $bookPwdApiNBN);
+   if($isSuperAdmin)
     echo "<script>window.location.href = '/area-riservata/admin/'</script>";
    // echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/istituzione/signup-services'</script>";
   }
+  echo "<div class='alert alert-success alert-dismissible margin-top-15'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Inserimento andato a buon fine per servizio $nomeDatasource.</div>";
+
 } // End inserisciServizio
-
-
-  

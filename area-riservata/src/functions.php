@@ -7,6 +7,7 @@ require 'send-email/Exception.php';
 require 'send-email/PHPMailer.php';
 require 'send-email/SMTP.php';
 require 'mailer-parm.php';//hassan vado a includele  il modulo mailer-local per mandare le mail tramite mailtrap
+include_once("debug.php");
 
 function check_db_error($db){
 
@@ -1151,7 +1152,20 @@ function retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstituzione) { /
     return $result;
     
 }
+function retrieve_id_login_for_istituzione($dbMD, $uuid) { // , $nomeIstituzione
 
+    $prepareQuery       = $dbMD->prepare("SELECT * FROM `MDIstituzione` WHERE ID='%s'  ", $uuid); // AND inst_name='%s', $nomeIstituzione
+    $result             = $dbMD->get_results($prepareQuery);
+
+    // $error = $dbNBN->last_error;
+    // $last_query = $dbNBN->last_query;        
+
+    if($result){
+        $loginInst     = $result[0]->LOGIN;
+        return $loginInst;
+    }
+    return $result;
+}
 function insert_into_nbn_datasource($dbNBN, $nomeDatasource, $urlOai, $subnamespaceID, $servizioAbilitato) {
 
     $insert = $dbNBN->insert(
@@ -1323,7 +1337,14 @@ function retrieve_id_datasource($dbNBN, $subnamespaceID, $servizioAbilitato) {
     }
     return $result;
 }
-
+function retrieve_ids_datasources($dbNBN, $subnamespaceID, $servizioAbilitato) {
+    $prepareQuery       = $dbNBN->prepare("SELECT datasourceID FROM datasource WHERE materiale='%s' AND subNamespaceID='%s' ", $servizioAbilitato, $subnamespaceID);
+   $result             = $dbNBN->get_results($prepareQuery);
+    if($result){
+        return $result;
+    }
+    return null;
+}
 function retrieve_id_istituzione($dbMD, $login) {
     $prepareQuery = $dbMD->prepare("SELECT ID FROM MDIstituzione WHERE login='%s'", $login);
     $result        = $dbMD->get_results($prepareQuery);
@@ -1396,11 +1417,30 @@ function retrieve_url_harvest_anagrafe($dbHarvest, $url)  {
 
 
 
-function insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $contatti, $formatMetadati, $setMetadati, $utenzaEmbargo, $pwdEmbargo, $servizioAbilitato, $loginIstituzione, $urlOai ){
+function insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $contatti, $formatMetadati, $setMetadati, $utenzaEmbargo, $pwdEmbargo, $servizioAbilitato, $loginIstituzione, $urlOai, $nomeDatasource ){
 
     $selectID   = $dbHarvest->get_row("SELECT MAX(ID) AS 'MaximumValue' FROM anagrafe");
     $id         = intval($selectID->MaximumValue);
     $id        += 1;
+    $datasource = '';
+    //eb -> testo utente
+    //ej -> login . testo
+    //td -> solo login (campo disabilitato)
+    switch ($servizioAbilitato) {
+        case 'ej':
+            # code...
+            $datasource = $loginIstituzione.'.'.$nomeDatasource;
+            break;
+            
+        case 'td':
+            $datasource = $loginIstituzione;
+            break;
+        
+        default:
+            # code...
+            $datasource = $nomeDatasource;
+            break;
+    }
 
     $insert = $dbHarvest->insert(
         'anagrafe',
@@ -1414,7 +1454,7 @@ function insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasourc
             'harvest_userEmbargo'       => $utenzaEmbargo,
             'harvest_pwdEmbargo'        => $pwdEmbargo,
             'harvest_materiale'         => $servizioAbilitato,
-            'harvest_name'              => $loginIstituzione,
+            'harvest_name'              => $datasource,
             'harvest_url'               => $urlOai
         )
     );
@@ -1423,7 +1463,7 @@ function insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasourc
 
 }
 
-function update_anagrafe_harvest($dbHarvest, $uuidIstituzione, $loginIstituzione, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $url, $servizioAbilitato, $idDatasource){ // , $nomeIstituzione, $nomeDatasource
+function update_anagrafe_harvest($dbHarvest, $uuidIstituzione, $nomeDatasource, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $url, $servizioAbilitato, $idDatasource){ // , $nomeIstituzione, $nomeDatasource
 
     $query = $dbHarvest->update(
       'anagrafe',
@@ -1433,7 +1473,7 @@ function update_anagrafe_harvest($dbHarvest, $uuidIstituzione, $loginIstituzione
         'harvest_set'               => $set,
         'harvest_userEmbargo'       => $userEmbargo,
         'harvest_pwdEmbargo'        => $pwdEmbargo,
-        'harvest_name'              => $loginIstituzione,
+        'harvest_name'              => $nomeDatasource,
         'harvest_url'               => $url
       ),
       array(
@@ -1445,8 +1485,53 @@ function update_anagrafe_harvest($dbHarvest, $uuidIstituzione, $loginIstituzione
 
     return $query;
 }
+function update_servizi_harvest($dbHarvest, $uuidIstituzione, $nomeDatasource, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $url, $servizioAbilitato, $idServizio){ // , $nomeIstituzione, $nomeDatasource
+    
+    $query = $dbHarvest->update(
+      'anagrafe',
+      array(
+        'harvest_contact'           => $contatti,
+        'harvest_format'            => $format,
+        'harvest_set'               => $set,
+        'harvest_userEmbargo'       => $userEmbargo,
+        'harvest_pwdEmbargo'        => $pwdEmbargo,
+        'harvest_name'              => $nomeDatasource,
+        'harvest_url'               => $url
+      ),
+      array(
+        'id_istituzione'            => $uuidIstituzione,
+        'id'                        => $idServizio,
+        'harvest_materiale'         => $servizioAbilitato
+      )
+    );
+   
+  //  global $WH_LOG_INFO;
 
+    //wh_log($WH_LOG_INFO, "$query Errori -> " .  $dbHarvest->show_errors );
 
+    return $query;
+}
+
+function update_servizi_nbn($dbNBN, $nomeDatasource, $user, $password, $ip, $url, $subnamespaceID, $idDatasource,  $idServizio){ // , $nomeIstituzione, $nomeDatasource
+
+    $query = $dbNBN->update(
+      'agent',
+      array(
+        'agent_name'                 => $nomeDatasource,
+        'user'            => $user,
+        'pass'               => $password,
+        'IP'       => $ip,
+        'baseurl'        => $url
+      ),
+      array(
+        'subnamespaceID'            => $subnamespaceID,
+        'datasourceID'                        => $idDatasource,
+        'agentID'         => $idServizio
+      )
+    );
+
+    return $query;
+}
 
 function update_anagrafe_harvest_mod($dbHarvest, $uuidIstituzione, $loginIstituzione, $nomeDatasource, $contatti, $format, $set, $userEmbargo, $pwdEmbargo, $url, $servizioAbilitato, $idDatasource){ // add by Hassan
 
@@ -1501,6 +1586,25 @@ function select_agent_ngn_and_anagrafe_harvest($dbNBN, $dbHarvest, $servizioAbil
 
     return $results;
         
+}
+
+function select_anagrafe_harvest($dbHarvest, $idIstituzione, $tipoServizio){
+
+    $query = $dbHarvest->prepare("SELECT * FROM anagrafe WHERE id_istituzione='%s' AND harvest_materiale = '%s' ",  $idIstituzione, $tipoServizio);
+
+    $results = $dbHarvest->get_results($query);
+
+    return $results;
+    
+}
+function select_agent_nbn($dbHarvest, $idIstituzione, $tipoServizio){
+
+    $query = $dbHarvest->prepare("SELECT * FROM anagrafe WHERE id_istituzione='%s' AND harvest_materiale = '%s' ",  $idIstituzione, $tipoServizio);
+
+    $results = $dbHarvest->get_results($query);
+
+    return $results;
+    
 }
 
 function select_agent_ngn($dbNBN, $servizioAbilitato, $subnamespaceID){
@@ -1848,4 +1952,38 @@ function delete_datasource($dbNBN, $dbHarvest, $datasourceID){
 
 
 }
+function delete_servizi_nbn($db, $idIstituzione, $idServizio) {
 
+
+    $query   = $db->delete(
+        'agent',
+        array(
+            'agentID'                        => $idServizio
+        )
+    );
+    /*'subnamespaceID'            => $subnamespaceID,
+          'datasourceID'                        => $idDatasource,
+        */
+    return $query;
+}
+function delete_servizi_harvest($db, $idIstituzione, $idServizio) {
+    $query   = $db->delete(
+        'anagrafe',
+        array(
+            'id_istituzione'            => $idIstituzione,
+            'id'                        => $idServizio
+        )
+    );
+    return $query;
+}
+function delete_servizio_md($idIstituzione, $tipoServizio) {
+    $db = connect_to_md();
+    $query   = $db->delete(
+        'MDServizi',
+        array(
+            'id_istituzione'            => $idIstituzione,
+            'servizio_abilitato'        => $tipoServizio
+        )
+    );
+    return $query;
+}

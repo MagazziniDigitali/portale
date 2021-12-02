@@ -91,17 +91,14 @@
       get_header();
 
 ?>
-<header class="entry-header has-text-align-center header-footer-group" style="background: white;">
+ <header id="homeHeader" class="entry-header welcomePad has-text-align-center">
+        <div class="entry-header-inner section-inner medium">
+        <h5 class="entry-title">Gestione profilo</h5>
 
-	
-<div class="entry-header-inner section-inner medium">
-
-  <h1 class="entry-title">Profilo SuperAdmin</h1>
-</div><!-- .entry-header-inner -->
-
-</header>
-<section>
-   <div class="container">
+            <h6 class="entry-title"><strong><?php echo ($_SESSION['name'] . ' ' . $_SESSION['surname']); ?></strong> (SuperAdmin)</h6>
+        </div>
+    </header>
+   <div class="container margin-top-15">
       <form action="" method="post">
          <div class="row">
             <div class="col-md-6">
@@ -144,7 +141,6 @@
             </div>
       </form>
    </div>
-</section>
 
 <?php
    }

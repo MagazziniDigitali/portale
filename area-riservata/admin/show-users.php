@@ -47,22 +47,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // ========
   // SERVIZI
   else if (isset($_POST['inserisciServizio']))
-    inserisciServizio($dbMD, $dbNBN, $dbHarvest);
+    inserisciServizio($dbMD, $dbNBN, $dbHarvest, true);
   
   else if (isset($_POST['modificaTesi'])) {
-    $id_istituzione  = $_POST['id_Ist_td'];
-    $subnamespace  = $_POST['userNBN_td'];
-    modificaServizio($dbHarvest, $dbNBN, $id_istituzione, $subnamespace, 'td');
+   $id_istituzione  = $_POST['id_Ist_td'];
+   modificaServizio($dbHarvest, $dbNBN, $id_istituzione, 'td');
   }
   else if (isset($_POST['modificaJournal'])) {
-    $id_istituzione  = $_POST['id_Ist_ej'];
-    $subnamespace  = $_POST['userNBN_ej'];
-    modificaServizio($dbHarvest, $dbNBN, $id_istituzione, $subnamespace, 'ej');
+   $id_istituzione  = $_POST['id_Ist_ej'];
+    modificaServizio($dbHarvest, $dbNBN, $id_istituzione, 'ej');
   }
   else if (isset($_POST['modificaBook'])) {
     $id_istituzione  = $_POST['id_Ist_eb'];
-    $subnamespace  = $_POST['userNBN_eb'];
-    modificaServizio($dbHarvest, $dbNBN, $id_istituzione, $subnamespace, 'eb');
+    modificaServizio($dbHarvest, $dbNBN, $id_istituzione, 'eb');
+  } 
+  else if (isset($_POST['modificaNBN'])) {
+    $id_istituzione  = $_POST['id_Ist_nbn'];
+    modificaServizio($dbHarvest, $dbNBN, $id_istituzione, 'nbn');
   }
   // elseif (isset($_POST['rimuoviTesi']))
   // {
@@ -70,13 +71,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   //   rimuoviServizio($dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzione, "td");
   // }
 
-  elseif (isset($_POST['rimuoviTesi']))
-    rimuoviServizio($dbNBN, $dbHarvest, "td"); // $uuidIstituzione, $loginIstituzione, 
-    // echo "<div class='alert alert-warning mt-3'>FINGO di rimuovere tesi</div>";
-  elseif (isset($_POST['rimuoviJournal']))
-    rimuoviServizio($dbNBN, $dbHarvest, "ej");
-  elseif (isset($_POST['rimuoviBook']))
-    rimuoviServizio($dbNBN, $dbHarvest, "eb");
+  elseif (isset($_POST['rimuoviTesi'])) {
+    $id_istituzione  = $_POST['id_Ist_td'];
+    rimuoviServizio($dbNBN, $dbHarvest,   $id_istituzione,"td"); // $uuidIstituzione, $loginIstituzione, 
+
+  }  elseif (isset($_POST['rimuoviJournal'])) {
+    $id_istituzione  = $_POST['id_Ist_ej'];
+    rimuoviServizio($dbNBN, $dbHarvest,   $id_istituzione,"ej");
+  }
+  elseif (isset($_POST['rimuoviBook'])) {
+    $id_istituzione  = $_POST['id_Ist_eb'];
+    rimuoviServizio($dbNBN, $dbHarvest,   $id_istituzione,"eb");
+  }
+  elseif (isset($_POST['rimuoviNBN'])){
+    $id_istituzione  = $_POST['id_Ist_nbn'];
+    rimuoviServizio($dbNBN, $dbHarvest,   $id_istituzione,"nbn");
+  }
 
 
 } // End if POST
@@ -92,52 +102,61 @@ if (isset($isImport) && $isImport == 1) {
 
 
 foreach ($uniqueIdIst as $key => $results) {
+  //3cf0f778-4c73-11ec-ad53-0800277090c0
   $idIst = $results->ID_ISTITUZIONE;
   $loginIst = retrieve_login_istituzione($dbMD, $idIst);
   $tesiServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $idIst, 'td');
   $journalServizioAttivo  = check_if_istituzione_signed_for_service($dbMD, $idIst, 'ej');
   $bookServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $idIst, 'eb');
+  $nbnServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $idIst, 'nbn');
   if (!empty($loginIst)) {
     $loginIstLogin = $loginIst[0]->LOGIN;
     $loginIstName = $loginIst[0]->NOME;
     if (!empty($tesiServizioAttivo)) {
-
-      $subnamespaceID = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstLogin, $loginIstName);
-      $idDatasource   = retrieve_id_datasource($dbNBN, $subnamespaceID, 'td');
-      if ($idDatasource) {
-        $tesiAll        = select_agent_ngn_and_anagrafe_harvest($dbNBN, $dbHarvest, 'td', $subnamespaceID, $idDatasource);
-      }
-      else
-        $tesiAll = null;
+      $tesiAll = select_anagrafe_harvest($dbHarvest, $idIst, 'td');
     }
     if (!empty($journalServizioAttivo)) {
-      $subnamespaceID = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstLogin, $loginIstName);
-      $idDatasource   = retrieve_id_datasource($dbNBN, $subnamespaceID, 'ej');
-      if ($idDatasource) {
-        $journalAll   = select_agent_ngn_and_anagrafe_harvest($dbNBN, $dbHarvest, 'ej', $subnamespaceID, $idDatasource);
-      }
-      else
-        $journalAll = null;
-    }
+         $journalAll  = select_anagrafe_harvest($dbHarvest, $idIst, 'ej');
+     }
     if (!empty($bookServizioAttivo)) {
-      $subnamespaceID = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstLogin, $loginIstName);
-      $idDatasource   = retrieve_id_datasource($dbNBN, $subnamespaceID, 'eb');
-      if ($idDatasource) {
-        $bookAll      = select_agent_ngn_and_anagrafe_harvest($dbNBN, $dbHarvest, 'eb', $subnamespaceID, $idDatasource);
+        $bookAll  = select_anagrafe_harvest($dbHarvest, $idIst, 'eb');
       }
-      else
-        $bookAll = null;
+    if(!empty($nbnServizioAttivo)) {
+      //TODO: finire
+
+      /*
+        NBN.subnameSpace == MDIstituzioni.login
+
+        1. select by uudi su MDIstituzioni  retrieve_id_login_for_istituzione($dbMD, $idIst)
+        2. select subnameSpaceID where  NBN.subnameSpace == MDIstituzioni.login retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstituzione)
+        3. select datasourceID where subnameSpaceID  retrieve_id_datasource($dbNBN, $subnamespaceID, $servizioAbilitato)
+        4. select agent where datasourceID == datasourceID retrieve_agent_nbn($dbNBN, $subnamespaceID, $idDatasource)
+      */  
+      $loginIstNameNbn = retrieve_id_login_for_istituzione($dbMD, $idIst);
+      $subNspaceID = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstNameNbn);
+      $dtsourcesID = retrieve_ids_datasources($dbNBN, $subNspaceID, 'nbn');
+      $nbnAll = []; 
+      foreach ($dtsourcesID as $key => $ds){
+        $id = $ds->datasourceID;
+        $nbnResult = retrieve_agent_nbn($dbNBN, $subNspaceID, $id);
+          foreach ($nbnResult as $obj){
+            $obj->id_istituzione = $idIst;
+            $nbnAll[] = $obj;
+        }
+    
+      }
+      
     }
     $users = retrieve_user_by_id_istituzione($dbMD, $idIst);
   } // End !empty($loginIst))
 ?>
 
   <div class="card">
-    <div class="card-header" id="heading<?php echo $key ?>">
+    <div class="card-header" id="heading<?php echo $idIst ?>">
       <?php if (isset($isImport) && $isImport == 1) { ?>
         <input class="form-check-input" type="checkbox" value="" id="<?php echo $idIst ?>">
       <?php } ?>
-      <button class="btn" data-toggle="collapse" data-target="#collapse_ist<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_ist<?php echo $key ?>">
+      <button class="btn" data-toggle="collapse" data-target="#collapse_ist<?php echo $idIst ?>" aria-expanded="false" aria-controls="collapse_ist<?php echo $idIst ?>">
         <?php if ($loginIstLogin == 'istituzioneBase') { ?>
           <h5 class="m-0">Utenti non appartenenti a un'istituzione</h5>
         <?php } else { ?>
@@ -158,7 +177,7 @@ foreach ($uniqueIdIst as $key => $results) {
       <?php } ?>
     </div>
 
-    <div id="collapse_ist<?php echo $key ?>" class="collapse" aria-labelledby="heading<?php echo $key ?>">
+    <div id="collapse_ist<?php echo $idIst ?>" class="collapse" aria-labelledby="heading<?php echo $idIst ?>">
       <div class="card-body">
 
         <h4>Utenti:
@@ -185,7 +204,7 @@ foreach ($uniqueIdIst as $key => $results) {
             <div class="card-header" id="heading<?php echo $key ?>">
 
               <button class="btn" data-toggle="collapse" data-target="#collapse_utente<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_utente<?php echo $key ?>">
-                <h5 class="m-0"> <?php if ($admin == 1) { ?>
+                <h5 class="m-0"> <?php if ($admin == 1) { $gestoreIstituzioneUser = $login; ?>
                     <h5 class="mt-0">Gestore d'istituzione: <?php echo $login ?></h5>
                   <?php } else { ?>
                     <h5 class="mt-0"><?php echo $login ?></h5>
@@ -286,27 +305,132 @@ foreach ($uniqueIdIst as $key => $results) {
             </button>
           <?php } ?>
         </h4>
+        <!-- nbn -->
+        <?php if (!empty($nbnServizioAttivo) && $nbnAll) { ?>
+          <div id="infonbn">
 
+            <h5>NBN - National Bibliography Number </h5>
+
+            <?php foreach ($nbnAll as $key => $results) {
+             $nomeDatasource_nbn     = $results->agent_name;
+             $url_nbn                = $results->baseurl;
+             $userNBN_nbn            = $results->user;
+             $pwdNBN_nbn             = $results->pass;
+             $ipNBN_nbn              = $results->IP;
+             $idSubNamespace_nbn     = $results->subNamespaceID;
+             $idDatasource_nbn       = $results->datasourceID;
+             $id_Ist_nbn             = $results->id_istituzione;
+             $agent_name_nbn       = $results->agent_name;
+             $idServizio =          $results->agentID;
+
+            ?>
+
+              <div class="card">
+                <div class="card-header" id="heading<?php echo $key ?>">
+
+                  <button class="btn" data-toggle="collapse" data-target="#collapse_nbn<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_tesi<?php echo $key ?>">
+                    <h5 class="m-0"><?php echo $nomeDatasource_nbn ?></h5>
+                  </button>
+
+                </div>
+
+                <div id="collapse_nbn<?php echo $key ?>" class="collapse" aria-labelledby="heading<?php echo $key ?>">
+                  <div class="card-body">
+                    <form action="" method="post">
+
+                      <input type="hidden" name="idSubNamespace_nbn" value="<?php echo $idSubNamespace_nbn ?>">
+                      <input type="hidden" name="idDatasource_nbn" value="<?php echo $idDatasource_nbn ?>">
+                      <input type="hidden" name="id_Ist_nbn" value="<?php echo $id_Ist_nbn ?>">
+                      <input type="hidden" name="agent_name_nbn" value="<?php echo $agent_name_nbn ?>">
+                      <input type="hidden" name="gestoreIstituzioneUser" value="<?php echo $gestoreIstituzioneUser ?>">
+                      <input type="hidden" name="idServizio" value="<?php echo $idServizio ?>">
+
+
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label for="nomeDatasource_nbn">Nome Datasource</label>
+                          <input name="nomeDatasource_nbn" value="<?php echo $nomeDatasource_nbn ?>" type="text">
+                        </div>
+                        <div class="col-md-6">
+                          <label for="url_nbn">URL sito</label>
+                          <input name="url_nbn" value="<?php echo $url_nbn ?>" type="text">
+                        </div>
+                      </div>
+                      <div class="row">
+                       <div class="col-md-6">
+                          <label for="userNBN_nbn">User per API NBN</label>
+                          <input name="userNBN_nbn" value="<?php echo $userNBN_nbn ?>" type="text">
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label for="pwdNBN_nbn">Password per API NBN</label>
+                          <input name="pwdNBN_nbn" value="<?php echo $pwdNBN_nbn ?>" type="text">
+                        </div>
+                        <div class="col-md-6">
+                          <label for="ipNBN_nbn">IP per API NBN</label>
+                          <input name="ipNBN_nbn" value="<?php echo $ipNBN_nbn ?>" type="text">
+                        </div>
+                      </div>
+
+                      <div class="row">
+
+                        <div class="col-md-12">
+                        <?php
+                        // 26/08/2021 Only omy dev D B for naow since I've implemented cascade on NBN db 
+                        $ambiente = getenv('AMBIENTE_APPLICATIVO'); // Get Il Nome Del AMBIENTE  \r\n
+                        if($ambiente == "local")
+                        {?>
+                          <input type="submit" name="rimuoviNBN" value="Rimuovi NBN" class="mt-3 btnRejectSub mr-3" />
+                          <!-- <button type="button" class="btn btn-outline-secondary utente-cancella" data-toggle="modal" 
+                            data-target="#deleteServiceModal" id="idRimuoviTesi" 
+                            onclick="PreOpenDeleteServiceModal(
+                              '<?php echo "rimuoviNBN" ?>', 
+                              '<?php echo $userNBN_nbn ?>', 
+                              '<?php echo $idSubNamespace_nbn ?>', 
+                              '<?php echo $nomeDatasource_nbn ?>', 
+                              '<?php echo $idDatasource_nbn ?>')">
+                            <i class="icon-remove icon-2x " title="cancella Servizio"></i>
+                          </button>   -->
+
+                          <?php } ?>
+
+                          <input type="submit" name="modificaNBN" value="Modifica" class="mt-3 float-right">
+                        </div>
+                      </div>
+
+
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+            <?php } // End foreach ($nbnAll ?>
+          </div>
+        <?php } // End if (!empty($nbnServizioAttivo))?>
+        <!-- Tesi dottorato -->
         <?php if (!empty($tesiServizioAttivo) && $tesiAll) { ?>
           <div id="infotesi">
 
             <h5>Tesi di Dottorato </h5>
 
             <?php foreach ($tesiAll as $key => $results) {
-              $nomeDatasource_td     = $results->agent_name;
-              $url_td                = $results->baseurl;
+              $nomeDatasource_td     = $results->harvest_name;
+              $url_td                = $results->harvest_url;
               $contatti_td           = $results->harvest_contact;
               $format_td             = $results->harvest_format;
               $set_td                = $results->harvest_set;
               $userEmbargo_td        = $results->harvest_userEmbargo;
               $pwdEmbargo_td         = $results->harvest_pwdEmbargo;
-              $userNBN_td            = $results->user;
-              $pwdNBN_td             = $results->pass;
-              $ipNBN_td              = $results->IP;
-              $idSubNamespace_td     = $results->subNamespaceID;
-              $idDatasource_td       = $results->datasourceID;
+           //   $userNBN_td            = $results->user;
+            //  $pwdNBN_td             = $results->pass;
+             // $ipNBN_td              = $results->IP;
+           //   $idSubNamespace_td     = $results->subNamespaceID;
+            //  $idDatasource_td       = $results->datasourceID;
               $id_Ist_td             = $results->id_istituzione;
               $harvest_name_td       = $results->harvest_name;
+              $id = $results->id;
+
             ?>
 
               <div class="card">
@@ -322,17 +446,15 @@ foreach ($uniqueIdIst as $key => $results) {
                   <div class="card-body">
                     <form action="" method="post">
 
-                      <input type="hidden" name="idSubNamespace_td" value="<?php echo $idSubNamespace_td ?>">
-                      <input type="hidden" name="idDatasource_td" value="<?php echo $idDatasource_td ?>">
+                      <input type="hidden" name="gestoreIstituzioneUser" value="<?php echo $gestoreIstituzioneUser ?>">
+                      <input type="hidden" name="idServizio" value="<?php echo $id ?>">
                       <input type="hidden" name="id_Ist_td" value="<?php echo $id_Ist_td ?>">
                       <input type="hidden" name="harvest_name_td" value="<?php echo $harvest_name_td ?>">
-
-
 
                       <div class="row">
                         <div class="col-md-6">
                           <label for="nomeDatasource_td">Nome Datasource</label>
-                          <input name="nomeDatasource_td" value="<?php echo $nomeDatasource_td ?>" type="text">
+                          <input class="disabilitato" name="nomeDatasource_td" readonly value="<?php echo $nomeDatasource_td ?>" type="text">
                         </div>
                         <div class="col-md-6">
                           <label for="url_td">URL sito OAI</label>
@@ -364,7 +486,7 @@ foreach ($uniqueIdIst as $key => $results) {
                           <label for="pwdEmbargo_td">Password per accesso embargo</label>
                           <input name="pwdEmbargo_td" value="<?php echo $pwdEmbargo_td ?>" type="text">
                         </div>
-                        <div class="col-md-6">
+                      <!--  <div class="col-md-6">
                           <label for="userNBN_td">User per API NBN</label>
                           <input name="userNBN_td" value="<?php echo $userNBN_td ?>" type="text">
                         </div>
@@ -377,7 +499,7 @@ foreach ($uniqueIdIst as $key => $results) {
                         <div class="col-md-6">
                           <label for="ipNBN_td">IP per API NBN</label>
                           <input name="ipNBN_td" value="<?php echo $ipNBN_td ?>" type="text">
-                        </div>
+                        </div> -->
                       </div>
 
                       <div class="row">
@@ -423,20 +545,22 @@ foreach ($uniqueIdIst as $key => $results) {
 
             <?php foreach ($journalAll as $key => $results) {
 
-              $nomeDatasource_ej     = $results->agent_name;
-              $url_ej                = $results->baseurl;
+              $nomeDatasource_ej     = $results->harvest_name;
+              $url_ej                = $results->harvest_url;
               $contatti_ej           = $results->harvest_contact;
               $format_ej             = $results->harvest_format;
               $set_ej                = $results->harvest_set;
               $userEmbargo_ej        = $results->harvest_userEmbargo;
               $pwdEmbargo_ej         = $results->harvest_pwdEmbargo;
-              $userNBN_ej            = $results->user;
-              $pwdNBN_ej             = $results->pass;
-              $ipNBN_ej              = $results->IP;
-              $idSubNamespace_ej     = $results->subNamespaceID;
-              $idDatasource_ej       = $results->datasourceID;
+             // $userNBN_ej            = $results->user;
+             // $pwdNBN_ej             = $results->pass;
+             // $ipNBN_ej              = $results->IP;
+             // $idSubNamespace_ej     = $results->subNamespaceID;
+             // $idDatasource_ej       = $results->datasourceID;
               $id_Ist_ej          = $results->id_istituzione;
               $harvest_name_ej    = $results->harvest_name;
+              $id = $results->id;
+
             ?>
 
               <div class="card">
@@ -451,10 +575,12 @@ foreach ($uniqueIdIst as $key => $results) {
                 <div id="collapse_journal<?php echo $key ?>" class="collapse" aria-labelledby="heading<?php echo $key ?>">
                   <div class="card-body">
                     <form action="" method="post">
-                      <input type="hidden" name="idSubNamespace_ej" value="<?php echo $idSubNamespace_ej ?>">
-                      <input type="hidden" name="idDatasource_ej" value="<?php echo $idDatasource_ej ?>">
+                    <!--  <input type="hidden" name="idSubNamespace_ej" value="<?php echo $idSubNamespace_ej ?>">
+                      <input type="hidden" name="idDatasource_ej" value="<?php echo $idDatasource_ej ?>"> -->
                       <input type="hidden" name="id_Ist_ej" value="<?php echo $id_Ist_ej ?>">
                       <input type="hidden" name="harvest_name_ej" value="<?php echo $harvest_name_ej ?>">
+                      <input type="hidden" name="gestoreIstituzioneUser" value="<?php echo $gestoreIstituzioneUser ?>">
+                      <input type="hidden" name="idServizio" value="<?php echo $id ?>">
                       <div class="row">
                         <div class="col-md-6">
                           <label for="nomeDatasource_ej">Nome Datasource</label>
@@ -480,12 +606,12 @@ foreach ($uniqueIdIst as $key => $results) {
                           <label for="set_ej">Set dei metadati</label>
                           <input name="set_ej" value="<?php echo $set_ej ?>" type="text">
                         </div>
-                        <div class="col-md-6">
+                       <!-- <div class="col-md-6">
                           <label for="userEmbargo_ej">Utenza per accesso embargo</label>
                           <input name="userEmbargo_ej" value="<?php echo $userEmbargo_ej ?>" type="text">
-                        </div>
+                        </div> -->
                       </div>
-                      <div class="row">
+                    <!--  <div class="row">
                         <div class="col-md-6">
                           <label for="pwdEmbargo_ej">Password per accesso embargo</label>
                           <input name="pwdEmbargo_ej" value="<?php echo $pwdEmbargo_ej ?>" type="text">
@@ -504,7 +630,8 @@ foreach ($uniqueIdIst as $key => $results) {
                           <label for="ipNBN_ej">IP per API NBN</label>
                           <input name="ipNBN_ej" value="<?php echo $ipNBN_ej ?>" type="text">
                         </div>
-                      </div>
+                         </div> -->
+                     
 
                       <div class="row">
                         <div class="col-md-12">
@@ -533,13 +660,16 @@ foreach ($uniqueIdIst as $key => $results) {
           <div id="infoBook">
             <h5>e-Book </h5>
             <?php foreach ($bookAll as $keyBook => $results) {
-              $nomeDatasource_eb     = $results->agent_name;
-              $url_eb                = $results->baseurl;
-              $userNBN_eb            = $results->user;
-              $pwdNBN_eb             = $results->pass;
-              $ipNBN_eb              = $results->IP;
-              $idSubNamespace_eb  = $results->subNamespaceID;
-              $idDatasource_eb    = $results->datasourceID;
+              $nomeDatasource_eb     = $results->harvest_name;
+              $url_eb                = $results->harvest_url;
+              $contatti_eb           = $results->harvest_contact;
+
+            //  $userNBN_eb            = $results->user;
+             // $pwdNBN_eb             = $results->pass;
+             // $ipNBN_eb              = $results->IP;
+             // $idSubNamespace_eb  = $results->subNamespaceID;
+             // $idDatasource_eb    = $results->datasourceID;
+             $id = $results->id;
               $id_Ist_eb              = $results->id_istituzione;
               $harvest_name_eb        = $results->harvest_name;
             ?>
@@ -558,10 +688,14 @@ foreach ($uniqueIdIst as $key => $results) {
                     <?php } ?>
 
                     <form action="" method="post">
-                      <input type="hidden" name="idSubNamespace_eb" value="<?php echo $idSubNamespace_eb ?>">
-                      <input type="hidden" name="idDatasource_eb" value="<?php echo $idDatasource_eb ?>">
+                  <!--    <input type="hidden" name="idSubNamespace_eb" value="<?php echo $idSubNamespace_eb ?>">
+                      <input type="hidden" name="idDatasource_eb" value="<?php echo $idDatasource_eb ?>"> -->
                       <input type="hidden" name="id_Ist_eb" value="<?php echo $id_Ist_eb ?>">
+                      <input type="hidden" name="gestoreIstituzioneUser" value="<?php echo $gestoreIstituzioneUser ?>">
+                      <input type="hidden" name="idServizio" value="<?php echo $id ?>">
+
                       <input type="hidden" name="harvest_name_eb" value="<?php echo $harvest_name_eb ?>">
+
                       <div class="row">
                         <div class="col-md-6">
                           <label for="nomeDatasource_eb">Nome Datasource</label>
@@ -573,6 +707,12 @@ foreach ($uniqueIdIst as $key => $results) {
                         </div>
                       </div>
                       <div class="row">
+                        <div class="col-md-6">
+                            <label for="contatti_eb">Contatti</label>
+                            <input name="contatti_eb" value="<?php echo $contatti_eb ?>" type="text">
+                          </div>
+                      </div>
+                     <!-- <div class="row">
                         <div class="col-md-6">
                           <label for="userNBN_eb">User per API NBN</label>
                           <input name="userNBN_eb" value="<?php echo $userNBN_eb ?>" type="text">
@@ -587,8 +727,8 @@ foreach ($uniqueIdIst as $key => $results) {
                           <label for="ipNBN_eb">IP per API NBN</label>
                           <input name="ipNBN_eb" value="<?php echo $ipNBN_eb ?>" type="text">
                         </div>
-                        <div class="col-md-6"></div>
-                      </div>
+                        <div class="col-md-6"></div> 
+                      </div>-->
                       <div class="row">
                         <div class="col-md-12">
                         <?php
@@ -652,9 +792,9 @@ foreach ($uniqueIdIst as $key => $results) {
                 </div>
             </div>
             <div class="row">
-              <div class="col-md-6" id="tsDataSource">
-                <label for="nomeDatasource" onchange="onChangeDataSource(this)" >Nome Datasource</label>
-                <input name="nomeDatasource" value="" type="text">
+              <div class="col-md-6" id="tsDataSource"> <!--nomeDatasource -->
+                <label for="nomeDatasource">Nome Datasource</label>
+                <input name="nomeDatasource" value="" id="nomeDatasource"type="text">
               </div>
               <div class="col-md-6" id="tsSitoOai">
                 <label for="url">URL sito <span id="tsSitoOaiLabel">OAI</span></label>
@@ -843,7 +983,7 @@ foreach ($uniqueIdIst as $key => $results) {
   function onChangeTipoServizio(tipoServizioField) {
      let tipoServizio = tipoServizioField.value;
      showAllFieldsServizio()
-
+     enableField('nomeDatasource')
     switch (tipoServizio) {
       case "nbn": //Lasciare visibili solo campi NBN e Nome Datasource
         hideFields([
@@ -855,10 +995,20 @@ foreach ($uniqueIdIst as $key => $results) {
                   "tsPwdEmbargo",
                   ]);
         break;
-      case "td":
+      case "td": {
+        debugger
+        disableField('nomeDatasource');
+        setIstitutoLoginToDataSource();
+        hideFields([ "tsNbnApi",
+                  "tsNbnPsw",
+                  "tsNbnIp"
+                  ]);
+        break;
+      }
       case "ej":
       case "eb":
-        hideFields([
+        hideFields([ "tsEmbargo",
+                  "tsPwdEmbargo",
                   "tsNbnApi",
                   "tsNbnPsw",
                   "tsNbnIp"
@@ -916,9 +1066,24 @@ foreach ($uniqueIdIst as $key => $results) {
     var x = document.getElementById(id);
     x.style.display = cssAction;
   }
+  function disableField (id) {
+    $('#' + id).prop("readonly", true);
+    $('#' + id).addClass("disabilitato");
+  }
+  function enableField (id) {
+   
+    $('#' + id).prop("readonly", false);
+    $('#' + id).removeClass("disabilitato");
+
+  }
  function onChangeDataSource(dataSourceField) {
   let nomeDataSource = dataSourceField.value;
 
   //TODO: chiamata php per verica campo in database
+  }
+  function setIstitutoLoginToDataSource() {
+    debugger
+    var istLogin = $("#Ist_login_modal").val()
+    $("#nomeDatasource").val(istLogin)    
   }
 </script>

@@ -21,6 +21,7 @@ if ($_SESSION['role'] == 'admin_istituzione') {
   $istituzione        = retrieve_login_istituzione($dbMD, $uuidIstituzione);
   $loginIstituzione   = $istituzione[0]->LOGIN;
   $nomeIstituzione    = $istituzione[0]->NOME;
+  $gestoreIstituzioneUser = $loginIstituzione;
 
   if (!isset($_isviewonly)) {
     $_isviewonly = false;
@@ -28,33 +29,87 @@ if ($_SESSION['role'] == 'admin_istituzione') {
 
 
 
-  if (isset($_POST['signupTesiDottorato']))
+ /* if (isset($_POST['signupTesiDottorato']))
     signupTesiDottorato($dbMD, $dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzione, $nomeIstituzione);
   elseif (isset($_POST['signupJournal']))
     signupJournal($dbMD, $dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzione, $nomeIstituzione);
   elseif (isset($_POST['signupBook']))
-    signupBook($dbMD, $dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzione, $nomeIstituzione);
+    signupBook($dbMD, $dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzione, $nomeIstituzione); */
   
-  elseif (isset($_POST['modificaTesi']))
-    modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzione, "td");
-  elseif (isset($_POST['modificaJournal']))
-    modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzione, "ej");
-  elseif (isset($_POST['modificaBook']))
-    modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzione, "eb");
+   if (isset($_POST['inserisciServizio']))
+   iscriviServizioToIstituzione($dbMD, $dbNBN, $dbHarvest);
+  
+  else if (isset($_POST['modificaTesi'])) {
+   modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, 'td');
+  }
+  else if (isset($_POST['modificaJournal'])) {
+    modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, 'ej');
+  }
+  else if (isset($_POST['modificaBook'])) {
+    modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, 'eb');
+  } 
+  else if (isset($_POST['modificaNBN'])) {
+    modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, 'nbn');
+  }
 
-  elseif (isset($_POST['rimuoviTesi']))
-    rimuoviServizio($dbNBN, $dbHarvest, "td"); // $uuidIstituzione, $loginIstituzione, 
-  elseif (isset($_POST['rimuoviJournal']))
-    rimuoviServizio($dbNBN, $dbHarvest, "ej");
-  elseif (isset($_POST['rimuoviBook']))
-    rimuoviServizio($dbNBN, $dbHarvest, "eb");
+  elseif (isset($_POST['rimuoviTesi'])) {
+    rimuoviServizio($dbNBN, $dbHarvest,   $uuidIstituzione,"td"); // $uuidIstituzione, $loginIstituzione, 
 
+  }  elseif (isset($_POST['rimuoviJournal'])) {
+    rimuoviServizio($dbNBN, $dbHarvest,   $uuidIstituzione,"ej");
+  }
+  elseif (isset($_POST['rimuoviBook'])) {
+    rimuoviServizio($dbNBN, $dbHarvest,   $uuidIstituzione,"eb");
+  }
+  elseif (isset($_POST['rimuoviNBN'])){
+    rimuoviServizio($dbNBN, $dbHarvest,   $uuidIstituzione,"nbn");
+  }
 
-
+/* old
   $tesiServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'td');
   $journalServizioAttivo  = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'ej');
   $bookServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $uuidIstituzione, 'eb');
+*/
+$idIst = $uuidIstituzione;
+$tesiServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $idIst, 'td');
+$journalServizioAttivo  = check_if_istituzione_signed_for_service($dbMD, $idIst, 'ej');
+$bookServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $idIst, 'eb');
+$nbnServizioAttivo     = check_if_istituzione_signed_for_service($dbMD, $idIst, 'nbn');
+if (!empty($tesiServizioAttivo)) {
+  $tesiAll = select_anagrafe_harvest($dbHarvest, $idIst, 'td');
+}
+if (!empty($journalServizioAttivo)) {
+     $journalAll  = select_anagrafe_harvest($dbHarvest, $idIst, 'ej');
+ }
+if (!empty($bookServizioAttivo)) {
+    $bookAll  = select_anagrafe_harvest($dbHarvest, $idIst, 'eb');
+  }
+if(!empty($nbnServizioAttivo)) {
+  //TODO: finire
 
+  /*
+    NBN.subnameSpace == MDIstituzioni.login
+
+    1. select by uudi su MDIstituzioni  retrieve_id_login_for_istituzione($dbMD, $idIst)
+    2. select subnameSpaceID where  NBN.subnameSpace == MDIstituzioni.login retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstituzione)
+    3. select datasourceID where subnameSpaceID  retrieve_id_datasource($dbNBN, $subnamespaceID, $servizioAbilitato)
+    4. select agent where datasourceID == datasourceID retrieve_agent_nbn($dbNBN, $subnamespaceID, $idDatasource)
+  */  
+  $loginIstNameNbn = retrieve_id_login_for_istituzione($dbMD, $idIst);
+  $subNspaceID = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstNameNbn);
+  $dtsourcesID = retrieve_ids_datasources($dbNBN, $subNspaceID, 'nbn');
+  $nbnAll = []; 
+  foreach ($dtsourcesID as $key => $ds){
+    $id = $ds->datasourceID;
+    $nbnResult = retrieve_agent_nbn($dbNBN, $subNspaceID, $id);
+      foreach ($nbnResult as $obj){
+        $obj->id_istituzione = $idIst;
+        $nbnAll[] = $obj;
+    }
+
+  }
+}
+/*
   if (!empty($tesiServizioAttivo)) {
     $subnamespaceID = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstituzione, $nomeIstituzione);
     $idDatasource   = retrieve_id_datasource($dbNBN, $subnamespaceID, 'td');
@@ -74,19 +129,19 @@ if ($_SESSION['role'] == 'admin_istituzione') {
     $idDatasource   = retrieve_id_datasource($dbNBN, $subnamespaceID, 'eb');
     $bookAll        = select_agent_ngn($dbNBN, 'eb', $subnamespaceID);
   }
-
+ */
   get_header();
 ?>
 
-  <section>
-    <div class="container">
+  
+    <div class="">
 
       <!-- <div id="tesiDottorato">
 
       <?php if (empty($tesiServizioAttivo)) {  ?>
         <?php if (!$_isviewonly) { ?>
 
-        <h5>Registra l'istituzione al servizio di Tesi di Dottorato</h5>
+        <h6>Registra l'istituzione al servizio di Tesi di Dottorato</h6>
 
         <?php if (isset($alertTesi)) { ?>
             <div class='alert alert-warning'><?php echo $alertTesi ?></div>
@@ -146,26 +201,23 @@ if ($_SESSION['role'] == 'admin_istituzione') {
 
           <div class="row">
             <div class="col-md-12"><input name="signupTesiDottorato" type="submit" value="Registra" class="mt-3 float-right"/></div>
-          </div>
-        </form>
+          </div> 
+        </form> 
         <?php } ?>
         <?php } else { ?>
 
-        <h5>Sei già iscritto al servizio di Tesi di Dottorato</h5>
+        <h6>Sei già iscritto al servizio di Tesi di Dottorato</h6>
 
         <?php foreach ($tesiAll as $key => $results) {
-          $nomeDatasource     = $results->agent_name;
-          $url                = $results->baseurl;
-          $contatti           = $results->harvest_contact;
-          $format             = $results->harvest_format;
-          $set                = $results->harvest_set;
-          $userEmbargo        = $results->harvest_userEmbargo;
-          $pwdEmbargo         = $results->harvest_pwdEmbargo;
-          $userNBN            = $results->user;
-          $pwdNBN             = $results->pass;
-          $ipNBN              = $results->IP;
-          $idSubNamespace     = $results->subNamespaceID;
-          $idDatasource       = $results->datasourceID;
+       $nomeDatasource     = $results->harvest_name;
+       $url                = $results->harvest_url;
+       $contatti           = $results->harvest_contact;
+       $format             = $results->harvest_format;
+       $set                = $results->harvest_set;
+       $userEmbargo        = $results->harvest_userEmbargo;
+       $pwdEmbargo         = $results->harvest_pwdEmbargo;
+       $id_Ist_td             = $results->id_istituzione;
+       $harvest_name_td       = $results->harvest_name;
         ?>
           <div id="infoTesi">
           <?php if (isset($alert)) { ?>
@@ -173,8 +225,7 @@ if ($_SESSION['role'] == 'admin_istituzione') {
           <?php } ?>
 
               <form action="" method="post">
-                <input type="hidden" name="idSubNamespace" value="<?php echo $idSubNamespace ?>">
-                <input type="hidden" name="idDatasource" value="<?php echo $idDatasource ?>">
+           
                   <div class="row">
                       <div class="col-md-6">
                           <label for="nomeDatasource">Nome Datasource</label>
@@ -210,22 +261,8 @@ if ($_SESSION['role'] == 'admin_istituzione') {
                           <label for="pwdEmbargo">Password per accesso embargo</label>
                           <input name="pwdEmbargo" value="<?php echo $pwdEmbargo ?>" type="text">
                       </div>
-                      <div class="col-md-6">
-                          <label for="userNBN">User per API NBN</label>
-                          <input name="userNBN" value="<?php echo $userNBN ?>" type="text">
-                      </div>
+                     
                   </div>
-                  <div class="row">
-                      <div class="col-md-6">
-                          <label for="pwdNBN">Password per API NBN</label>
-                          <input name="pwdNBN" value="<?php echo $pwdNBN ?>" type="text">
-                      </div>
-                      <div class="col-md-6">
-                          <label for="ipNBN">IP per API NBN</label>
-                          <input name="ipNBN" value="<?php echo $ipNBN ?>" type="text">
-                      </div>
-                  </div>
-
                   <div class="row">
                     <div class="col-md-12"><input name="modificaTesi" type="submit" value="Modifica" class="mt-3 float-right"/></div>
                   </div>
@@ -239,17 +276,17 @@ if ($_SESSION['role'] == 'admin_istituzione') {
     </div> -->
 
 
-      <?php if ($_isviewonly) { ?>
+   <!--   <?php if ($_isviewonly) { ?>
 
-        <h5>Servizi registrati:</h5>
+        <h6>Servizi registrati:</h6>
 
-      <?php } ?>
+      <?php } ?> -->
 
-      <div id="tesiDottorato">
+      <div id="ServiziShowup">
         <?php if ((!$_isviewonly) && (empty($tesiServizioAttivo))) { ?>
           <div id="tesi" class="mb-5">
 
-            <h5>Registra l'istituzione al servizio Tesi di Dottorato</h5>
+            <h6>Registra l'istituzione al servizio Tesi di Dottorato</h6>
 
             <?php if (isset($alertTesi)) { ?>
               <div class='alert alert-warning'><?php echo $alertTesi ?></div>
@@ -314,35 +351,139 @@ if ($_SESSION['role'] == 'admin_istituzione') {
         <?php } ?>
 
 
-        <?php if (!empty($tesiServizioAttivo) || !empty($journalServizioAttivo) || !empty($bookServizioAttivo)) { ?>
-          <h4>Servizi: </h4>
+        <?php if (!empty($tesiServizioAttivo) || !empty($journalServizioAttivo) || !empty($bookServizioAttivo) || !empty($nbnServizioAttivo)) { ?>
+          <h5>Servizi </h5>
         <?php } ?>
 
-        <?php if (!empty($tesiServizioAttivo)) { ?>
-          <div id="infotesi">
+          <!-- nbn -->
+          <?php if (!empty($nbnServizioAttivo) && $nbnAll) { ?>
+          <div class="divServizi" id="infonbn">
 
-            <h5>Tesi di Dottorato </h5>
+            <h6>NBN - National Bibliography Number </h6>
+
+            <?php foreach ($nbnAll as $key => $results) {
+             $nomeDatasource_nbn     = $results->agent_name;
+             $url_nbn                = $results->baseurl;
+             $userNBN_nbn            = $results->user;
+             $pwdNBN_nbn             = $results->pass;
+             $ipNBN_nbn              = $results->IP;
+             $idSubNamespace_nbn     = $results->subNamespaceID;
+             $idDatasource_nbn       = $results->datasourceID;
+             $id_Ist_nbn             = $results->id_istituzione;
+             $agent_name_nbn       = $results->agent_name;
+             $idServizio =          $results->agentID;
+
+            ?>
+
+              <div class="card">
+                <div class="card-header" id="heading<?php echo $key ?>">
+
+                  <button class="btn" data-toggle="collapse" data-target="#collapse_nbn<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_tesi<?php echo $key ?>">
+                    <h6 class="m-0"><?php echo $nomeDatasource_nbn ?></h6>
+                  </button>
+
+                </div>
+
+                <div id="collapse_nbn<?php echo $key ?>" class="collapse" aria-labelledby="heading<?php echo $key ?>">
+                  <div class="card-body">
+                    <form action="" method="post">
+
+                      <input type="hidden" name="idSubNamespace_nbn" value="<?php echo $idSubNamespace_nbn ?>">
+                      <input type="hidden" name="idDatasource_nbn" value="<?php echo $idDatasource_nbn ?>">
+                      <input type="hidden" name="id_Ist_nbn" value="<?php echo $id_Ist_nbn ?>">
+                      <input type="hidden" name="agent_name_nbn" value="<?php echo $agent_name_nbn ?>">
+                      <input type="hidden" name="gestoreIstituzioneUser" value="<?php echo $gestoreIstituzioneUser ?>">
+                      <input type="hidden" name="idServizio" value="<?php echo $idServizio ?>">
+
+
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label for="nomeDatasource_nbn">Nome Datasource</label>
+                          <input name="nomeDatasource_nbn" value="<?php echo $nomeDatasource_nbn ?>" type="text">
+                        </div>
+                        <div class="col-md-6">
+                          <label for="url_nbn">URL sito</label>
+                          <input name="url_nbn" value="<?php echo $url_nbn ?>" type="text">
+                        </div>
+                      </div>
+                      <div class="row">
+                       <div class="col-md-6">
+                          <label for="userNBN_nbn">User per API NBN</label>
+                          <input name="userNBN_nbn" value="<?php echo $userNBN_nbn ?>" type="text">
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label for="pwdNBN_nbn">Password per API NBN</label>
+                          <input name="pwdNBN_nbn" value="<?php echo $pwdNBN_nbn ?>" type="text">
+                        </div>
+                        <div class="col-md-6">
+                          <label for="ipNBN_nbn">IP per API NBN</label>
+                          <input name="ipNBN_nbn" value="<?php echo $ipNBN_nbn ?>" type="text">
+                        </div>
+                      </div>
+
+                      <div class="row">
+
+                        <div class="col-md-12">
+                        <?php
+                        // 26/08/2021 Only omy dev D B for naow since I've implemented cascade on NBN db 
+                        $ambiente = getenv('AMBIENTE_APPLICATIVO'); // Get Il Nome Del AMBIENTE  \r\n
+                        if($ambiente == "local")
+                        {?>
+                          <input type="submit" name="rimuoviNBN" value="Rimuovi NBN" class="mt-3 btnRejectSub mr-3" />
+                          <!-- <button type="button" class="btn btn-outline-secondary utente-cancella" data-toggle="modal" 
+                            data-target="#deleteServiceModal" id="idRimuoviTesi" 
+                            onclick="PreOpenDeleteServiceModal(
+                              '<?php echo "rimuoviNBN" ?>', 
+                              '<?php echo $userNBN_nbn ?>', 
+                              '<?php echo $idSubNamespace_nbn ?>', 
+                              '<?php echo $nomeDatasource_nbn ?>', 
+                              '<?php echo $idDatasource_nbn ?>')">
+                            <i class="icon-remove icon-2x " title="cancella Servizio"></i>
+                          </button>   -->
+
+                          <?php } ?>
+
+                          <input type="submit" name="modificaNBN" value="Modifica" class="mt-3 float-right">
+                        </div>
+                      </div>
+
+
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+            <?php } // End foreach ($nbnAll ?>
+          </div>
+        <?php } // End if (!empty($nbnServizioAttivo))?>
+
+        <?php if (!empty($tesiServizioAttivo)) { ?>
+          <div class="divServizi"  id="infotesi">
+
+            <h6>Tesi di Dottorato </h6>
 
             <?php foreach ($tesiAll as $key => $results) {
-              $nomeDatasource_td     = $results->agent_name;
-              $url_td                = $results->baseurl;
-              $contatti_td           = $results->harvest_contact;
-              $format_td             = $results->harvest_format;
-              $set_td                = $results->harvest_set;
-              $userEmbargo_td        = $results->harvest_userEmbargo;
-              $pwdEmbargo_td         = $results->harvest_pwdEmbargo;
-              $userNBN_td            = $results->user;
-              $pwdNBN_td             = $results->pass;
-              $ipNBN_td              = $results->IP;
-              $idSubNamespace_td     = $results->subNamespaceID;
-              $idDatasource_td       = $results->datasourceID;
+                $nomeDatasource_td     = $results->harvest_name;
+                $url_td                = $results->harvest_url;
+                $contatti_td           = $results->harvest_contact;
+                $format_td             = $results->harvest_format;
+                $set_td                = $results->harvest_set;
+                $userEmbargo_td        = $results->harvest_userEmbargo;
+                $pwdEmbargo_td         = $results->harvest_pwdEmbargo;
+            
+                $id_Ist_td             = $results->id_istituzione;
+                $harvest_name_td       = $results->harvest_name;
+                $id = $results->id;
+
             ?>
 
               <div class="card">
                 <div class="card-header" id="heading<?php echo $key ?>">
 
                   <button class="btn" data-toggle="collapse" data-target="#collapse_tesi<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_tesi<?php echo $key ?>">
-                    <h5 class="m-0"><?php echo $nomeDatasource_td ?></h5>
+                    <h6 class="m-0"><?php echo $nomeDatasource_td ?></h6>
                   </button>
 
                 </div>
@@ -350,12 +491,15 @@ if ($_SESSION['role'] == 'admin_istituzione') {
                 <div id="collapse_tesi<?php echo $key ?>" class="collapse" aria-labelledby="heading<?php echo $key ?>">
                   <div class="card-body">
                     <form action="" method="post">
-                      <input type="hidden" name="idSubNamespace_td" value="<?php echo $idSubNamespace_td ?>">
-                      <input type="hidden" name="idDatasource_td" value="<?php echo $idDatasource_td ?>">
+                    <!--  <input type="hidden" name="idSubNamespace_td" value="<?php echo $idSubNamespace_td ?>">
+                      <input type="hidden" name="idDatasource_td" value="<?php echo $idDatasource_td ?>"> -->
+                      <input type="hidden" name="harvest_name_td" value="<?php echo $harvest_name_td ?>">
+                      <input type="hidden" name="gestoreIstituzioneUser" value="<?php echo $gestoreIstituzioneUser ?>">
+                      <input type="hidden" name="idServizio" value="<?php echo $id ?>">
                       <div class="row">
                         <div class="col-md-6">
                           <label for="nomeDatasource_td">Nome Datasource</label>
-                          <input name="nomeDatasource_td" value="<?php echo $nomeDatasource_td ?>" type="text">
+                          <input name="nomeDatasource_td" readonly class="disabilitato" value="<?php echo $nomeDatasource_td ?>" type="text">
                         </div>
                         <div class="col-md-6">
                           <label for="url_td">URL sito OAI</label>
@@ -387,12 +531,12 @@ if ($_SESSION['role'] == 'admin_istituzione') {
                           <label for="pwdEmbargo_td">Password per accesso embargo</label>
                           <input name="pwdEmbargo_td" value="<?php echo $pwdEmbargo_td ?>" type="text">
                         </div>
-                        <div class="col-md-6">
+                      <!--  <div class="col-md-6">
                           <label for="userNBN_td">User per API NBN</label>
                           <input name="userNBN_td" value="<?php echo $userNBN_td ?>" type="text">
-                        </div>
+                        </div> -->
                       </div>
-                      <div class="row">
+                    <!--  <div class="row">
                         <div class="col-md-6">
                           <label for="pwdNBN_td">Password per API NBN</label>
                           <input name="pwdNBN_td" value="<?php echo $pwdNBN_td ?>" type="text">
@@ -401,7 +545,7 @@ if ($_SESSION['role'] == 'admin_istituzione') {
                           <label for="ipNBN_td">IP per API NBN</label>
                           <input name="ipNBN_td" value="<?php echo $ipNBN_td ?>" type="text">
                         </div>
-                      </div>
+                      </div> -->
 
                       <div class="row">
                         <div class="col-md-12">
@@ -448,13 +592,16 @@ if ($_SESSION['role'] == 'admin_istituzione') {
         <?php if (!$_isviewonly) { ?>
           <div id="eJournal" class="mb-5">
 
-            <h5>Registra l'istituzione al servizio e-Journal</h5>
+            <h6>Registra l'istituzione al servizio e-Journal</h6>
 
             <?php if (isset($alertJournal)) { ?>
               <div class='alert alert-warning'><?php echo $alertJournal ?></div>
             <?php } ?>
             <form action="" method="post">
               <div class="row">
+              <input type="hidden" name="harvest_name_ej" value="<?php echo $harvest_name_ej ?>">
+                      <input type="hidden" name="gestoreIstituzioneUser" value="<?php echo $gestoreIstituzioneUser ?>">
+                      <input type="hidden" name="idServizio" value="<?php echo $id ?>">
                 <div class="col-md-6">
                   <label for="journalNomeDatasource">Nome Datasource</label>
                   <input required type="text" name="journalNomeDatasource" id="journalNomeDatasource">
@@ -502,24 +649,27 @@ if ($_SESSION['role'] == 'admin_istituzione') {
         <?php } ?>
 
         <?php if (!empty($journalServizioAttivo)) { ?>
-          <div id="infoJournal">
+          <div id="infoJournal" class="divServizi" >
 
-            <h5>e-Journal </h5>
+            <h6>e-Journal </h6>
 
             <?php foreach ($journalAll as $key => $results) {
 
-              $nomeDatasource_ej     = $results->agent_name;
-              $url_ej                = $results->baseurl;
+              $nomeDatasource_ej     = $results->harvest_name;
+              $url_ej                = $results->harvest_url;
               $contatti_ej           = $results->harvest_contact;
               $format_ej             = $results->harvest_format;
               $set_ej                = $results->harvest_set;
               $userEmbargo_ej        = $results->harvest_userEmbargo;
               $pwdEmbargo_ej         = $results->harvest_pwdEmbargo;
-              $userNBN_ej            = $results->user;
-              $pwdNBN_ej             = $results->pass;
-              $ipNBN_ej              = $results->IP;
-              $idSubNamespace_ej     = $results->subNamespaceID;
-              $idDatasource_ej       = $results->datasourceID;
+              // $userNBN_ej            = $results->user;
+              // $pwdNBN_ej             = $results->pass;
+              // $ipNBN_ej              = $results->IP;
+              // $idSubNamespace_ej     = $results->subNamespaceID;
+              // $idDatasource_ej       = $results->datasourceID;
+              $id_Ist_ej          = $results->id_istituzione;
+              $harvest_name_ej    = $results->harvest_name;
+              $id = $results->id;
 
             ?>
 
@@ -527,7 +677,7 @@ if ($_SESSION['role'] == 'admin_istituzione') {
                 <div class="card-header" id="heading<?php echo $key ?>">
 
                   <button class="btn" data-toggle="collapse" data-target="#collapse_journal<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_journal<?php echo $key ?>">
-                    <h5 class="m-0"><?php echo $nomeDatasource_ej ?></h5>
+                    <h6 class="m-0"><?php echo $nomeDatasource_ej ?></h6>
                   </button>
 
                 </div>
@@ -535,8 +685,9 @@ if ($_SESSION['role'] == 'admin_istituzione') {
                 <div id="collapse_journal<?php echo $key ?>" class="collapse" aria-labelledby="heading<?php echo $key ?>">
                   <div class="card-body">
                     <form action="" method="post">
-                      <input type="hidden" name="idSubNamespace_ej" value="<?php echo $idSubNamespace_ej ?>">
-                      <input type="hidden" name="idDatasource_ej" value="<?php echo $idDatasource_ej ?>">
+                    <input type="hidden" name="harvest_name_ej" value="<?php echo $harvest_name_ej ?>">
+                      <input type="hidden" name="gestoreIstituzioneUser" value="<?php echo $gestoreIstituzioneUser ?>">
+                      <input type="hidden" name="idServizio" value="<?php echo $id ?>">
                       <div class="row">
                         <div class="col-md-6">
                           <label for="nomeDatasource_ej">Nome Datasource</label>
@@ -562,22 +713,22 @@ if ($_SESSION['role'] == 'admin_istituzione') {
                           <label for="set_ej">Set dei metadati</label>
                           <input name="set_ej" value="<?php echo $set_ej ?>" type="text">
                         </div>
-                        <div class="col-md-6">
+                        <!--<div class="col-md-6">
                           <label for="userEmbargo_ej">Utenza per accesso embargo</label>
                           <input name="userEmbargo_ej" value="<?php echo $userEmbargo_ej ?>" type="text">
-                        </div>
+                        </div> -->
                       </div>
-                      <div class="row">
+                    <!--   <div class="row">
                         <div class="col-md-6">
                           <label for="pwdEmbargo_ej">Password per accesso embargo</label>
                           <input name="pwdEmbargo_ej" value="<?php echo $pwdEmbargo_ej ?>" type="text">
                         </div>
-                        <div class="col-md-6">
+                       <div class="col-md-6">
                           <label for="userNBN_ej">User per API NBN</label>
                           <input name="userNBN_ej" value="<?php echo $userNBN_ej ?>" type="text">
-                        </div>
-                      </div>
-                      <div class="row">
+                        </div> 
+                      </div>-->
+                     <!-- <div class="row">
                         <div class="col-md-6">
                           <label for="pwdNBN_ej">Password per API NBN</label>
                           <input name="pwdNBN_ej" value="<?php echo $pwdNBN_ej ?>" type="text">
@@ -586,7 +737,7 @@ if ($_SESSION['role'] == 'admin_istituzione') {
                           <label for="ipNBN_ej">IP per API NBN</label>
                           <input name="ipNBN_ej" value="<?php echo $ipNBN_ej ?>" type="text">
                         </div>
-                      </div>
+                      </div> -->
 
                       <div class="row">
                         <div class="col-md-12">
@@ -611,7 +762,7 @@ if ($_SESSION['role'] == 'admin_istituzione') {
         <?php } ?>
         <?php if (!$_isviewonly) { ?>
           <div id="eBook" class="mb-5">
-            <h5>Registra l'istituzione al servizio e-Book</h5>
+            <h6>Registra l'istituzione al servizio e-Book</h6>
             <?php if (isset($alertBook)) { ?>
               <div class='alert alert-warning'><?php echo $alertBook ?></div>
             <?php } ?>
@@ -651,22 +802,27 @@ if ($_SESSION['role'] == 'admin_istituzione') {
         <?php } ?>
 
         <?php if (!empty($bookServizioAttivo)) { ?>
-          <div id="infoBook">
-            <h5>e-Book </h5>
+          <div id="infoBook" class="divServizi" >
+            <h6>e-Book </h6>
             <?php foreach ($bookAll as $keyBook => $results) {
-              $nomeDatasource_eb     = $results->agent_name;
-              $url_eb                = $results->baseurl;
-              $userNBN_eb            = $results->user;
-              $pwdNBN_eb             = $results->pass;
-              $ipNBN_eb              = $results->IP;
-              $idSubNamespace_eb     = $results->subNamespaceID;
-              $idDatasource_eb       = $results->datasourceID;
+                $nomeDatasource_eb     = $results->harvest_name;
+                $url_eb                = $results->harvest_url;
+                $contatti_eb           = $results->harvest_contact;
+
+              //  $userNBN_eb            = $results->user;
+                // $pwdNBN_eb             = $results->pass;
+                // $ipNBN_eb              = $results->IP;
+                // $idSubNamespace_eb  = $results->subNamespaceID;
+                // $idDatasource_eb    = $results->datasourceID;
+                $id_Ist_eb              = $results->id_istituzione;
+                $harvest_name_eb        = $results->harvest_name;
+                $id = $results->id;
 
             ?>
               <div class="card">
                 <div class="card-header" id="heading<?php echo $keyBook ?>">
                   <button class="btn" data-toggle="collapse" data-target="#collapse_Book<?php echo $keyBook ?>" aria-expanded="false" aria-controls="collapse_Book<?php echo $keyBook ?>">
-                    <h5 class="m-0"><?php echo $nomeDatasource_eb ?></h5>
+                    <h6 class="m-0"><?php echo $nomeDatasource_eb ?></h6>
                   </button>
                 </div>
                 <div id="collapse_Book<?php echo $keyBook ?>" class="collapse" aria-labelledby="heading<?php echo $keyBook ?>">
@@ -677,8 +833,8 @@ if ($_SESSION['role'] == 'admin_istituzione') {
                     <?php } ?>
 
                     <form action="" method="post">
-                      <input type="hidden" name="idSubNamespace_eb" value="<?php echo $idSubNamespace_eb ?>">
-                      <input type="hidden" name="idDatasource_eb" value="<?php echo $idDatasource_eb ?>">
+                    <input type="hidden" name="gestoreIstituzioneUser" value="<?php echo $gestoreIstituzioneUser ?>">
+                      <input type="hidden" name="idServizio" value="<?php echo $id ?>">
                       
                       <div class="row">
                         <div class="col-md-6">
@@ -690,8 +846,13 @@ if ($_SESSION['role'] == 'admin_istituzione') {
                           <input name="url_eb" value="<?php echo $url_eb ?>" type="text">
                         </div>
                       </div>
-
                       <div class="row">
+                        <div class="col-md-6">
+                            <label for="contatti_eb">Contatti</label>
+                            <input name="contatti_eb" value="<?php echo $contatti_eb ?>" type="text">
+                          </div>
+                      </div>
+                    <!--   <div class="row">
                         <div class="col-md-6">
                           <label for="userNBN_eb">User per API NBN</label>
                           <input name="userNBN_eb" value="<?php echo $userNBN_eb ?>" type="text">
@@ -702,13 +863,13 @@ if ($_SESSION['role'] == 'admin_istituzione') {
                         </div>
                       </div>
                       
-                      <div class="row">
+                     <div class="row">
                         <div class="col-md-6">
                           <label for="ipNBN_eb">IP per API NBN</label>
                           <input name="ipNBN_eb" value="<?php echo $ipNBN_eb ?>" type="text">
                         </div>
                         <div class="col-md-6"></div>
-                      </div>
+                      </div> -->
                       <div class="row">
                         <div class="col-md-12">
                           <?php
@@ -729,8 +890,6 @@ if ($_SESSION['role'] == 'admin_istituzione') {
             <?php } ?>
           </div>
         <?php } ?>
-
-  </section>
 
 <?php
   if (!$_isviewonly) {
