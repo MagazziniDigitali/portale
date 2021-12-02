@@ -64,7 +64,7 @@ function modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, $servizio) // $d
         break;
       case "eb":
         $descServizio = "e-book";
-        $updateResult  = update_servizi_harvest($dbHarvest, $uuidIstituzione, $nomeDatasource, "","", "", "", "", $url, $servizio, $idServizio);
+        $updateResult  = update_servizi_harvest($dbHarvest, $uuidIstituzione, $nomeDatasource, $contatti,"", "", "", "", $url, $servizio, $idServizio);
         break;
       default:
         $descServizio = "Servizio sconosciuto";

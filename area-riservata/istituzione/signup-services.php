@@ -808,6 +808,8 @@ if(!empty($nbnServizioAttivo)) {
             <?php foreach ($bookAll as $keyBook => $results) {
                 $nomeDatasource_eb     = $results->harvest_name;
                 $url_eb                = $results->harvest_url;
+                $contatti_eb           = $results->harvest_contact;
+
               //  $userNBN_eb            = $results->user;
                 // $pwdNBN_eb             = $results->pass;
                 // $ipNBN_eb              = $results->IP;
@@ -845,7 +847,12 @@ if(!empty($nbnServizioAttivo)) {
                           <input name="url_eb" value="<?php echo $url_eb ?>" type="text">
                         </div>
                       </div>
-
+                      <div class="row">
+                        <div class="col-md-6">
+                            <label for="contatti_eb">Contatti</label>
+                            <input name="contatti_eb" value="<?php echo $contatti_eb ?>" type="text">
+                          </div>
+                      </div>
                     <!--   <div class="row">
                         <div class="col-md-6">
                           <label for="userNBN_eb">User per API NBN</label>
