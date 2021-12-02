@@ -29,15 +29,15 @@ if ($_SESSION['role'] == 'admin_istituzione') {
 
 
 
-  if (isset($_POST['signupTesiDottorato']))
+ /* if (isset($_POST['signupTesiDottorato']))
     signupTesiDottorato($dbMD, $dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzione, $nomeIstituzione);
   elseif (isset($_POST['signupJournal']))
     signupJournal($dbMD, $dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzione, $nomeIstituzione);
   elseif (isset($_POST['signupBook']))
-    signupBook($dbMD, $dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzione, $nomeIstituzione);
+    signupBook($dbMD, $dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzione, $nomeIstituzione); */
   
-    else if (isset($_POST['inserisciServizio']))
-    inserisciServizio($dbMD, $dbNBN, $dbHarvest);
+   if (isset($_POST['inserisciServizio']))
+   iscriviServizioToIstituzione($dbMD, $dbNBN, $dbHarvest);
   
   else if (isset($_POST['modificaTesi'])) {
    modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, 'td');
@@ -500,7 +500,7 @@ if(!empty($nbnServizioAttivo)) {
                       <div class="row">
                         <div class="col-md-6">
                           <label for="nomeDatasource_td">Nome Datasource</label>
-                          <input name="nomeDatasource_td" disabled class="disabilitato" value="<?php echo $nomeDatasource_td ?>" type="text">
+                          <input name="nomeDatasource_td" readonly class="disabilitato" value="<?php echo $nomeDatasource_td ?>" type="text">
                         </div>
                         <div class="col-md-6">
                           <label for="url_td">URL sito OAI</label>

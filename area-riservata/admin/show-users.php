@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // ========
   // SERVIZI
   else if (isset($_POST['inserisciServizio']))
-    inserisciServizio($dbMD, $dbNBN, $dbHarvest);
+    inserisciServizio($dbMD, $dbNBN, $dbHarvest, true);
   
   else if (isset($_POST['modificaTesi'])) {
    $id_istituzione  = $_POST['id_Ist_td'];
@@ -454,7 +454,7 @@ foreach ($uniqueIdIst as $key => $results) {
                       <div class="row">
                         <div class="col-md-6">
                           <label for="nomeDatasource_td">Nome Datasource</label>
-                          <input class="disabilitato" name="nomeDatasource_td" disabled value="<?php echo $nomeDatasource_td ?>" type="text">
+                          <input class="disabilitato" name="nomeDatasource_td" readonly value="<?php echo $nomeDatasource_td ?>" type="text">
                         </div>
                         <div class="col-md-6">
                           <label for="url_td">URL sito OAI</label>
@@ -991,6 +991,11 @@ foreach ($uniqueIdIst as $key => $results) {
         debugger
         disableField('nomeDatasource');
         setIstitutoLoginToDataSource();
+        hideFields([ "tsNbnApi",
+                  "tsNbnPsw",
+                  "tsNbnIp"
+                  ]);
+        break;
       }
       case "ej":
       case "eb":
@@ -1054,12 +1059,12 @@ foreach ($uniqueIdIst as $key => $results) {
     x.style.display = cssAction;
   }
   function disableField (id) {
-    $('#' + id).prop("disabled", true);
+    $('#' + id).prop("readonly", true);
     $('#' + id).addClass("disabilitato");
   }
   function enableField (id) {
    
-    $('#' + id).prop("disabled", false);
+    $('#' + id).prop("readonly", false);
     $('#' + id).removeClass("disabilitato");
 
   }

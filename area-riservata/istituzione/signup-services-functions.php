@@ -1,6 +1,7 @@
 <?php
 include_once("../src/Htpasswd.php");
 include_once("../src/debug.php");
+include_once("../admin/show-users-functions.php");
 
 // 23/08/2021  Argentino
 //Modificato il 29/11/2021 almaviva3
@@ -202,9 +203,12 @@ function rimuoviServizio($dbNBN, $dbHarvest, $uuidIstituzione, $servizio) // $db
   wh_log($WH_LOG_INFO, "Rimuovi servizio  '$nomeDatasource' con idDatasource $idDatasource");
   }
   if ($errorString != "") { // Signal some error
-    echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>". $errorString ."</div>";
+    echo "<div class='alert alert-danger alert-dismissible  margin-top-15'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>". $errorString ."</div>";
     return;
   } else {
-    echo "<div class='alert alert-success alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Cancellazione andata a buon fine per servizio $descServizio di '$nomeDatasource' .</div>";
+    echo "<div class='alert alert-success alert-dismissible  margin-top-15'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Cancellazione andata a buon fine per servizio $descServizio di '$nomeDatasource' .</div>";
   }
 } // End rimuoviServizio
+function iscriviServizioToIstituzione($dbMD, $dbNBN, $dbHarvest) {
+  inserisciServizio($dbMD, $dbNBN, $dbHarvest, false);
+}

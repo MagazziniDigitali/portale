@@ -127,7 +127,7 @@ function addUser($dbMD)
   } // end else
 } // End addUser()
 
-function inserisciServizio($dbMD, $dbNBN, $dbHarvest)
+function inserisciServizio($dbMD, $dbNBN, $dbHarvest, $isSuperAdmin)
 {
   global $WH_LOG_INFO;
 
@@ -197,19 +197,10 @@ function inserisciServizio($dbMD, $dbNBN, $dbHarvest)
 
   $isSendEmail = ($insertAgent == 1);
   $htpasswd = new Htpasswd('../passwd/md_passwd_basic_auth');
-  if ($old_user != $userNBN) { // change of user and pwd
-    // Delete old user
-    $ret = $htpasswd->deleteUser($old_user);
-    wh_log($WH_LOG_INFO, "NBN apache managed basic authentication - Deleted user $old_user ret='$ret'");
 
     // Add new user
     $ret = $htpasswd->addUser($userNBN, $pwdNBN);
     wh_log($WH_LOG_INFO, "NBN apache managed basic authentication - Added user $userNBN:$pwdNBN,  ret='$ret'");
-  } else if ($old_pwd != $pwdNBN) { // change password of old user
-    // update old user
-    $ret = $htpasswd->updateUser($userNBN, $pwdNBN);
-    wh_log($WH_LOG_INFO, "Updated user $userNBN:$pwdNBN, ret='$ret'");
-  }
 } else {
   if( $servizioAbilitato == "ej" || $servizioAbilitato == "eb") {
     $userEmbargo = "";
@@ -224,7 +215,10 @@ function inserisciServizio($dbMD, $dbNBN, $dbHarvest)
     $bookUserApiNBN       = '';
     $bookPwdApiNBN        = '';
     send_notice_nbn_email_to_admin($dbMD, $userNBN, $pwdNBN, $journalUserApiNBN, $journalPwdApiNBN, $bookUserApiNBN, $bookPwdApiNBN);
+   if($isSuperAdmin)
     echo "<script>window.location.href = '/area-riservata/admin/'</script>";
    // echo "<script>window.location.href = 'http://md-collaudo.depositolegale.it/area-riservata/istituzione/signup-services'</script>";
   }
+  echo "<div class='alert alert-success alert-dismissible margin-top-15'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Inserimento andato a buon fine per servizio $nomeDatasource.</div>";
+
 } // End inserisciServizio
