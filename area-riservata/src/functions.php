@@ -1976,3 +1976,14 @@ function delete_servizi_harvest($db, $idIstituzione, $idServizio) {
     );
     return $query;
 }
+function delete_servizio_md($idIstituzione, $tipoServizio) {
+    $db = connect_to_md();
+    $query   = $db->delete(
+        'MDServizi',
+        array(
+            'id_istituzione'            => $idIstituzione,
+            'servizio_abilitato'        => $tipoServizio
+        )
+    );
+    return $query;
+}

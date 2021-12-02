@@ -77,6 +77,7 @@ function modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, $servizio) // $d
 
     }
 
+    
     //GestioneErrori
     if ($errorString != "") { // Signal some error
       echo "<div class='alert alert-danger alert-dismissible margin-top-15'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>". $errorString ."</div>";
@@ -84,26 +85,7 @@ function modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, $servizio) // $d
     } else {
       echo "<div class='alert alert-success alert-dismissible margin-top-15'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Modifica andata a buon fine per servizio $descServizio.</div>";
     }
- /* // Prendiamo i dati dell'agent prima delle modifiche
-  // per gestire basic authentication di apache
-  $agent = retrieve_agent_nbn($dbNBN, $idSubNamespace, $idDatasource);
-  if (!$agent) { // Signal some error
-    echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Agent mancante. Aggiornamento fallito per servizio $servizio</div>";
-    return;
-  }
-  $updateDatasource   = update_datasource_nbn_test($dbNBN, $nomeDatasource, $url, $idSubNamespace, $idDatasource); // $loginIstituzione, $nomeIstituzione, 
-  if (!$updateDatasource && check_db_error($dbNBN)) { // Signal some error
-    echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Aggiornamento datasouurce fallito per servizio $descServizio.</div>";
-    return;
-  }
-  $updateAgent      = update_agent_nbn($dbNBN, $nomeDatasource, $url, $userNBN, $pwdNBN, $ipNBN, $servizio, $idSubNamespace, $idDatasource); // , $loginIstituzione, $nomeIstituzione
-  if (!$updateAgent && check_db_error($dbNBN)) { // Signal some error
-    echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Aggiornamento agent fallito per servizio $descServizio.</div>";
-    return;
-  }
-  if ($servizio != 'eb')
-  {
-  */
+ 
   // 20/08/21
   // Aggiorniamo la password per la basic authnetication in caso sia stata modificata
   if ($updateNBN) {
@@ -158,19 +140,23 @@ function rimuoviServizio($dbNBN, $dbHarvest, $uuidIstituzione, $servizio) // $db
       $updateNBN = true;
       $agent = retrieve_agent_nbn($dbNBN, $idSubNamespace, $idDatasource);
       $deleteResult = delete_servizi_nbn($dbNBN, $uuidIstituzione, $idServizio);
+      rimuoviServizioNBNPerServiziNonPresenti($deleteResult, $uuidIstituzione, $servizio);
       break;
 
     case "td":
       $descServizio = "tesi di dottorato";
       $deleteResult = delete_servizi_harvest($dbHarvest, $uuidIstituzione, $idServizio);
+      rimuoviServizioHarvestPerServiziNonPresenti($deleteResult, $dbHarvest, $uuidIstituzione, $servizio);
       break;
     case "ej":
       $descServizio = "e-journal";
       $deleteResult = delete_servizi_harvest($dbHarvest, $uuidIstituzione, $idServizio);
+      rimuoviServizioHarvestPerServiziNonPresenti($deleteResult, $dbHarvest, $uuidIstituzione, $servizio);
       break;
     case "eb":
       $descServizio = "e-book";
       $deleteResult = delete_servizi_harvest($dbHarvest, $uuidIstituzione, $idServizio);
+      rimuoviServizioHarvestPerServiziNonPresenti($deleteResult, $dbHarvest, $uuidIstituzione, $servizio);
       break;
     default:
       $descServizio = "Servizio sconosciuto";
@@ -179,20 +165,7 @@ function rimuoviServizio($dbNBN, $dbHarvest, $uuidIstituzione, $servizio) // $db
   };
   if (!$deleteResult) {
     $errorString = "Cancellazione fallita per il servizio ". $descServizio . " di '" . $nomeDatasource ."'" ;
-  }
-
-  /*$deleteDatasource = delete_datasource($dbNBN, $dbHarvest, $idDatasource);
-  if (!$deleteDatasource)
-  {
-    $error = check_db_error($dbNBN);
-    $error = check_db_error($dbHarvest);
-
-    echo "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Rimozione datasource fallita per servizio '$nomeDatasource' con idDatasource $idDatasource.</div>";
-    return;
-  }
-*/
-  // Dobbiamo rimuovere dati da utenza apacache per la basic authentication
-  // $htpasswd = new Htpasswd('../passwd/.htpasswd_nbn');
+  } 
   if($updateNBN) {
     
   $htpasswd = new Htpasswd('../passwd/md_passwd_basic_auth');
@@ -211,4 +184,38 @@ function rimuoviServizio($dbNBN, $dbHarvest, $uuidIstituzione, $servizio) // $db
 } // End rimuoviServizio
 function iscriviServizioToIstituzione($dbMD, $dbNBN, $dbHarvest) {
   inserisciServizio($dbMD, $dbNBN, $dbHarvest, false);
+}
+function rimuoviServizioHarvestPerServiziNonPresenti($deleteResult, $dbHarvest, $idIst, $servizio) {
+    if($deleteResult) {
+    //Controllo su MDServizi
+    $serviziPresenti = select_anagrafe_harvest($dbHarvest, $idIst, $servizio);
+    if(empty($serviziPresenti)) {
+      //Delete su MDServizi
+      delete_servizio_md($idIst, $servizio);
+    }
+  }
+}
+function rimuoviServizioNBNPerServiziNonPresenti($deleteResult, $idIst, $servizio) {
+  if($deleteResult) {
+    $dbMD           = connect_to_md();
+    $dbNBN          = connect_to_nbn();
+  //Controllo su MDServizi
+  $loginIstNameNbn = retrieve_id_login_for_istituzione($dbMD, $idIst);
+  $subNspaceID = retrieve_id_subnamespace_for_istituzione($dbNBN, $loginIstNameNbn);
+  $dtsourcesID = retrieve_ids_datasources($dbNBN, $subNspaceID, 'nbn');
+  $serviziPresenti = []; 
+  foreach ($dtsourcesID as $key => $ds){
+    $id = $ds->datasourceID;
+    $nbnResult = retrieve_agent_nbn($dbNBN, $subNspaceID, $id);
+      foreach ($nbnResult as $obj){
+        $obj->id_istituzione = $idIst;
+        $serviziPresenti[] = $obj;
+    }
+
+  }
+  if(empty($serviziPresenti)) {
+    //Delete su MDServizi
+    delete_servizio_md($idIst, $servizio);
+  }
+}
 }

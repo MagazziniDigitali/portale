@@ -108,7 +108,6 @@ if(!empty($nbnServizioAttivo)) {
     }
 
   }
-  
 }
 /*
   if (!empty($tesiServizioAttivo)) {
