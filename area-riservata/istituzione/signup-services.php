@@ -902,7 +902,7 @@ if(!empty($nbnServizioAttivo)) {
 // 20/08/2021 Argentino
 // Funzioni varie per avere una logica compatta
 
-function signupTesiDottorato($dbMD, $dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzione, $nomeIstituzione)
+/*function signupTesiDottorato($dbMD, $dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzione, $nomeIstituzione)
 { // Argentino
   if (isset($_POST['tesiNomeDatasource']) && $_POST['tesiNomeDatasource'] != '') {
     $tesiNomeDatasource = $_POST['tesiNomeDatasource'];
@@ -1089,7 +1089,7 @@ function signupBook($dbMD, $dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzio
   } else {
     $alertBook = 'Nome Datasource già in uso';
   }
-} // End signupBook()
+} // End signupBook() */
 
 // // 23/08/2021  Argentino
 // function modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, $loginIstituzione, $nomeIstituzione, $servizio, $nomeServizio) // $dbMD, 

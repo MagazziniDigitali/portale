@@ -1048,19 +1048,17 @@ function set_email_to_true_import($dbMD, $uuid){
         )
     );
 }
-function set_approve_to_true_import($dbMD, $uuid){
-
-    $approvato = 1;
-
+function set_approve_to_true_import($dbMD, $idIst){
     $updateDB = $dbMD->update(
         'MDIstituzioneImport',
         array(
-            'Approvato'     => (int)$approvato,
+            'Approvato'     => 1,
         ),
         array(
-            'ID_Utente'   => $uuid
+            'ID_Istituto'   => $idIst
         )
     );
+    return $updateDB;
     // $error = check_db_error($dbMD);
 
 }
