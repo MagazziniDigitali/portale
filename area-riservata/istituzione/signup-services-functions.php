@@ -60,7 +60,7 @@ function modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, $servizio) // $d
       case "ej":
         $descServizio = "e-journal";
         $datasource = '';
-        if(strpos($nomeDatasource, $loginIstituzione) == 0) {
+        if(strpos($nomeDatasource, $loginIstituzione.'.') == 0) {
           $datasource = str_replace($loginIstituzione.'.', $loginIstituzione.'.', $nomeDatasource); ;
 
         } else {
