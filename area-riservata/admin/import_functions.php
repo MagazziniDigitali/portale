@@ -293,10 +293,10 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato, $h
   else { // Servizio NON nbn
     $harvest_url = retrieve_url_harvest_anagrafe($dbHarvest, $url);
     if (empty($harvest_url)) {
-      if ($servizioAbilitato == "ej" || $servizioAbilitato == "eb")
-        $ds_name = $g_loginIstituzione . "." . str_replace(" ", "_", $nomeDatasource);
-      else
-        $ds_name = $g_loginIstituzione;
+      // if ($servizioAbilitato == "ej" || $servizioAbilitato == "eb")
+      //   $ds_name = $g_loginIstituzione . "." . str_replace(" ", "_", $nomeDatasource);
+      // else
+      //   $ds_name = $g_loginIstituzione;
 
       $insertAnagrafe  = insert_into_harvest_anagrafe(
         $dbHarvest,
@@ -308,8 +308,9 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato, $h
         $userEmbargo,
         $pwdEmbargo,
         $servizioAbilitato,
-        $ds_name, // $g_loginIstituzione,
-        $url
+        $g_loginIstituzione,  
+        $url,
+        $nomeDatasource
       );
       if ($insertAnagrafe != 1) {
         $error = check_db_error($dbHarvest);

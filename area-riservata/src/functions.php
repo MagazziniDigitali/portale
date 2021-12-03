@@ -1417,7 +1417,9 @@ function retrieve_url_harvest_anagrafe($dbHarvest, $url)  {
 
 
 
-function insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasource, $contatti, $formatMetadati, $setMetadati, $utenzaEmbargo, $pwdEmbargo, $servizioAbilitato, $loginIstituzione, $urlOai, $nomeDatasource ){
+function insert_into_harvest_anagrafe(
+    $dbHarvest, $uuidIstituzione, $idDatasource, $contatti, $formatMetadati, $setMetadati, 
+    $utenzaEmbargo, $pwdEmbargo, $servizioAbilitato, $loginIstituzione, $urlOai, $nomeDatasource ){
 
     $selectID   = $dbHarvest->get_row("SELECT MAX(ID) AS 'MaximumValue' FROM anagrafe");
     $id         = intval($selectID->MaximumValue);
@@ -1429,8 +1431,9 @@ function insert_into_harvest_anagrafe($dbHarvest, $uuidIstituzione, $idDatasourc
     switch ($servizioAbilitato) {
         case 'ej':
             # code...
-            $datasource = $loginIstituzione.'.'.$nomeDatasource;
-            break;
+            // $datasource = $loginIstituzione.'.'.$nomeDatasource;
+            $datasource = $loginIstituzione . "." . str_replace(" ", "_", $nomeDatasource);
+        break;
             
         case 'td':
             $datasource = $loginIstituzione;
