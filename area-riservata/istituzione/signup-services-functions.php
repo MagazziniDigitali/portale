@@ -59,7 +59,8 @@ function modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, $servizio) // $d
         break;
       case "ej":
         $descServizio = "e-journal";
-        $datasource = $loginIstituzione.'.'.$nomeDatasource;
+        
+        $datasource = str_replace($loginIstituzione.'.', $loginIstituzione.'.', $nomeDatasource); ;
         $updateResult  = update_servizi_harvest($dbHarvest, $uuidIstituzione, $datasource, $contatti, $format, $set, "", "", $url, $servizio, $idServizio); // , $nomeIstituzione
         break;
       case "eb":
