@@ -62,10 +62,15 @@ if ($_SESSION['role'] == 'superadmin') {
   $dbNBN      = connect_to_nbn();
   $dbHarvest  = connect_to_harvest();
   // test();
+  $isApprovatoIst = false;
+
   if (isset($_POST["ApprovaUser"])) {
-    if (isset($_POST['argument'])) {
-      $_iduser = $_POST['argument'];
-      set_approve_to_true_import($dbMD, $_iduser);
+    if (isset($_POST['idIst'])) {
+      $_iduser = $_POST['idIst'];
+     $result = set_approve_to_true_import($dbMD, $_iduser);
+     if($result) {
+      $isApprovatoIst = true;
+     }
     }
   }
 
@@ -100,20 +105,11 @@ get_header();
   </div>
   <div class="container">
     <div id="showAllUser">
-      <h5>Lista Istituzioni Importate:
-        <div id="buttons" style="display: none;">
-          <button type="button" class="btn btn-outline-secondary" onclick="" disabled>
-            <i class="icon-remove icon-2x" title="cancella Istituto"></i>
-          </button>
-          <button type="button" class="btn btn-outline-secondary" onclick="" disabled>
-            <i class="icon-list icon-2x" title="approva Istituto"></i>
-          </button>
-          <button type="button" class="btn btn-outline-secondary" onclick="" disabled>
-            <i class="icon-envelope-alt icon-2x" title="invia mail al risponsabile dell'istituto"></i>
-          </button>
-        </div>
-      </h5>
+      <h5>Lista Istituzioni Importate:</h5>
+      <?php if($isApprovatoIst) { ?>
+       <div class='alert alert-success alert-dismissible margin-top-15'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Instituto approvato!</div>
 
+     <?php }  ?>
       <?php
       $isImport = 1;
       include("show-users.php"); ?>
@@ -151,16 +147,7 @@ get_footer();
   $(".utente-approva").click(function(e) {
     console.log(this);
     console.log(this.id);
-    jQuery.ajax({
-      type: "POST",
-      url: 'import.php',
-      dataType: 'json',
-      data: {
-        ApprovaUser: 'ApprovaUser',
-        argument: this.id
-      },
-
-    });
+   
   });
 
 

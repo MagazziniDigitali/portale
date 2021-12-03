@@ -165,15 +165,20 @@ foreach ($uniqueIdIst as $key => $results) {
       </button>
       <?php
       if (isset($isImport) && $isImport == 1) { ?>
-        <button type="button" id="<?php echo $idIst ?>" class="btn btn-outline-secondary" disabled>
+      <!--  <button type="button" id="<?php echo $idIst ?>" class="btn btn-outline-secondary" disabled>
           <i class="icon-remove icon-2x" title="cancella Istituto"></i>
-        </button>
-        <button type="button" id="<?php echo $idIst ?>" class="btn btn-outline-secondary" disabled>
+        </button> -->
+        <form style="display: inline" action="" method="POST">
+        <input type="hidden" name="idIst" value="<?php echo $idIst ?>">
+
+        <button type="submit" id="<?php echo $idIst ?>" class="btn btn-outline-secondary" name="ApprovaUser">
           <i class="icon-list icon-2x" title="approva Istituto"></i>
         </button>
-        <button type="button" id="<?php echo $idIst ?>" class="btn btn-outline-secondary" disabled>
+        </form>
+
+       <!-- <button type="button" id="<?php echo $idIst ?>" class="btn btn-outline-secondary" disabled>
           <i class="icon-envelope-alt icon-2x" title="invia mail al risponsabile dell'istituto"></i>
-        </button>
+        </button> -->
       <?php } ?>
     </div>
 
