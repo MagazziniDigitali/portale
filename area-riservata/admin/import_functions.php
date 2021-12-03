@@ -1,5 +1,5 @@
 <?php
-require("../src/debug.php");
+include_once("../src/debug.php");
 
 function test()
 {
