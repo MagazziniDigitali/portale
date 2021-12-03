@@ -59,8 +59,14 @@ function modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, $servizio) // $d
         break;
       case "ej":
         $descServizio = "e-journal";
-        
-        $datasource = str_replace($loginIstituzione.'.', $loginIstituzione.'.', $nomeDatasource); ;
+        $datasource = '';
+        if(strpos($nomeDatasource, $loginIstituzione) == 0) {
+          $datasource = str_replace($loginIstituzione.'.', $loginIstituzione.'.', $nomeDatasource); ;
+
+        } else {
+          $datasource = $loginIstituzione.'.'.$nomeDatasource;
+
+        }
         $updateResult  = update_servizi_harvest($dbHarvest, $uuidIstituzione, $datasource, $contatti, $format, $set, "", "", $url, $servizio, $idServizio); // , $nomeIstituzione
         break;
       case "eb":
