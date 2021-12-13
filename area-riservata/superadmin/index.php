@@ -8,9 +8,9 @@
     } 
 
    $dbMD = connect_to_md();
-
+    $isInsert = false;
    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
+      
       if(isset($_POST['superadminUsername']) && $_POST['superadminUsername'] != '') {
          $login = $_POST['superadminUsername'];
       }
@@ -39,23 +39,34 @@
       $idIstituzione  = 'ISTITUZIONE-BASE';
 
       $superadmin = insert_new_user($dbMD, $uuid, $login, $password, $cognome, $nome, $codiceFiscale, $email, $admin, $superadmin, $ipAutorizzati, $idIstituzione);
-
+      $isInsert = true;
       if(!$superadmin){
          $error = insert_new_user_check_errors($dbMD);
-      }
 
+      } 
    }
 
    get_header();
 
 ?>
+      <header id="homeHeader" class="entry-header welcomePad has-text-align-center">
+        <div class="entry-header-inner section-inner medium">
+           <!-- <h4 class="entry-title">Benvenuto <strong><?php echo ($_SESSION['name'] . ' ' . $_SESSION['surname']); ?></strong> (SuperAdmin)</h4> -->
+            <h5 class="entry-title"> Inserimento nuova utenza di gestione del sistema </h5>
+         <!--   <?php if ($_SESSION['istituzione'] != 'istituzioneBase') { ?>
+            <h5 class="text-center">Istituzione di appartenenza: <?php echo $_SESSION['istituzione'] ?></h5>
+            <?php } ?> -->
+        </div>
+    </header>
+   
+   <div class="container margin-top-15">
 
-<section>
-   <div class="container">
-
-   <?php if(isset($error)) { ?>
-      <div class='alert alert-warning mt-3 mb-5'><?php echo $error ?></div>
-   <?php } ?>
+   <?php if(isset($error) && $isInsert) {
+      
+      echo "<div class='alert alert-danger alert-dismissible margin-top-15'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a> Errore nella creazione di un utente SuperAdmin". $error ."</div>";
+ } else if ($isInsert) {
+   echo "<div class='alert alert-success alert-dismissible margin-top-15'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Inserimento effettuato correttamente</div>";
+ }?>
 
       <form action="" method="POST">
          <div class="row">
@@ -96,8 +107,6 @@
          </div>
       </form>
    </div>
-</section>
-
 <?php
    get_footer(); 
 ?>

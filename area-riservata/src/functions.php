@@ -785,7 +785,7 @@ function insert_new_gestore_istituzione($dbMD, $uuidUtente, $nomeLogin, $passwor
         'NOME'                     => $utenteNome,
         'AMMINISTRATORE'           => $admin,
         'ID_ISTITUZIONE'           => $uuidIstituzione,
-        // 'CODICEFISCALE'            => $utenteCodicefiscale,
+         'CODICEFISCALE'            => $utenteCodicefiscale,
         'EMAIL'                    => $utenteEmail,
         'SUPERADMIN'               => $superadmin,
         'IP_AUTORIZZATI'           => $ipAutorizzati

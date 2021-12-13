@@ -109,7 +109,7 @@ if ($_SESSION['role'] == 'superadmin') {
                     if ($insertIstituzione != 1) {
                         $errorIstituzione = insert_new_istituzione_check_errors($dbMD);
                     } else {
-                        $insertGestoreIstituzione = insert_new_gestore_istituzione($dbMD, $uuidUtente, $preRegNomeLogin, $preRegPassword, $preRegUtenteCognome, $preRegUtenteNome, $admin, $uuidIstituzione, $preRegUtenteCodicefiscale, $preRegUtenteEmail, $superadmin, $ipAutorizzati);
+                        $insertGestoreIstituzione = insert_new_gestore_istituzione($dbMD, $uuidUtente, $preRegNomeLogin, $preRegPassword, $preRegUtenteCognome, $preRegUtenteNome, $admin, $uuidIstituzione, $preRegUtenteCodiceFiscale, $preRegUtenteEmail, $superadmin, $ipAutorizzati);
                         if ($insertGestoreIstituzione != 1) {
                             $errorUtente = insert_new_gestore_istituzione_check_errors($dbMD);
                         } else {
@@ -136,10 +136,11 @@ if ($_SESSION['role'] == 'superadmin') {
 
     <header id="homeHeader" class="entry-header welcomePad has-text-align-center">
         <div class="entry-header-inner section-inner medium">
-            <h4 class="entry-title">Benvenuto <strong><?php echo ($_SESSION['name'] . ' ' . $_SESSION['surname']); ?></strong> (SuperAdmin)</h4>
-            <?php if ($_SESSION['istituzione'] != 'istituzioneBase') { ?>
+            <h4 class="entry-title">Benvenuto <strong><?php echo ($_SESSION['name'] . ' ' . $_SESSION['surname']); ?></strong> </h4>
+            <h5 class="entry-title"> Gestione del sistema (SuperAdmin) </h5>
+           <!-- <?php if ($_SESSION['istituzione'] != 'istituzioneBase') { ?>
             <h5 class="text-center">Istituzione di appartenenza: <?php echo $_SESSION['istituzione'] ?></h5>
-            <?php } ?>
+            <?php } ?> -->
         </div>
     </header>
    
