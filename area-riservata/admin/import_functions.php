@@ -220,11 +220,10 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato, $h
   $contatti        = $row[4];
   $format          = $row[5];
   $set             = $row[6];
-  $userEmbargo     = null; //$row[7];
-  $pwdEmbargo      = null; //$row[8];
+  $userEmbargo     = $row[7];
+  $pwdEmbargo      = $row[8];
   $userNBN         = $row[9];
   $pwdNBN          = $row[10];
-  // $servizioAbilitato='td';
   $ipNBN            = '*.*.*.*';
 
 
