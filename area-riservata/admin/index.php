@@ -137,7 +137,7 @@ if ($_SESSION['role'] == 'superadmin') {
     <header id="homeHeader" class="entry-header welcomePad has-text-align-center">
         <div class="entry-header-inner section-inner medium">
             <h4 class="entry-title">Benvenuto <strong><?php echo ($_SESSION['name'] . ' ' . $_SESSION['surname']); ?></strong> </h4>
-            <h5 class="entry-title"> Gestione del sistema (SuperAdmin) </h5>
+            <h5 class="entry-title"> Amministrazione del sistema (SuperAdmin) </h5>
            <!-- <?php if ($_SESSION['istituzione'] != 'istituzioneBase') { ?>
             <h5 class="text-center">Istituzione di appartenenza: <?php echo $_SESSION['istituzione'] ?></h5>
             <?php } ?> -->

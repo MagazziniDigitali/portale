@@ -52,7 +52,7 @@
       <header id="homeHeader" class="entry-header welcomePad has-text-align-center">
         <div class="entry-header-inner section-inner medium">
            <!-- <h4 class="entry-title">Benvenuto <strong><?php echo ($_SESSION['name'] . ' ' . $_SESSION['surname']); ?></strong> (SuperAdmin)</h4> -->
-            <h5 class="entry-title"> Inserimento nuova utenza di gestione del sistema </h5>
+            <h5 class="entry-title"> Inserimento nuova utenza di amministrazione del sistema </h5>
          <!--   <?php if ($_SESSION['istituzione'] != 'istituzioneBase') { ?>
             <h5 class="text-center">Istituzione di appartenenza: <?php echo $_SESSION['istituzione'] ?></h5>
             <?php } ?> -->
