@@ -103,6 +103,7 @@
         <?php } ?>
 
         <form action="" method="POST" id="formSignupCustom" name="formSignupCustom">
+            <input type="hidden" value="inserisciformSignupCustom" name="inserisciformSignupCustom">
             <div class="row">
                 <div class="col-md-12"><h3>Anagrafica Istituzione</h3></div>
             </div>
@@ -179,7 +180,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <input name="submit" type="submit" name="inserisciformSignupCustom" value="Registrati" class="mt-4 float-right"/>
+                    <input name="submit" type="submit"  value="Registrati" class="mt-4 float-right"/>
                 </div>
             </div>
         </form>     
