@@ -1,6 +1,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-  function PreOpenModal(idIstituzione, loginIstLogin, loginIstName) {
+  function PreOpenModal(idIstituzione, loginIstLogin, loginIstName, isTesiDottoratoAttiva) {
     document.getElementById("InsertIstForm").reset();
     $(".modal-body #id_Ist_modal").val(idIstituzione);
     // var idIstituzioneHtml = document.getElementById('id_Ist_modal');
@@ -10,9 +10,14 @@
     // loginIstLoginHtml.value = loginIstLogin;
     $(".modal-body #Ist_name_modal").val(loginIstName);
     //  var loginIstNameHtml = document.getElementById('Ist_name_modal');
-    //  loginIstNameHtml.value = loginIstName;
-   // hideAllFieldsServizio()
+    //  loginIstNameHtml.value = loginIstName; (!empty($tesiServizioAttivo) && $tesiAll)
    hideAllFieldsServizio();
+   showFields(["selectionTD"])
+   if(isTesiDottoratoAttiva){
+   hideFields(["selectionTD"])
+
+
+   }
   }
 
   function PreOpeninsertUserModal(idIstituzione) {
@@ -305,7 +310,7 @@ foreach ($uniqueIdIst as $key => $results) {
 
         <h4>Servizi:
           <?php if (!isset($isImport)) { ?>
-            <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#insertIstModal" onclick="PreOpenModal('<?php echo $idIst ?>', '<?php echo $loginIstLogin ?>', '<?php echo $loginIstName ?>')">
+            <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#insertIstModal" onclick="PreOpenModal('<?php echo $idIst ?>', '<?php echo $loginIstLogin ?>', '<?php echo $loginIstName ?>', <?php echo (!empty($tesiServizioAttivo)) ?>)">
               <i class="icon-plus icon-2x" title="Aggiungi un nuovo servizio"></i>
             </button>
           <?php } ?>
@@ -783,10 +788,10 @@ foreach ($uniqueIdIst as $key => $results) {
                   <select class="form-control" id="selectType" name="selectType" style="font-size: 100%;"
                   onchange="onChangeTipoServizio(this)">
                     <option selected value="">Seleziona Tipo Servizio...</option>
-                    <option value="td">Harvesting Tesi di Dottorato</option>
-                    <option value="ej">Harvesting E-Journal</option>
-                    <option value="eb">Harvesting E-Book</option>
-                    <option value="nbn">National Bibliography Number</option>
+                    <option value="td" id="selectionTD">Harvesting Tesi di Dottorato</option>
+                    <option value="ej" id="selectionEJ">Harvesting E-Journal</option>
+                    <option value="eb" id="selectionEB">Harvesting E-Book</option>
+                    <option value="nbn" id="selectionNBN">National Bibliography Number</option>
                   </select>
                 </div>
               </div>
@@ -1091,4 +1096,5 @@ foreach ($uniqueIdIst as $key => $results) {
     var istLogin = $("#Ist_login_modal").val()
     $("#nomeDatasource").val(istLogin)    
   }
+
 </script>

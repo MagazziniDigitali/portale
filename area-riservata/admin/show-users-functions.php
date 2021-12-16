@@ -29,6 +29,9 @@ function updateUser($dbMD)
   }
   if(isset($_POST['codiceFiscale'])){
     $codiceFiscale = $_POST['codiceFiscale'];
+    if ($codiceFiscale == ''){
+      $codiceFiscale = null;
+    }
   }
   if(isset($_POST['email'])){
     $email = $_POST['email'];
@@ -41,6 +44,7 @@ function updateUser($dbMD)
   if(isset($_POST['uuid'])){
     $uuid = $_POST['uuid'];
   }
+  $gestoreIstituzione = '';
   if (isset($_POST['gestoreIstituzione'])) {
     $gestoreIstituzione = $_POST['gestoreIstituzione'];
   }
