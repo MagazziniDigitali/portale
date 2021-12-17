@@ -79,7 +79,7 @@ function modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, $servizio) // $d
         break;
     };
     if (!$updateResult) {
-      $errorString = "Aggiornamento anagrafe harvest fallito per servizio ". $descServizio;
+      $errorString = "Aggiornamento anagrafe harvest fallito per servizio ". $descServizio .". Controllare che tutti i campi siano inseriti correttamente.";
       wh_log($WH_LOG_INFO, "Errore Aggiornamento abagrafe harvest: ".$updateResult);
 
     }
