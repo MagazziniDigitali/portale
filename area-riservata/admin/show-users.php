@@ -14,9 +14,7 @@
    hideAllFieldsServizio();
    showFields(["selectionTD"])
    if(isTesiDottoratoAttiva){
-   hideFields(["selectionTD"])
-
-
+     hideFields(["selectionTD"])
    }
   }
 

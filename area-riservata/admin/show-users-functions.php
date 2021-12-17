@@ -134,33 +134,72 @@ function addUser($dbMD)
 function inserisciServizio($dbMD, $dbNBN, $dbHarvest, $isSuperAdmin)
 {
   global $WH_LOG_INFO;
+  $hasValidationErrors = false;
+  $missingFields = [];
+  if (isset($_POST['selectType'])) 
+    $servizioAbilitato = $_POST['selectType'];
+
+    switch ($servizioAbilitato) {
+      case 'td':
+      case 'ej':
+      case 'eb':
+        if (isset($_POST['contatti']) && $_POST['contatti'] != '')
+          $contatti = $_POST['contatti'];
+        else
+          $missingFields[] = "Contatti";
+
+        if (isset($_POST['format'])&& $_POST['format'] != '')
+          $format = $_POST['format'];
+        else
+          $missingFields[] = "Format dei metadati";
+        if (isset($_POST['set']) && $_POST['set'] != '')
+          $set = $_POST['set'];
+        else
+          $missingFields[] = "Set dei metadati";
+        if (isset($_POST['userEmbargo']))
+          $userEmbargo = $_POST['userEmbargo'];
+        if (isset($_POST['pwdEmbargo']))
+          $pwdEmbargo = $_POST['pwdEmbargo'];
+
+        break;
+      case 'nbn':
+            
+          if (isset($_POST['userNBN']) && $_POST['userNBN'] != '')
+            $userNBN = $_POST['userNBN'];
+          else
+            $missingFields[] = "User API NBN";
+          if (isset($_POST['pwdNBN']) && $_POST['pwdNBN'] != '')
+           $pwdNBN = $_POST['pwdNBN'];
+          else
+           $missingFields[] = "Password API NBN";
+          if (isset($_POST['ipNBN']) && $_POST['ipNBN'] != '') 
+           $ipNBN = $_POST['ipNBN'];
+          else
+           $missingFields[] = "IP API NBN";
+        break;
+      
+      default:
+        
+      $hasValidationErrors = true;
+      $missingFields[] = "Tipo servizio";
+        break;
+    }
 
   if (isset($_POST['nomeDatasource']))
     $nomeDatasource = $_POST['nomeDatasource'];
+  else
+    $missingFields[] = "Nome datasouce";
   if (isset($_POST['url']))
     $url = $_POST['url'];
-  if (isset($_POST['contatti']))
-    $contatti = $_POST['contatti'];
-  if (isset($_POST['format']))
-    $format = $_POST['format'];
-  if (isset($_POST['set']))
-    $set = $_POST['set'];
-  if (isset($_POST['userEmbargo']))
-    $userEmbargo = $_POST['userEmbargo'];
-  if (isset($_POST['pwdEmbargo']))
-    $pwdEmbargo = $_POST['pwdEmbargo'];
-  if (isset($_POST['userNBN']))
-    $userNBN = $_POST['userNBN'];
-  if (isset($_POST['pwdNBN']))
-    $pwdNBN = $_POST['pwdNBN'];
-  if (isset($_POST['ipNBN']) && $_POST['ipNBN'] != '') 
-    $ipNBN = $_POST['ipNBN'];
+  else
+    $missingFields[] = "URL datasource";
+
   if (isset($_POST['id_Ist']))
     $idIst = $_POST['id_Ist'];
   if (isset($_POST['harvest_name']))
     $loginIstLogin = $_POST['harvest_name'];
-  if (isset($_POST['selectType'])) 
-    $servizioAbilitato = $_POST['selectType'];
+
+    //Campi di servizio
   if (isset($_POST['id_Ist_modal'])) 
     $uuidIstituzione = $_POST['id_Ist_modal'];
   if (isset($_POST['Ist_name_modal'])) 
@@ -168,6 +207,12 @@ function inserisciServizio($dbMD, $dbNBN, $dbHarvest, $isSuperAdmin)
   if (isset($_POST['Ist_login_modal']))
     $loginIstituzione = $_POST['Ist_login_modal'];
 
+    if (count($missingFields) > 0 ) {
+      $campiMancanti = implode(', ', $missingFields);
+      echo "<div class='alert alert-danger alert-dismissible margin-top-15'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>I campi $campiMancanti sono obbligatori</div>";
+
+      return;
+    }
 
   $isServizioAttivo = '';
   $isNbn = ($servizioAbilitato =='nbn');
