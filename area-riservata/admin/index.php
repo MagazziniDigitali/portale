@@ -332,16 +332,13 @@ get_footer();
 ?>
 
 <script>
-    passwordToggle = document.getElementById('showPwd');
-    passwordInput = document.getElementById('passwordCustom');
-
-    passwordToggle.addEventListener('change', function() {
-
+    function onMonstraPsw(pwdFieldId) {
+        var passwordInput = document.getElementById(pwdFieldId);
         if (passwordInput.type === 'password') {
             passwordInput.type = 'text';
         } else {
             passwordInput.type = 'password';
         }
 
-    });
+    }
 </script>

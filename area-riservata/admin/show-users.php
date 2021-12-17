@@ -891,7 +891,7 @@ foreach ($uniqueIdIst as $key => $results) {
               <div class="col-md-6">
                 <label for="newUserPassword">Password</label>
                 <input type="password" name="newUserPassword" id="newUserPassword">
-                <input type="checkbox" name="newUserPasswordShow" id="newUserPasswordShow"> <label for="newUserPasswordShow">Mostra la password</label>
+                <input onchange="onstraPsw('newUserPassword')" type="checkbox" name="newUserPasswordShow" id="newUserPasswordShow"> <label for="newUserPasswordShow">Mostra la password</label>
               </div>
             </div>
             <div class="row">
