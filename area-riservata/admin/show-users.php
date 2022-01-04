@@ -356,31 +356,35 @@ foreach ($uniqueIdIst as $key => $results) {
 
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="nomeDatasource_nbn">Nome Datasource</label>
+                          <label for="nomeDatasource_nbn">Nome Datasource *</label>
                           <input name="nomeDatasource_nbn" value="<?php echo $nomeDatasource_nbn ?>" type="text">
                         </div>
                         <div class="col-md-6">
-                          <label for="url_nbn">URL sito</label>
+                          <label for="url_nbn">URL sito *</label>
                           <input name="url_nbn" value="<?php echo $url_nbn ?>" type="text">
                         </div>
                       </div>
                       <div class="row">
                        <div class="col-md-6">
-                          <label for="userNBN_nbn">User per API NBN</label>
+                          <label for="userNBN_nbn">User per API NBN *</label>
                           <input name="userNBN_nbn" value="<?php echo $userNBN_nbn ?>" type="text">
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="pwdNBN_nbn">Password per API NBN</label>
+                          <label for="pwdNBN_nbn">Password per API NBN *</label>
                           <input name="pwdNBN_nbn" value="<?php echo $pwdNBN_nbn ?>" type="text">
                         </div>
                         <div class="col-md-6">
-                          <label for="ipNBN_nbn">IP per API NBN</label>
+                          <label for="ipNBN_nbn">IP per API NBN *</label>
                           <input name="ipNBN_nbn" value="<?php echo $ipNBN_nbn ?>" type="text">
                         </div>
                       </div>
-
+                      <div class="row">
+                <div  id="infoCampiObbblNbn" class="col-md-6 margin-top-5">
+                <label>I campi segnati da * (asterisco) sono obbligatori</label>
+                </div>
+            </div>
                       <div class="row">
 
                         <div class="col-md-12">
@@ -461,37 +465,37 @@ foreach ($uniqueIdIst as $key => $results) {
 
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="nomeDatasource_td">Nome Datasource</label>
+                          <label for="nomeDatasource_td">Nome Datasource *</label>
                           <input class="disabilitato" name="nomeDatasource_td" readonly value="<?php echo $nomeDatasource_td ?>" type="text">
                         </div>
                         <div class="col-md-6">
-                          <label for="url_td">URL sito OAI</label>
+                          <label for="url_td">URL sito OAI *</label>
                           <input name="url_td" value="<?php echo $url_td ?>" type="text">
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="contatti_td">Contatti</label>
+                          <label for="contatti_td">Contatti *</label>
                           <input name="contatti_td" value="<?php echo $contatti_td ?>" type="text">
                         </div>
                         <div class="col-md-6">
-                          <label for="format_td">Format dei metadati</label>
+                          <label for="format_td">Format dei metadati *</label>
                           <input name="format_td" value="<?php echo $format_td ?>" type="text">
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="set_td">Set dei metadati</label>
+                          <label for="set_td">Set dei metadati *</label>
                           <input name="set_td" value="<?php echo $set_td ?>" type="text">
                         </div>
                         <div class="col-md-6">
-                          <label for="userEmbargo_td">Utenza per accesso embargo</label>
+                          <label for="userEmbargo_td">Utenza per accesso embargo *</label>
                           <input name="userEmbargo_td" value="<?php echo $userEmbargo_td ?>" type="text">
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="pwdEmbargo_td">Password per accesso embargo</label>
+                          <label for="pwdEmbargo_td">Password per accesso embargo *</label>
                           <input name="pwdEmbargo_td" value="<?php echo $pwdEmbargo_td ?>" type="text">
                         </div>
                       <!--  <div class="col-md-6">
@@ -509,7 +513,11 @@ foreach ($uniqueIdIst as $key => $results) {
                           <input name="ipNBN_td" value="<?php echo $ipNBN_td ?>" type="text">
                         </div> -->
                       </div>
-
+                      <div class="row">
+                <div  id="infoCampiObbblTD" class="col-md-6 margin-top-5">
+                <label>I campi segnati da * (asterisco) sono obbligatori</label>
+                </div>
+            </div>
                       <div class="row">
 
                         <div class="col-md-12">
@@ -591,27 +599,27 @@ foreach ($uniqueIdIst as $key => $results) {
                       <input type="hidden" name="idServizio" value="<?php echo $id ?>">
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="nomeDatasource_ej">Nome Datasource</label>
+                          <label for="nomeDatasource_ej">Nome Datasource *</label>
                           <input name="nomeDatasource_ej" value="<?php echo $nomeDatasource_ej ?>" type="text">
                         </div>
                         <div class="col-md-6">
-                          <label for="url_ej">URL sito OAI</label>
+                          <label for="url_ej">URL sito OAI *</label>
                           <input name="url_ej" value="<?php echo $url_ej ?>" type="text">
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="contatti_ej">Contatti</label>
+                          <label for="contatti_ej">Contatti *</label>
                           <input name="contatti_ej" value="<?php echo $contatti_ej ?>" type="text">
                         </div>
                         <div class="col-md-6">
-                          <label for="format_ej">Format dei metadati</label>
+                          <label for="format_ej">Format dei metadati *</label>
                           <input name="format_ej" value="<?php echo $format_ej ?>" type="text">
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="set_ej">Set dei metadati</label>
+                          <label for="set_ej">Set dei metadati *</label>
                           <input name="set_ej" value="<?php echo $set_ej ?>" type="text">
                         </div>
                        <!-- <div class="col-md-6">
@@ -639,7 +647,11 @@ foreach ($uniqueIdIst as $key => $results) {
                           <input name="ipNBN_ej" value="<?php echo $ipNBN_ej ?>" type="text">
                         </div>
                          </div> -->
-                     
+                         <div class="row">
+                <div  id="infoCampiObbblEJ" class="col-md-6 margin-top-5">
+                <label>I campi segnati da * (asterisco) sono obbligatori</label>
+                </div>
+            </div>
 
                       <div class="row">
                         <div class="col-md-12">
@@ -706,17 +718,17 @@ foreach ($uniqueIdIst as $key => $results) {
 
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="nomeDatasource_eb">Nome Datasource</label>
+                          <label for="nomeDatasource_eb">Nome Datasource *</label>
                           <input name="nomeDatasource_eb" value="<?php echo $nomeDatasource_eb ?>" type="text">
                         </div>
                         <div class="col-md-6">
-                          <label for="url_eb">URL sito OAI</label>
+                          <label for="url_eb">URL sito OAI *</label>
                           <input name="url_eb" value="<?php echo $url_eb ?>" type="text">
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-md-6">
-                            <label for="contatti_eb">Contatti</label>
+                            <label for="contatti_eb">Contatti *</label>
                             <input name="contatti_eb" value="<?php echo $contatti_eb ?>" type="text">
                           </div>
                       </div>
@@ -737,6 +749,11 @@ foreach ($uniqueIdIst as $key => $results) {
                         </div>
                         <div class="col-md-6"></div> 
                       </div>-->
+                      <div class="row">
+                <div  id="infoCampiObbblEB" class="col-md-6 margin-top-5">
+                <label>I campi segnati da * (asterisco) sono obbligatori</label>
+                </div>
+            </div>
                       <div class="row">
                         <div class="col-md-12">
                         <?php
@@ -795,63 +812,68 @@ foreach ($uniqueIdIst as $key => $results) {
               </div>
             </div>
             <div class="row" id="alertSelezionaTipo">
-                <div class="col-md-12">
-                 Seleziona il Tipo di Servizio per inserire i dati
+                <div class="col-md-12 text-danger">
+                 Seleziona il Tipo di Servizio per inserire i dati 
                 </div>
             </div>
             <div class="row">
               <div class="col-md-6" id="tsDataSource"> <!--nomeDatasource -->
-                <label for="nomeDatasource">Nome Datasource</label>
+                <label for="nomeDatasource">Nome Datasource *</label>
                 <input name="nomeDatasource" value="" id="nomeDatasource"type="text">
               </div>
               <div class="col-md-6" id="tsSitoOai">
-                <label for="url">URL sito <span id="tsSitoOaiLabel">OAI</span></label>
+                <label for="url">URL sito <span id="tsSitoOaiLabel">OAI</span> *</label>
                 <input name="url" value="" type="text">
               </div>
             </div>
             <div class="row">
               <div class="col-md-6" id="tsContatti">
-                <label for="contatti">Contatti</label>
+                <label for="contatti">Contatti *</label>
                 <input name="contatti" value="" type="text">
               </div>
               
             </div>
             <div class="row">
             <div class="col-md-6" id="tsFormat">
-                <label for="format">Format dei metadati</label>
+                <label for="format">Format dei metadati *</label>
                 <input name="format" value="" type="text">
               </div>
               <div class="col-md-6" id="tsSet">
-                <label for="set">Set dei metadati</label>
+                <label for="set">Set dei metadati *</label>
                 <input name="set" value="" type="text">
               </div>
              
             </div>
             <div class="row">
             <div class="col-md-6" id="tsEmbargo">
-                <label for="userEmbargo">Utenza per accesso embargo</label>
+                <label for="userEmbargo">Utenza per accesso embargo *</label>
                 <input name="userEmbargo" value="" type="text">
               </div>
               <div class="col-md-6"  id="tsPwdEmbargo">
-                <label for="pwdEmbargo" id="tsPwdEmbargo">Password per accesso embargo</label>
+                <label for="pwdEmbargo" id="tsPwdEmbargo">Password per accesso embargo *</label>
                 <input name="pwdEmbargo" value="" type="text">
               </div>
             </div>
             <div class="row">
             <div class="col-md-6" id="tsNbnApi">
-                <label for="userNBN">User per API NBN</label>
+                <label for="userNBN">User per API NBN *</label>
                 <input name="userNBN" value="" type="text">
               </div>
             </div>
             <div class="row">
               <div class="col-md-6" id="tsNbnPsw">
-                <label for="pwdNBN">Password per API NBN</label>
+                <label for="pwdNBN">Password per API NBN *</label>
                 <input name="pwdNBN" value="" type="text">
               </div>
               <div class="col-md-6" id="tsNbnIp">
-                <label for="ipNBN">IP per API NBN</label>
+                <label for="ipNBN">IP per API NBN *</label>
                 <input name="ipNBN" value="" type="text">
               </div>
+            </div>
+            <div class="row">
+                <div  id="infoCampiObbbl" class="col-md-6 margin-top-5">
+                <label>I campi segnati da * (asterisco) sono obbligatori</label>
+                </div>
             </div>
             <!-- </form> -->
             <br>
@@ -991,6 +1013,9 @@ foreach ($uniqueIdIst as $key => $results) {
   function onChangeTipoServizio(tipoServizioField) {
      let tipoServizio = tipoServizioField.value;
      showAllFieldsServizio()
+     
+     showFields(["infoCampiObbbl"])
+
      enableField('nomeDatasource')
     switch (tipoServizio) {
       case "nbn": //Lasciare visibili solo campi NBN e Nome Datasource
@@ -1014,7 +1039,6 @@ foreach ($uniqueIdIst as $key => $results) {
         break;
       }
       case "ej":
-      case "eb":
         hideFields([ "tsEmbargo",
                   "tsPwdEmbargo",
                   "tsNbnApi",
@@ -1022,9 +1046,19 @@ foreach ($uniqueIdIst as $key => $results) {
                   "tsNbnIp"
                   ]);
       break;
+      case "eb":
+        hideFields([ "tsEmbargo",
+                  "tsPwdEmbargo",
+                  "tsNbnApi",
+                  "tsNbnPsw",
+                  "tsNbnIp",
+                  "tsFormat",
+                  "tsSet",
+                  ]);
+      break;
       default:
-      //hideAllFieldsServizio()
-      showAllFieldsServizio()
+      hideAllFieldsServizio()
+     // showAllFieldsServizio()
         break;
     }
   }
@@ -1051,7 +1085,8 @@ foreach ($uniqueIdIst as $key => $results) {
   }
   function hideAllFieldsServizio() {
     showFields(["alertSelezionaTipo"])
-    hideFields(["tsDataSource",
+    hideFields([ "infoCampiObbbl",
+                 "tsDataSource",
                  "tsSitoOaiLabel",
                   "tsSitoOai",
                   "tsContatti",
