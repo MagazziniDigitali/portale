@@ -79,9 +79,14 @@ function modificaServizio($dbHarvest, $dbNBN, $uuidIstituzione, $servizio) // $d
         break;
     };
     if (!$updateResult) {
-      $errorString = "Aggiornamento anagrafe harvest fallito per servizio ". $descServizio .". Controllare che tutti i campi siano inseriti correttamente.";
-      wh_log($WH_LOG_INFO, "Errore Aggiornamento abagrafe harvest: ".$updateResult);
+      if($updateResult == 0) {
+        $errorString = "Nessuna modifica è stata apportata ai dati per il servizio ". $descServizio .". Se necessario effettuare un cambiamento dei dati.";
 
+      } else {
+
+      $errorString = "Aggiornamento anagrafe harvest fallito per il servizio ". $descServizio .". Controllare che tutti i campi siano inseriti correttamente.";
+      wh_log($WH_LOG_INFO, "Errore Aggiornamento abagrafe harvest: ".$updateResult);
+      }
     }
 
     
