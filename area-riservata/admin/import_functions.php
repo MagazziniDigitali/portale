@@ -232,7 +232,8 @@ function insert_servizio($row, $dbNBN, $dbMD, $dbHarvest, $servizioAbilitato, $h
     // return ("Inserimento servizio fallito");
     wh_log($WH_LOG_INFO, "g_loginIstituzione = $g_loginIstituzione");
     // $subnamespaceID  = retrieve_id_subnamespace_for_istituzione($dbNBN, $g_loginIstituzione);
-    $subnamespaceID  = retrieve_id_subnamespace_for_istituzione($dbNBN, $nomeDatasource);
+    // $subnamespaceID  = retrieve_id_subnamespace_for_istituzione($dbNBN, $nomeDatasource);
+    $subnamespaceID  = retrieve_id_subnamespace_for_istituzione($dbNBN, $g_loginIstituzione); // 14/12/2021
     
     // wh_log($WH_LOG_INFO, "subnamespaceID = $subnamespaceID");
     if (empty($subnamespaceID)) {
