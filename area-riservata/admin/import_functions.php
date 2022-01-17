@@ -135,6 +135,9 @@ function upload_file($dbNBN, $dbMD, $dbHarvest)
 function insert_istituzione($row, $dbMD)
 {
   global $g_loginIstituzione, $g_nomeIstituzione, $g_idIstituzione;
+  global $WH_LOG_DEBUG;
+
+  
 
   $num_campi       = $row[1];
   $g_nomeIstituzione = $nome            = $row[2];
@@ -191,10 +194,14 @@ function insert_istituzione($row, $dbMD)
     if ($insertIstituzioneImport != 1)
       return check_db_error($dbMD);
 
-    $insertGestoreIstituzione = insert_new_gestore_istituzione($dbMD, $uuidUtente, $nomeLogin, $password, $preRegUtenteCognome, $preRegUtenteNome, $admin, $uuidIstituzione, $UtenteCodicefiscale, $UtenteEmail, $superadmin, $ipAutorizzati);
+  wh_log($WH_LOG_DEBUG, "Inserimento utente");
+  
+      $insertGestoreIstituzione = insert_new_gestore_istituzione($dbMD, $uuidUtente, $nomeLogin, $password, $preRegUtenteCognome, $preRegUtenteNome, $admin, $uuidIstituzione, $UtenteCodicefiscale, $UtenteEmail, $superadmin, $ipAutorizzati);
     if ($insertGestoreIstituzione != 1)
       return insert_new_gestore_istituzione_check_errors($dbMD);
 
+  wh_log($WH_LOG_DEBUG, "Utente inserito");
+  
     $uuidSoftware = generate_uuid($dbMD);
     $insertSoftware = insert_new_software($dbMD, $uuidSoftware, $uuidIstituzione, $nomeLogin, $password, $nome);
 
