@@ -155,7 +155,7 @@ if ($_SESSION['role'] == 'superadmin') {
                 <?php
                 if ($pendingPreReg == 0) { ?>
 
-                    <h5>Non ci sono richieste di registrazione da approvare</h5>
+                   <!-- <h5>Non ci sono richieste di registrazione da approvare</h5> -->
 
                     <?php } else {
 

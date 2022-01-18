@@ -403,13 +403,13 @@ foreach ($uniqueIdIst as $key => $results) {
                           <input name="set_td" value="<?php echo $set_td ?>" type="text">
                         </div>
                         <div class="col-md-6">
-                          <label for="userEmbargo_td">Utenza per accesso embargo *</label>
+                          <label for="userEmbargo_td">Utenza per accesso embargo </label>
                           <input name="userEmbargo_td" value="<?php echo $userEmbargo_td ?>" type="text">
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="pwdEmbargo_td">Password per accesso embargo *</label>
+                          <label for="pwdEmbargo_td">Password per accesso embargo </label>
                           <input name="pwdEmbargo_td" value="<?php echo $pwdEmbargo_td ?>" type="text">
                         </div>
                       <!--  <div class="col-md-6">
@@ -873,13 +873,13 @@ foreach ($uniqueIdIst as $key => $results) {
                 <input name="userEmbargo" value="" type="text">
               </div>
               <div class="col-md-6"  id="tsPwdEmbargo">
-                <label for="pwdEmbargo" id="tsPwdEmbargo">Password per accesso embargo *</label>
+                <label for="pwdEmbargo" id="tsPwdEmbargo">Password per accesso embargo </label>
                 <input name="pwdEmbargo" value="" type="text">
               </div>
             </div>
             <div class="row">
             <div class="col-md-6" id="tsNbnApi">
-                <label for="userNBN">User per API NBN *</label>
+                <label for="userNBN">User per API NBN </label>
                 <input name="userNBN" value="" type="text">
               </div>
             </div>

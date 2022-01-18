@@ -75,7 +75,7 @@ if(!isset($isEditEnabled))
                         <?php if ($isEditEnabled) { ?>
                         <div class="row">
                             <div class="col-md-12 text-right">
-                              <input name="modificaIstituzione" type="submit" value="Modifica anagrafica" class="mt-3 btnAcceptSub mr-3" />
+                              <input name="modificaIstituzione" type="submit" value="Modifica anagrafica" class="mt-3 mr-3" />
                             </div>
                         </div>
                         <?php } ?>

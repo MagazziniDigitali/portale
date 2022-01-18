@@ -2007,8 +2007,9 @@ function delete_servizio_md($idIstituzione, $tipoServizio) {
     return $query;
 }
 function modificaAnagraficaIstituto($istId, $istNome, $istIndirizzo, $istTelefono, $istNomeContatto, $istUrl, $istNote,  $istPiva, $istRegione ) {
+    $errorString = "";
     $db = connect_to_md();
-    $updateDB = $db->update(
+    $updateResult = $db->update(
             'MDIstituzione',
             array(
                 'NOME'           => $istNome,
@@ -2024,5 +2025,20 @@ function modificaAnagraficaIstituto($istId, $istNome, $istIndirizzo, $istTelefon
                 'ID'                => $istId
             )
         );
-    
+        if (!$updateResult) {
+            if($updateResult == 0) {
+              $errorString = "Nessuna modifica è stata apportata all'istituzione ". $istNome .". Se necessario effettuare un cambiamento dei dati.";
+            } else {
+             $errorString = "Aggiornamento anagrafica fallito per ". $istNome .". Controllare che tutti i campi siano inseriti correttamente.";
+            }
+          }
+        if ($errorString != "") { // Signal some error
+            echo "<div class='alert alert-danger alert-dismissible margin-top-15'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>". $errorString ."</div>";
+            return;
+          } else {
+            echo "<div class='alert alert-success alert-dismissible margin-top-15'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Modifica andata a buon fine per l'anagrafica di $istNome.</div>";
+           if( $_SESSION['istituzione'] != 'istituzioneBase' && $_SESSION['istituzione'] != $istNome) {
+            $_SESSION['istituzione'] = $istNome;
+           }
+        }
 }
