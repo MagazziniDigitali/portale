@@ -90,7 +90,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_istituzione  = $_POST['id_Ist_nbn'];
     rimuoviServizio($dbNBN, $dbHarvest,   $id_istituzione,"nbn");
   }
-
+  if (isset($_POST['modificaIstituzione'])) {
+    $istId_New = (isset($_POST['istId']) ? $_POST['istId'] : "");
+    $istNome_New = (isset($_POST['istNome']) ? $_POST['istNome'] : "");
+    $istIndirizzo_New = (isset($_POST['istIndirizzo']) ? $_POST['istIndirizzo'] : "");
+    $istTelefono_New = (isset($_POST['istTelefono']) ? $_POST['istTelefono'] : "");
+    $istNomeContatto_New = (isset($_POST['istNomeContatto']) ? $_POST['istNomeContatto'] : "");
+    $istUrl_New = (isset($_POST['istUrl']) ? $_POST['istUrl'] : "");
+    $istNote_New = (isset($_POST['istNote']) ? $_POST['istNote'] : "");
+    $istPiva_New = (isset($_POST['istPiva']) ? $_POST['istPiva'] : "");
+    $istRegione_New = (isset($_POST['istRegione']) ? $_POST['istRegione'] : "");
+        modificaAnagraficaIstituto($istId_New,
+             $istNome_New,
+             $istIndirizzo_New,
+             $istTelefono_New,
+             $istNomeContatto_New,
+             $istUrl_New,
+             $istNote_New,
+             $istPiva_New,
+             $istRegione_New 
+            );
+        }
 
 } // End if POST
 
@@ -115,6 +135,7 @@ foreach ($uniqueIdIst as $key => $results) {
   if (!empty($loginIst)) {
     $loginIstLogin = $loginIst[0]->LOGIN;
     $loginIstName = $loginIst[0]->NOME;
+    //Info istituto
     if (!empty($tesiServizioAttivo)) {
       $tesiAll = select_anagrafe_harvest($dbHarvest, $idIst, 'td');
     }
@@ -187,7 +208,7 @@ foreach ($uniqueIdIst as $key => $results) {
 
     <div id="collapse_ist<?php echo $idIst ?>" class="collapse" aria-labelledby="heading<?php echo $idIst ?>">
       <div class="card-body">
-
+       <?php require("../src/istituzione_detail.php") ?>
         <h4>Utenti:
           <?php if (!isset($isImport)) { ?>
             <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#insertUserModal" onclick="PreOpeninsertUserModal('<?php echo $idIst ?>')">

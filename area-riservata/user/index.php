@@ -14,7 +14,8 @@
       $dbMD           = connect_to_md();
       $dbHarvest      = connect_to_harvest();
       $dbNBN          = connect_to_nbn();
-    
+      $allRegions = retrieve_regions($dbMD);
+
       $uuidIstituzione    = check_istituizone_session($dbMD);
       $istituzione        = retrieve_login_istituzione($dbMD, $uuidIstituzione);
       $loginIstituzione   = $istituzione[0]->LOGIN;
@@ -73,7 +74,10 @@
      <!-- <?php if($_SESSION['istituzione'] != 'istituzioneBase') { ?>
          <p class="text-center">Istituzione di appartenenza: <strong><?php echo $_SESSION['istituzione'] ?></strong></p>
       <?php } ?> -->
-      
+      <!-- dettaglio istitutione -->
+      <div class="divServizi">
+       <?php require("../src/istituzione_detail.php") ?>
+      </div>
       <div id="ServiziShowup">
       <?php if (!empty($tesiServizioAttivo) || !empty($journalServizioAttivo) || !empty($bookServizioAttivo) || !empty($nbnServizioAttivo)) { ?>
           <h5>Servizi </h5>

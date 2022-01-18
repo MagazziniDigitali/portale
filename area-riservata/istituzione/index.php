@@ -14,7 +14,36 @@ if ($_SESSION['role'] != 'admin_istituzione') {
 } else {
    $dbMD = connect_to_md();
    $checkUserPerIstituzione = check_users_for_istituzione($dbMD);
+   $idIst  = check_istituizone_session($dbMD);
+   $allRegions = retrieve_regions($dbMD);
+
    get_header();
+
+   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    if (isset($_POST['modificaIstituzione'])) {
+      $istId_New = (isset($_POST['istId']) ? $_POST['istId'] : "");
+      $istNome_New = (isset($_POST['istNome']) ? $_POST['istNome'] : "");
+      $istIndirizzo_New = (isset($_POST['istIndirizzo']) ? $_POST['istIndirizzo'] : "");
+      $istTelefono_New = (isset($_POST['istTelefono']) ? $_POST['istTelefono'] : "");
+      $istNomeContatto_New = (isset($_POST['istNomeContatto']) ? $_POST['istNomeContatto'] : "");
+      $istUrl_New = (isset($_POST['istUrl']) ? $_POST['istUrl'] : "");
+      $istNote_New = (isset($_POST['istNote']) ? $_POST['istNote'] : "");
+      $istPiva_New = (isset($_POST['istPiva']) ? $_POST['istPiva'] : "");
+      $istRegione_New = (isset($_POST['istRegione']) ? $_POST['istRegione'] : "");
+          modificaAnagraficaIstituto($istId_New,
+               $istNome_New,
+               $istIndirizzo_New,
+               $istTelefono_New,
+               $istNomeContatto_New,
+               $istUrl_New,
+               $istNote_New,
+               $istPiva_New,
+               $istRegione_New 
+              );
+          }
+
+   }
 ?>
 <header id="homeHeader" class="entry-header welcomePad has-text-align-center">
         <div class="entry-header-inner section-inner medium">
@@ -27,7 +56,9 @@ if ($_SESSION['role'] != 'admin_istituzione') {
          <?php if ($_SESSION['istituzione'] != 'istituzioneBase') { ?>
             <p class="text-center">Istituzione di appartenenza: <strong><?php echo $_SESSION['istituzione'] ?></strong></p>
          <?php } ?> -->
-
+         <div class="divServizi">
+           <?php require("../src/istituzione_detail.php") ?>
+         </div>
          <div id="addUser">
             <h6>Aggiungi un utente</h6>
             <?php include("add-user.php"); ?>

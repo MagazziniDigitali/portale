@@ -148,7 +148,15 @@ function retrieve_all_istituzioni_id_login($dbMD) {
     $istituzioni = $dbMD->get_results("SELECT ID, LOGIN FROM MDIstituzione;");
     return $istituzioni;
 }
+function select_istituzione_by_id($dbMD, $idIst) {
+    $preparedQuery = $dbMD->prepare("SELECT * FROM MDIstituzione WHERE ID='%s'", $idIst);
+    $result = $dbMD->get_results($preparedQuery);
 
+    if($result){
+        return $result[0];
+    }
+    return null;
+}
 function retrieve_login_istituzione($dbMD, $uuid){
 
     $preparedQuery = $dbMD->prepare("SELECT LOGIN, NOME FROM MDIstituzione WHERE ID='%s'", $uuid);
@@ -1997,4 +2005,24 @@ function delete_servizio_md($idIstituzione, $tipoServizio) {
         )
     );
     return $query;
+}
+function modificaAnagraficaIstituto($istId, $istNome, $istIndirizzo, $istTelefono, $istNomeContatto, $istUrl, $istNote,  $istPiva, $istRegione ) {
+    $db = connect_to_md();
+    $updateDB = $db->update(
+            'MDIstituzione',
+            array(
+                'NOME'           => $istNome,
+                'INDIRIZZO'      => $istIndirizzo,
+                'TELEFONO'       => $istTelefono,
+                'NOME_CONTATTO'  => $istNomeContatto,
+                'URL'            => $istUrl,
+                'NOTE'           => $istNote,
+                'PIVA'           => $istPiva,
+                'ID_REGIONE'     => $istRegione,
+            ),
+            array(
+                'ID'                => $istId
+            )
+        );
+    
 }
