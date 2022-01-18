@@ -785,7 +785,7 @@ function insert_new_gestore_istituzione($dbMD, $uuidUtente, $nomeLogin, $passwor
         'NOME'                     => $utenteNome,
         'AMMINISTRATORE'           => $admin,
         'ID_ISTITUZIONE'           => $uuidIstituzione,
-        // 'CODICEFISCALE'            => $utenteCodicefiscale,
+         'CODICEFISCALE'            => $utenteCodicefiscale,
         'EMAIL'                    => $utenteEmail,
         'SUPERADMIN'               => $superadmin,
         'IP_AUTORIZZATI'           => $ipAutorizzati
@@ -797,6 +797,9 @@ function insert_new_gestore_istituzione($dbMD, $uuidUtente, $nomeLogin, $passwor
 }
 
 function insert_new_gestore_istituzione_check_errors($dbMD){
+
+    global $WH_LOG_DEBUG;
+
 
     $error = $dbMD->last_error;
     $last_query = $dbMD->last_query;        
@@ -811,21 +814,28 @@ function insert_new_gestore_istituzione_check_errors($dbMD){
 
     if (strpos($error, $cannotAddRowForeign) !== false && strpos($error, $uuidIstituzioneNotMatched) !== false){
         $errorMessage = "UUID dell'Istituzione non valido";
+
+        wh_log($WH_LOG_DEBUG, "errorMessage = $errorMessage" );
+
         return $errorMessage;
     }
     if (strpos($error, $duplicate) !== false && strpos($error, $uuidError) !== false){
         $errorMessage = "UUID utente già presente";
+        wh_log($WH_LOG_DEBUG, "errorMessage = $errorMessage" );
         return $errorMessage;
     }
     if (strpos($error, $duplicate) !== false && strpos($error, $loginError) !== false){
         $errorMessage = "Nome utente già presente";
+        wh_log($WH_LOG_DEBUG, "errorMessage = $errorMessage" );
         return $errorMessage;
     }
     if (strpos($error, $duplicate) !== false && strpos($error, $codiceFiscaleError) !== false){
         $errorMessage = "Codice fiscale già presente";
+        wh_log($WH_LOG_DEBUG, "errorMessage = $errorMessage" );
         return $errorMessage;
     }
 
+    wh_log($WH_LOG_DEBUG, "errorMessage = $errorMessage" );
     return $error;
     
 }

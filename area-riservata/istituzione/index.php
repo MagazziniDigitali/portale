@@ -99,7 +99,7 @@ get_footer();
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="selectType">Tipo Servizio:</label>
+                  <label for="selectType">Tipo Servizio *</label>
                   <select disabled class="form-control" id="selectionTipoServType" name="selectionTipoServType" style="font-size: 100%;"
                   onchange="onChangeTipoServizio(this)">
                     <option value="">Seleziona Tipo Servizio...</option>
@@ -118,60 +118,63 @@ get_footer();
             </div>
             <div class="row">
               <div class="col-md-6" id="tsDataSource"> <!--nomeDatasource -->
-                <label for="nomeDatasource">Nome Datasource</label>
+                <label for="nomeDatasource">Nome Datasource *</label>
                 <input name="nomeDatasource" value="" id="nomeDatasource"type="text">
               </div>
               <div class="col-md-6" id="tsSitoOai">
-                <label for="url">URL sito <span id="tsSitoOaiLabel">OAI</span></label>
+                <label for="url">URL sito <span id="tsSitoOaiLabel">OAI</span> *</label>
                 <input name="url" value="" type="text">
               </div>
             </div>
             <div class="row">
               <div class="col-md-6" id="tsContatti">
-                <label for="contatti">Contatti</label>
+                <label for="contatti">Contatti *</label>
                 <input name="contatti" value="" type="text">
               </div>
               
             </div>
             <div class="row">
             <div class="col-md-6" id="tsFormat">
-                <label for="format">Format dei metadati</label>
+                <label for="format">Format dei metadati *</label>
                 <input name="format" value="" type="text">
               </div>
               <div class="col-md-6" id="tsSet">
-                <label for="set">Set dei metadati</label>
+                <label for="set">Set dei metadati *</label>
                 <input name="set" value="" type="text">
               </div>
              
             </div>
             <div class="row">
             <div class="col-md-6" id="tsEmbargo">
-                <label for="userEmbargo">Utenza per accesso embargo</label>
+                <label for="userEmbargo">Utenza per accesso embargo *</label>
                 <input name="userEmbargo" value="" type="text">
               </div>
               <div class="col-md-6"  id="tsPwdEmbargo">
-                <label for="pwdEmbargo">Password per accesso embargo</label>
+                <label for="pwdEmbargo">Password per accesso embargo *</label>
                 <input name="pwdEmbargo" value="" type="text">
               </div>
             </div>
             <div class="row">
             <div class="col-md-6" id="tsNbnApi">
-                <label for="userNBN">User per API NBN</label>
+                <label for="userNBN">User per API NBN *</label>
                 <input name="userNBN" value="" type="text">
               </div>
             </div>
             <div class="row">
               <div class="col-md-6" id="tsNbnPsw">
-                <label for="pwdNBN">Password per API NBN</label>
+                <label for="pwdNBN">Password per API NBN *</label>
                 <input name="pwdNBN" value="" type="text">
               </div>
               <div class="col-md-6" id="tsNbnIp">
-                <label for="ipNBN">IP per API NBN</label>
+                <label for="ipNBN">IP per API NBN *</label>
                 <input name="ipNBN" value="" type="text">
               </div>
             </div>
-          
-            <br>
+            <div class="row">
+                <div  id="infoCampiObbbl" class="col-md-6 margin-top-5">
+                <label>I campi segnati da * (asterisco) sono obbligatori</label>
+                </div>
+            </div>
           </div>
           <div class="modal-footer">
             <div class="row col-md-12">
@@ -213,7 +216,6 @@ get_footer();
       }
       
       case "ej":
-      case "eb":
         hideFields([ "tsEmbargo",
                   "tsPwdEmbargo",
                   "tsNbnApi",
@@ -221,9 +223,19 @@ get_footer();
                   "tsNbnIp"
                   ]);
       break;
+      case "eb":
+        hideFields([ "tsEmbargo",
+                  "tsPwdEmbargo",
+                  "tsNbnApi",
+                  "tsNbnPsw",
+                  "tsNbnIp",
+                  "tsFormat",
+                  "tsSet",
+                  ]);
+      break;
       default:
-      //hideAllFieldsServizio()
-      showAllFieldsServizio()
+      hideAllFieldsServizio()
+     // showAllFieldsServizio()
         break;
     }
   }
@@ -250,7 +262,8 @@ get_footer();
   }
   function hideAllFieldsServizio() {
     showFields(["alertSelezionaTipo"])
-    hideFields(["tsDataSource",
+    hideFields([ "infoCampiObbbl",
+                 "tsDataSource",
                  "tsSitoOaiLabel",
                   "tsSitoOai",
                   "tsContatti",

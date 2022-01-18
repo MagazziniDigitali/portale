@@ -398,31 +398,35 @@ if(!empty($nbnServizioAttivo)) {
 
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="nomeDatasource_nbn">Nome Datasource</label>
+                          <label for="nomeDatasource_nbn">Nome Datasource *</label>
                           <input name="nomeDatasource_nbn" value="<?php echo $nomeDatasource_nbn ?>" type="text">
                         </div>
                         <div class="col-md-6">
-                          <label for="url_nbn">URL sito</label>
+                          <label for="url_nbn">URL sito *</label>
                           <input name="url_nbn" value="<?php echo $url_nbn ?>" type="text">
                         </div>
                       </div>
                       <div class="row">
                        <div class="col-md-6">
-                          <label for="userNBN_nbn">User per API NBN</label>
+                          <label for="userNBN_nbn">User per API NBN *</label>
                           <input name="userNBN_nbn" value="<?php echo $userNBN_nbn ?>" type="text">
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="pwdNBN_nbn">Password per API NBN</label>
+                          <label for="pwdNBN_nbn">Password per API NBN *</label>
                           <input name="pwdNBN_nbn" value="<?php echo $pwdNBN_nbn ?>" type="text">
                         </div>
                         <div class="col-md-6">
-                          <label for="ipNBN_nbn">IP per API NBN</label>
+                          <label for="ipNBN_nbn">IP per API NBN *</label>
                           <input name="ipNBN_nbn" value="<?php echo $ipNBN_nbn ?>" type="text">
                         </div>
                       </div>
-
+                      <div class="row">
+                        <div  id="infoCampiObbblnbn" class="col-md-6 margin-top-5">
+                          <label>I campi segnati da * (asterisco) sono obbligatori</label>
+                        </div>
+                       </div>
                       <div class="row">
 
                         <div class="col-md-12">
@@ -498,17 +502,17 @@ if(!empty($nbnServizioAttivo)) {
                       <input type="hidden" name="idServizio" value="<?php echo $id ?>">
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="nomeDatasource_td">Nome Datasource</label>
+                          <label for="nomeDatasource_td">Nome Datasource *</label>
                           <input name="nomeDatasource_td" readonly class="disabilitato" value="<?php echo $nomeDatasource_td ?>" type="text">
                         </div>
                         <div class="col-md-6">
-                          <label for="url_td">URL sito OAI</label>
+                          <label for="url_td">URL sito OAI *</label>
                           <input name="url_td" value="<?php echo $url_td ?>" type="text">
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="contatti_td">Contatti</label>
+                          <label for="contatti_td">Contatti *</label>
                           <input name="contatti_td" value="<?php echo $contatti_td ?>" type="text">
                         </div>
                         <div class="col-md-6">
@@ -518,17 +522,17 @@ if(!empty($nbnServizioAttivo)) {
                       </div>
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="set_td">Set dei metadati</label>
+                          <label for="set_td">Set dei metadati *</label>
                           <input name="set_td" value="<?php echo $set_td ?>" type="text">
                         </div>
                         <div class="col-md-6">
-                          <label for="userEmbargo_td">Utenza per accesso embargo</label>
+                          <label for="userEmbargo_td">Utenza per accesso embargo *</label>
                           <input name="userEmbargo_td" value="<?php echo $userEmbargo_td ?>" type="text">
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="pwdEmbargo_td">Password per accesso embargo</label>
+                          <label for="pwdEmbargo_td">Password per accesso embargo *</label>
                           <input name="pwdEmbargo_td" value="<?php echo $pwdEmbargo_td ?>" type="text">
                         </div>
                       <!--  <div class="col-md-6">
@@ -546,7 +550,11 @@ if(!empty($nbnServizioAttivo)) {
                           <input name="ipNBN_td" value="<?php echo $ipNBN_td ?>" type="text">
                         </div>
                       </div> -->
-
+                      <div class="row">
+                        <div  id="infoCampiObbblTD" class="col-md-6 margin-top-5">
+                          <label>I campi segnati da * (asterisco) sono obbligatori</label>
+                        </div>
+                       </div>
                       <div class="row">
                         <div class="col-md-12">
 
@@ -603,17 +611,17 @@ if(!empty($nbnServizioAttivo)) {
                       <input type="hidden" name="gestoreIstituzioneUser" value="<?php echo $gestoreIstituzioneUser ?>">
                       <input type="hidden" name="idServizio" value="<?php echo $id ?>">
                 <div class="col-md-6">
-                  <label for="journalNomeDatasource">Nome Datasource</label>
+                  <label for="journalNomeDatasource">Nome Datasource *</label>
                   <input required type="text" name="journalNomeDatasource" id="journalNomeDatasource">
                 </div>
                 <div class="col-md-6">
-                  <label for="journalUrlOai">URL sito OAI</label>
+                  <label for="journalUrlOai">URL sito OAI *</label>
                   <input required type="text" name="journalUrlOai" id="journalUrlOai">
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-6">
-                  <label for="journalContatti">Contatti</label>
+                  <label for="journalContatti">Contatti *</label>
                   <input required type="text" name="journalContatti" id="journalContatti">
                 </div>
                 <div class="col-md-6">
@@ -690,27 +698,27 @@ if(!empty($nbnServizioAttivo)) {
                       <input type="hidden" name="idServizio" value="<?php echo $id ?>">
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="nomeDatasource_ej">Nome Datasource</label>
+                          <label for="nomeDatasource_ej">Nome Datasource *</label>
                           <input name="nomeDatasource_ej" value="<?php echo $nomeDatasource_ej ?>" type="text">
                         </div>
                         <div class="col-md-6">
-                          <label for="url_ej">URL sito OAI</label>
+                          <label for="url_ej">URL sito OAI *</label>
                           <input name="url_ej" value="<?php echo $url_ej ?>" type="text">
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="contatti_ej">Contatti</label>
+                          <label for="contatti_ej">Contatti *</label>
                           <input name="contatti_ej" value="<?php echo $contatti_ej ?>" type="text">
                         </div>
                         <div class="col-md-6">
-                          <label for="format_ej">Format dei metadati</label>
+                          <label for="format_ej">Format dei metadati *</label>
                           <input name="format_ej" value="<?php echo $format_ej ?>" type="text">
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="set_ej">Set dei metadati</label>
+                          <label for="set_ej">Set dei metadati *</label>
                           <input name="set_ej" value="<?php echo $set_ej ?>" type="text">
                         </div>
                         <!--<div class="col-md-6">
@@ -738,7 +746,11 @@ if(!empty($nbnServizioAttivo)) {
                           <input name="ipNBN_ej" value="<?php echo $ipNBN_ej ?>" type="text">
                         </div>
                       </div> -->
-
+                      <div class="row">
+                        <div  id="infoCampiObbblEJ" class="col-md-6 margin-top-5">
+                          <label>I campi segnati da * (asterisco) sono obbligatori</label>
+                        </div>
+                       </div>
                       <div class="row">
                         <div class="col-md-12">
                           <?php
@@ -838,17 +850,17 @@ if(!empty($nbnServizioAttivo)) {
                       
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="nomeDatasource_eb">Nome Datasource</label>
+                          <label for="nomeDatasource_eb">Nome Datasource *</label>
                           <input name="nomeDatasource_eb" value="<?php echo $nomeDatasource_eb ?>" type="text">
                         </div>
                         <div class="col-md-6">
-                          <label for="url_eb">URL sito OAI</label>
+                          <label for="url_eb">URL sito OAI *</label>
                           <input name="url_eb" value="<?php echo $url_eb ?>" type="text">
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-md-6">
-                            <label for="contatti_eb">Contatti</label>
+                            <label for="contatti_eb">Contatti *</label>
                             <input name="contatti_eb" value="<?php echo $contatti_eb ?>" type="text">
                           </div>
                       </div>
@@ -870,6 +882,11 @@ if(!empty($nbnServizioAttivo)) {
                         </div>
                         <div class="col-md-6"></div>
                       </div> -->
+                      <div class="row">
+                        <div  id="infoCampiObbblEB" class="col-md-6 margin-top-5">
+                          <label>I campi segnati da * (asterisco) sono obbligatori</label>
+                        </div>
+                       </div>
                       <div class="row">
                         <div class="col-md-12">
                           <?php
