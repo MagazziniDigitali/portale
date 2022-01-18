@@ -57,13 +57,29 @@ if ($_SESSION['role'] != 'admin_istituzione') {
             <div class="row">
 
                <?php if (empty($tesiServizioAttivo) || empty($tesiAll)) { ?>
-                  <div class="col-md-3"><input style="background: cadetblue;" name="gotosignupTesiDottorato" type="button" value="Tesi di Dottorato" class="col-md-12 mt-3 float-left" onclick="openInsertModal('td')"/></div>
+                  <div class="col-md-3">
+                   <button style="background: cadetblue; height: 85px;" name="gotosignupTesiDottorato" type="button" class="col-md-12 mt-3 float-left" onclick="openInsertModal('td')">
+                    Harvest </br> Tesi di Dottorato
+                  </button>
+                  </div>
                <?php } ?>
                   <!--onclick="location.href='signup-services#eJournal';" -->
-               <div class="col-md-3"><input style="background: cadetblue;" name="gotosignupEJournal" type="button" value="e-Journal" class="col-md-12 mt-3 float-left"  onclick="openInsertModal('ej')"/></div>
+               <div class="col-md-3">         
+                <button style="background: cadetblue; height: 85px;" name="gotosignupEJournal" type="button" class="col-md-12 mt-3 float-left" onclick="openInsertModal('ej')">
+                Harvest </br> e-Journal
+                  </button>
+                </div>
 
-               <div class="col-md-3"><input style="background: cadetblue;" name="gotosignupEBook" type="button" value="e-Book" class="col-md-12 mt-3 float-left" onclick="openInsertModal('eb')" /></div>
-               <div class="col-md-3"><input style="background: cadetblue;" name="gotosignupNbn" type="button" value="NBN" class="col-md-12 mt-3 float-left" onclick="openInsertModal('nbn')" /></div>
+               <div class="col-md-3">
+                <button style="background: cadetblue; height: 85px;" name="gotosignupEBook" type="button" class="col-md-12 mt-3 float-left" onclick="openInsertModal('eb')">
+                e-Book
+                  </button>
+               </div>
+               <div class="col-md-3">
+                <button style="background: cadetblue; height: 85px;" name="gotosignupNbn" type="button" class="col-md-12 mt-3 float-left" onclick="openInsertModal('nbn')">
+                NBN
+                    </button>
+               </div>
 
             </div>
             <!-- <a  href="signup-services#tesiDottorato">Tesi di Dottorato</a>, <a href="signup-services#eJournal">e-Journal</a>, <a href="signup-services#eBook">e-Book</a> -->
@@ -103,9 +119,9 @@ get_footer();
                   <select disabled class="form-control" id="selectionTipoServType" name="selectionTipoServType" style="font-size: 100%;"
                   onchange="onChangeTipoServizio(this)">
                     <option value="">Seleziona Tipo Servizio...</option>
-                    <option value="td">Harvesting Tesi di Dottorato</option>
-                    <option value="ej">Harvesting E-Journal</option>
-                    <option value="eb">Harvesting E-Book</option>
+                    <option value="td">Harvest Tesi di Dottorato</option>
+                    <option value="ej">Harvest E-Journal</option>
+                    <option value="eb">E-Book</option>
                     <option value="nbn">National Bibliography Number</option>
                   </select>
                 </div>
