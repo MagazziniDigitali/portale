@@ -2037,7 +2037,15 @@ function modificaAnagraficaIstituto($istId, $istNome, $istIndirizzo, $istTelefon
             return;
           } else {
             echo "<div class='alert alert-success alert-dismissible margin-top-15'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Modifica andata a buon fine per l'anagrafica di $istNome.</div>";
-           if( $_SESSION['istituzione'] != 'istituzioneBase' && $_SESSION['istituzione'] != $istNome) {
+         
+            //Creazione directory lavoro 
+          $pathTmp    = '/mnt/areaTemporanea/Ingest/' . $istPiva;
+          if (!file_exists($pathTmp)) {
+                  mkdir($pathTmp, 0774, true);
+                }
+              
+          //Aggiornamento istituzione in sessione
+            if( $_SESSION['istituzione'] != 'istituzioneBase' && $_SESSION['istituzione'] != $istNome) {
             $_SESSION['istituzione'] = $istNome;
            }
         }
