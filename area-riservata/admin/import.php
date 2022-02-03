@@ -107,7 +107,7 @@ get_header();
     <div id="showAllUser">
       <h5>Lista Istituzioni Importate:</h5>
       <?php if($isApprovatoIst) { ?>
-       <div class='alert alert-success alert-dismissible margin-top-15'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Instituto approvato!</div>
+       <div class='alert alert-success alert-dismissible margin-top-15'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Istituzione approvata!</div>
 
      <?php }  ?>
       <?php

@@ -156,10 +156,15 @@ function inserisciServizio($dbMD, $dbNBN, $dbHarvest, $isSuperAdmin)
           $set = $_POST['set'];
         else
           $missingFields[] = "Set dei metadati";
-        if (isset($_POST['userEmbargo']))
+        
+         if (isset($_POST['userEmbargo']))
           $userEmbargo = $_POST['userEmbargo'];
+          else 
+          $userEmbargo = "";
         if (isset($_POST['pwdEmbargo']))
           $pwdEmbargo = $_POST['pwdEmbargo'];
+          else 
+          $pwdEmbargo = "";
 
         break;
       case 'nbn':

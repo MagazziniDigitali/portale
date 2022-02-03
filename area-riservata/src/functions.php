@@ -148,7 +148,15 @@ function retrieve_all_istituzioni_id_login($dbMD) {
     $istituzioni = $dbMD->get_results("SELECT ID, LOGIN FROM MDIstituzione;");
     return $istituzioni;
 }
+function select_istituzione_by_id($dbMD, $idIst) {
+    $preparedQuery = $dbMD->prepare("SELECT * FROM MDIstituzione WHERE ID='%s'", $idIst);
+    $result = $dbMD->get_results($preparedQuery);
 
+    if($result){
+        return $result[0];
+    }
+    return null;
+}
 function retrieve_login_istituzione($dbMD, $uuid){
 
     $preparedQuery = $dbMD->prepare("SELECT LOGIN, NOME FROM MDIstituzione WHERE ID='%s'", $uuid);
@@ -1997,4 +2005,48 @@ function delete_servizio_md($idIstituzione, $tipoServizio) {
         )
     );
     return $query;
+}
+function modificaAnagraficaIstituto($istId, $istNome, $istIndirizzo, $istTelefono, $istNomeContatto, $istUrl, $istNote,  $istPiva, $istRegione ) {
+    $errorString = "";
+    $db = connect_to_md();
+    $updateResult = $db->update(
+            'MDIstituzione',
+            array(
+                'NOME'           => $istNome,
+                'INDIRIZZO'      => $istIndirizzo,
+                'TELEFONO'       => $istTelefono,
+                'NOME_CONTATTO'  => $istNomeContatto,
+                'URL'            => $istUrl,
+                'NOTE'           => $istNote,
+                'PIVA'           => $istPiva,
+                'ID_REGIONE'     => $istRegione,
+            ),
+            array(
+                'ID'                => $istId
+            )
+        );
+        if (!$updateResult) {
+            if($updateResult == 0) {
+              $errorString = "Nessuna modifica è stata apportata all'istituzione ". $istNome .". Se necessario effettuare un cambiamento dei dati.";
+            } else {
+             $errorString = "Aggiornamento anagrafica fallito per ". $istNome .". Controllare che tutti i campi siano inseriti correttamente.";
+            }
+          }
+        if ($errorString != "") { // Signal some error
+            echo "<div class='alert alert-danger alert-dismissible margin-top-15'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>". $errorString ."</div>";
+            return;
+          } else {
+            echo "<div class='alert alert-success alert-dismissible margin-top-15'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Modifica andata a buon fine per l'anagrafica di $istNome.</div>";
+         
+            //Creazione directory lavoro 
+          $pathTmp    = '/mnt/areaTemporanea/Ingest/' . $istPiva;
+          if (!file_exists($pathTmp)) {
+                  mkdir($pathTmp, 0774, true);
+                }
+              
+          //Aggiornamento istituzione in sessione
+            if( $_SESSION['istituzione'] != 'istituzioneBase' && $_SESSION['istituzione'] != $istNome) {
+            $_SESSION['istituzione'] = $istNome;
+           }
+        }
 }

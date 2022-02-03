@@ -90,7 +90,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_istituzione  = $_POST['id_Ist_nbn'];
     rimuoviServizio($dbNBN, $dbHarvest,   $id_istituzione,"nbn");
   }
-
+  if (isset($_POST['modificaIstituzione'])) {
+    $istId_New = (isset($_POST['istId']) ? $_POST['istId'] : "");
+    $istNome_New = (isset($_POST['istNome']) ? $_POST['istNome'] : "");
+    $istIndirizzo_New = (isset($_POST['istIndirizzo']) ? $_POST['istIndirizzo'] : "");
+    $istTelefono_New = (isset($_POST['istTelefono']) ? $_POST['istTelefono'] : "");
+    $istNomeContatto_New = (isset($_POST['istNomeContatto']) ? $_POST['istNomeContatto'] : "");
+    $istUrl_New = (isset($_POST['istUrl']) ? $_POST['istUrl'] : "");
+    $istNote_New = (isset($_POST['istNote']) ? $_POST['istNote'] : "");
+    $istPiva_New = (isset($_POST['istPiva']) ? $_POST['istPiva'] : "");
+    $istRegione_New = (isset($_POST['istRegione']) ? $_POST['istRegione'] : "");
+        modificaAnagraficaIstituto($istId_New,
+             $istNome_New,
+             $istIndirizzo_New,
+             $istTelefono_New,
+             $istNomeContatto_New,
+             $istUrl_New,
+             $istNote_New,
+             $istPiva_New,
+             $istRegione_New 
+            );
+        }
 
 } // End if POST
 
@@ -115,6 +135,7 @@ foreach ($uniqueIdIst as $key => $results) {
   if (!empty($loginIst)) {
     $loginIstLogin = $loginIst[0]->LOGIN;
     $loginIstName = $loginIst[0]->NOME;
+    //Info istituto
     if (!empty($tesiServizioAttivo)) {
       $tesiAll = select_anagrafe_harvest($dbHarvest, $idIst, 'td');
     }
@@ -187,7 +208,7 @@ foreach ($uniqueIdIst as $key => $results) {
 
     <div id="collapse_ist<?php echo $idIst ?>" class="collapse" aria-labelledby="heading<?php echo $idIst ?>">
       <div class="card-body">
-
+       <?php require("../src/istituzione_detail.php") ?>
         <h4>Utenti:
           <?php if (!isset($isImport)) { ?>
             <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#insertUserModal" onclick="PreOpeninsertUserModal('<?php echo $idIst ?>')">
@@ -241,21 +262,21 @@ foreach ($uniqueIdIst as $key => $results) {
 
                   <div class="row">
                     <div class="col-md-6">
-                      <label for="nome">Nome</label>
+                      <label for="nome">Nome *</label>
                       <input type="text" name="nome" value="<?php echo $nome ?>">
                     </div>
                     <div class="col-md-6">
-                      <label for="cognome">Cognome</label>
+                      <label for="cognome">Cognome *</label>
                       <input type="text" name="cognome" value="<?php echo $cognome ?>">
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-6">
-                      <label for="email">Email</label>
+                      <label for="email">Email *</label>
                       <input type="text" name="email" value="<?php echo $email ?>">
                     </div>
                     <div class="col-md-6">
-                      <label for="codiceFiscale">Codice Fiscale</label>
+                      <label for="codiceFiscale">Codice Fiscale *</label>
                       <input type="text" name="codiceFiscale" value="<?php echo $codiceFiscale ?>">
                     </div>
                   </div>
@@ -271,7 +292,7 @@ foreach ($uniqueIdIst as $key => $results) {
 
                     <?php if ($admin == 0) { ?>
                       <div class="col-md-6">
-                        <label for="ipAutorizzati">IP Autorizzati</label>
+                        <label for="ipAutorizzati">IP Autorizzati *</label>
                         <input type="text" name="ipAutorizzati" value="<?php echo $ipAutorizzati ?>">
                       </div>
                     <?php } else { ?>
@@ -289,7 +310,11 @@ foreach ($uniqueIdIst as $key => $results) {
                       <div class="col-md-6"></div>
                     </div>
                   <?php } ?>
-
+                  <div class="row">
+                                 <div  id="infoCampiObbblTD" class="col-md-6 margin-top-5">
+                                     <label>I campi segnati da * (asterisco) sono obbligatori</label>
+                                 </div>
+                            </div>
                   <div class="row">
                     <div class="col-md-12 text-right">
                       <?php if ($admin == 0) { ?>
@@ -313,118 +338,11 @@ foreach ($uniqueIdIst as $key => $results) {
             </button>
           <?php } ?>
         </h4>
-        <!-- nbn -->
-        <?php if (!empty($nbnServizioAttivo) && $nbnAll) { ?>
-          <div id="infonbn">
-
-            <h5>NBN - National Bibliography Number </h5>
-
-            <?php foreach ($nbnAll as $key => $results) {
-             $nomeDatasource_nbn     = $results->agent_name;
-             $url_nbn                = $results->baseurl;
-             $userNBN_nbn            = $results->user;
-             $pwdNBN_nbn             = $results->pass;
-             $ipNBN_nbn              = $results->IP;
-             $idSubNamespace_nbn     = $results->subNamespaceID;
-             $idDatasource_nbn       = $results->datasourceID;
-             $id_Ist_nbn             = $results->id_istituzione;
-             $agent_name_nbn       = $results->agent_name;
-             $idServizio =          $results->agentID;
-
-            ?>
-
-              <div class="card">
-                <div class="card-header" id="heading<?php echo $key ?>">
-
-                  <button class="btn" data-toggle="collapse" data-target="#collapse_nbn<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_tesi<?php echo $key ?>">
-                    <h5 class="m-0"><?php echo $nomeDatasource_nbn ?></h5>
-                  </button>
-
-                </div>
-
-                <div id="collapse_nbn<?php echo $key ?>" class="collapse" aria-labelledby="heading<?php echo $key ?>">
-                  <div class="card-body">
-                    <form action="" method="post">
-
-                      <input type="hidden" name="idSubNamespace_nbn" value="<?php echo $idSubNamespace_nbn ?>">
-                      <input type="hidden" name="idDatasource_nbn" value="<?php echo $idDatasource_nbn ?>">
-                      <input type="hidden" name="id_Ist_nbn" value="<?php echo $id_Ist_nbn ?>">
-                      <input type="hidden" name="agent_name_nbn" value="<?php echo $agent_name_nbn ?>">
-                      <input type="hidden" name="gestoreIstituzioneUser" value="<?php echo $gestoreIstituzioneUser ?>">
-                      <input type="hidden" name="idServizio" value="<?php echo $idServizio ?>">
-
-
-                      <div class="row">
-                        <div class="col-md-6">
-                          <label for="nomeDatasource_nbn">Nome Datasource *</label>
-                          <input name="nomeDatasource_nbn" value="<?php echo $nomeDatasource_nbn ?>" type="text">
-                        </div>
-                        <div class="col-md-6">
-                          <label for="url_nbn">URL sito *</label>
-                          <input name="url_nbn" value="<?php echo $url_nbn ?>" type="text">
-                        </div>
-                      </div>
-                      <div class="row">
-                       <div class="col-md-6">
-                          <label for="userNBN_nbn">User per API NBN *</label>
-                          <input name="userNBN_nbn" value="<?php echo $userNBN_nbn ?>" type="text">
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <label for="pwdNBN_nbn">Password per API NBN *</label>
-                          <input name="pwdNBN_nbn" value="<?php echo $pwdNBN_nbn ?>" type="text">
-                        </div>
-                        <div class="col-md-6">
-                          <label for="ipNBN_nbn">IP per API NBN *</label>
-                          <input name="ipNBN_nbn" value="<?php echo $ipNBN_nbn ?>" type="text">
-                        </div>
-                      </div>
-                      <div class="row">
-                <div  id="infoCampiObbblNbn" class="col-md-6 margin-top-5">
-                <label>I campi segnati da * (asterisco) sono obbligatori</label>
-                </div>
-            </div>
-                      <div class="row">
-
-                        <div class="col-md-12">
-                        <?php
-                        // 26/08/2021 Only omy dev D B for naow since I've implemented cascade on NBN db 
-                        $ambiente = getenv('AMBIENTE_APPLICATIVO'); // Get Il Nome Del AMBIENTE  \r\n
-                        if($ambiente == "local")
-                        {?>
-                          <input type="submit" name="rimuoviNBN" value="Rimuovi NBN" class="mt-3 btnRejectSub mr-3" />
-                          <!-- <button type="button" class="btn btn-outline-secondary utente-cancella" data-toggle="modal" 
-                            data-target="#deleteServiceModal" id="idRimuoviTesi" 
-                            onclick="PreOpenDeleteServiceModal(
-                              '<?php echo "rimuoviNBN" ?>', 
-                              '<?php echo $userNBN_nbn ?>', 
-                              '<?php echo $idSubNamespace_nbn ?>', 
-                              '<?php echo $nomeDatasource_nbn ?>', 
-                              '<?php echo $idDatasource_nbn ?>')">
-                            <i class="icon-remove icon-2x " title="cancella Servizio"></i>
-                          </button>   -->
-
-                          <?php } ?>
-
-                          <input type="submit" name="modificaNBN" value="Modifica" class="mt-3 float-right">
-                        </div>
-                      </div>
-
-
-                    </form>
-                  </div>
-                </div>
-              </div>
-
-            <?php } // End foreach ($nbnAll ?>
-          </div>
-        <?php } // End if (!empty($nbnServizioAttivo))?>
         <!-- Tesi dottorato -->
         <?php if (!empty($tesiServizioAttivo) && $tesiAll) { ?>
           <div id="infotesi">
 
-            <h5>Tesi di Dottorato </h5>
+            <h5>Harvest Tesi di Dottorato </h5>
 
             <?php foreach ($tesiAll as $key => $results) {
               $nomeDatasource_td     = $results->harvest_name;
@@ -489,13 +407,13 @@ foreach ($uniqueIdIst as $key => $results) {
                           <input name="set_td" value="<?php echo $set_td ?>" type="text">
                         </div>
                         <div class="col-md-6">
-                          <label for="userEmbargo_td">Utenza per accesso embargo *</label>
+                          <label for="userEmbargo_td">Utenza per accesso embargo </label>
                           <input name="userEmbargo_td" value="<?php echo $userEmbargo_td ?>" type="text">
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-md-6">
-                          <label for="pwdEmbargo_td">Password per accesso embargo *</label>
+                          <label for="pwdEmbargo_td">Password per accesso embargo </label>
                           <input name="pwdEmbargo_td" value="<?php echo $pwdEmbargo_td ?>" type="text">
                         </div>
                       <!--  <div class="col-md-6">
@@ -553,11 +471,120 @@ foreach ($uniqueIdIst as $key => $results) {
             <?php } // End foreach ($tesiAll ?>
           </div>
         <?php } // End if (!empty($tesiServizioAttivo))?>
+        <!-- nbn -->
+        <?php if (!empty($nbnServizioAttivo) && $nbnAll) { ?>
+          <div id="infonbn">
+
+            <h5>NBN - National Bibliography Number </h5>
+
+            <?php foreach ($nbnAll as $key => $results) {
+             $nomeDatasource_nbn     = $results->agent_name;
+             $url_nbn                = $results->baseurl;
+             $userNBN_nbn            = $results->user;
+             $pwdNBN_nbn             = $results->pass;
+             $ipNBN_nbn              = $results->IP;
+             $idSubNamespace_nbn     = $results->subNamespaceID;
+             $idDatasource_nbn       = $results->datasourceID;
+             $id_Ist_nbn             = $results->id_istituzione;
+             $agent_name_nbn       = $results->agent_name;
+             $idServizio =          $results->agentID;
+
+            ?>
+      <?php if (strpos(strtolower($nomeDatasource_nbn),"dummy") == false) { ?>
+
+              <div class="card">
+                <div class="card-header" id="heading<?php echo $key ?>">
+
+                  <button class="btn" data-toggle="collapse" data-target="#collapse_nbn<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_tesi<?php echo $key ?>">
+                    <h5 class="m-0"><?php echo $nomeDatasource_nbn ?></h5>
+                  </button>
+
+                </div>
+
+                <div id="collapse_nbn<?php echo $key ?>" class="collapse" aria-labelledby="heading<?php echo $key ?>">
+                  <div class="card-body">
+                    <form action="" method="post">
+
+                      <input type="hidden" name="idSubNamespace_nbn" value="<?php echo $idSubNamespace_nbn ?>">
+                      <input type="hidden" name="idDatasource_nbn" value="<?php echo $idDatasource_nbn ?>">
+                      <input type="hidden" name="id_Ist_nbn" value="<?php echo $id_Ist_nbn ?>">
+                      <input type="hidden" name="agent_name_nbn" value="<?php echo $agent_name_nbn ?>">
+                      <input type="hidden" name="gestoreIstituzioneUser" value="<?php echo $gestoreIstituzioneUser ?>">
+                      <input type="hidden" name="idServizio" value="<?php echo $idServizio ?>">
+
+
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label for="nomeDatasource_nbn">Nome Datasource *</label>
+                          <input name="nomeDatasource_nbn" value="<?php echo $nomeDatasource_nbn ?>" type="text">
+                        </div>
+                        <div class="col-md-6">
+                          <label for="url_nbn">URL sito *</label>
+                          <input name="url_nbn" value="<?php echo $url_nbn ?>" type="text">
+                        </div>
+                      </div>
+                      <div class="row">
+                       <div class="col-md-6">
+                          <label for="userNBN_nbn">User per API NBN *</label>
+                          <input name="userNBN_nbn" value="<?php echo $userNBN_nbn ?>" type="text">
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label for="pwdNBN_nbn">Password per API NBN *</label>
+                          <input name="pwdNBN_nbn" value="<?php echo $pwdNBN_nbn ?>" type="text">
+                        </div>
+                        <div class="col-md-6">
+                          <label for="ipNBN_nbn">IP per API NBN *</label>
+                          <input name="ipNBN_nbn" value="<?php echo $ipNBN_nbn ?>" type="text">
+                        </div>
+                      </div>
+                      <div class="row">
+                <div  id="infoCampiObbblNbn" class="col-md-6 margin-top-5">
+                <label>I campi segnati da * (asterisco) sono obbligatori</label>
+                </div>
+                  </div>
+                      <div class="row">
+
+                        <div class="col-md-12">
+                        <?php
+                        // 26/08/2021 Only omy dev D B for naow since I've implemented cascade on NBN db 
+                        $ambiente = getenv('AMBIENTE_APPLICATIVO'); // Get Il Nome Del AMBIENTE  \r\n
+                        if($ambiente == "local")
+                        {?>
+                          <input type="submit" name="rimuoviNBN" value="Rimuovi NBN" class="mt-3 btnRejectSub mr-3" />
+                          <!-- <button type="button" class="btn btn-outline-secondary utente-cancella" data-toggle="modal" 
+                            data-target="#deleteServiceModal" id="idRimuoviTesi" 
+                            onclick="PreOpenDeleteServiceModal(
+                              '<?php echo "rimuoviNBN" ?>', 
+                              '<?php echo $userNBN_nbn ?>', 
+                              '<?php echo $idSubNamespace_nbn ?>', 
+                              '<?php echo $nomeDatasource_nbn ?>', 
+                              '<?php echo $idDatasource_nbn ?>')">
+                            <i class="icon-remove icon-2x " title="cancella Servizio"></i>
+                          </button>   -->
+
+                          <?php } ?>
+
+                          <input type="submit" name="modificaNBN" value="Modifica" class="mt-3 float-right">
+                        </div>
+                      </div>
+
+
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <?php } ?>
+            <?php } // End foreach ($nbnAll ?>
+          </div>
+        <?php } // End if (!empty($nbnServizioAttivo))?>
+        
 
         <?php if (!empty($journalServizioAttivo) and $journalAll) { ?>
           <div id="infoJournal">
 
-            <h5>e-Journal </h5>
+            <h5>Harvest e-Journal </h5>
 
             <?php foreach ($journalAll as $key => $results) {
 
@@ -803,9 +830,9 @@ foreach ($uniqueIdIst as $key => $results) {
                   <select class="form-control" id="selectType" name="selectType" style="font-size: 100%;"
                   onchange="onChangeTipoServizio(this)">
                     <option selected value="">Seleziona Tipo Servizio...</option>
-                    <option value="td" id="selectionTD">Harvesting Tesi di Dottorato</option>
-                    <option value="ej" id="selectionEJ">Harvesting E-Journal</option>
-                    <option value="eb" id="selectionEB">Harvesting E-Book</option>
+                    <option value="td" id="selectionTD">Harvest Tesi di Dottorato</option>
+                    <option value="ej" id="selectionEJ">Harvest E-Journal</option>
+                    <option value="eb" id="selectionEB">E-Book</option>
                     <option value="nbn" id="selectionNBN">National Bibliography Number</option>
                   </select>
                 </div>
@@ -850,13 +877,13 @@ foreach ($uniqueIdIst as $key => $results) {
                 <input name="userEmbargo" value="" type="text">
               </div>
               <div class="col-md-6"  id="tsPwdEmbargo">
-                <label for="pwdEmbargo" id="tsPwdEmbargo">Password per accesso embargo *</label>
+                <label for="pwdEmbargo" id="tsPwdEmbargo">Password per accesso embargo </label>
                 <input name="pwdEmbargo" value="" type="text">
               </div>
             </div>
             <div class="row">
             <div class="col-md-6" id="tsNbnApi">
-                <label for="userNBN">User per API NBN *</label>
+                <label for="userNBN">User per API NBN </label>
                 <input name="userNBN" value="" type="text">
               </div>
             </div>

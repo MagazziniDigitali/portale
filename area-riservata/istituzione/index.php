@@ -14,7 +14,36 @@ if ($_SESSION['role'] != 'admin_istituzione') {
 } else {
    $dbMD = connect_to_md();
    $checkUserPerIstituzione = check_users_for_istituzione($dbMD);
+   $idIst  = check_istituizone_session($dbMD);
+   $allRegions = retrieve_regions($dbMD);
+
    get_header();
+
+   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    if (isset($_POST['modificaIstituzione'])) {
+      $istId_New = (isset($_POST['istId']) ? $_POST['istId'] : "");
+      $istNome_New = (isset($_POST['istNome']) ? $_POST['istNome'] : "");
+      $istIndirizzo_New = (isset($_POST['istIndirizzo']) ? $_POST['istIndirizzo'] : "");
+      $istTelefono_New = (isset($_POST['istTelefono']) ? $_POST['istTelefono'] : "");
+      $istNomeContatto_New = (isset($_POST['istNomeContatto']) ? $_POST['istNomeContatto'] : "");
+      $istUrl_New = (isset($_POST['istUrl']) ? $_POST['istUrl'] : "");
+      $istNote_New = (isset($_POST['istNote']) ? $_POST['istNote'] : "");
+      $istPiva_New = (isset($_POST['istPiva']) ? $_POST['istPiva'] : "");
+      $istRegione_New = (isset($_POST['istRegione']) ? $_POST['istRegione'] : "");
+          modificaAnagraficaIstituto($istId_New,
+               $istNome_New,
+               $istIndirizzo_New,
+               $istTelefono_New,
+               $istNomeContatto_New,
+               $istUrl_New,
+               $istNote_New,
+               $istPiva_New,
+               $istRegione_New 
+              );
+          }
+
+   }
 ?>
 <header id="homeHeader" class="entry-header welcomePad has-text-align-center">
         <div class="entry-header-inner section-inner medium">
@@ -27,7 +56,9 @@ if ($_SESSION['role'] != 'admin_istituzione') {
          <?php if ($_SESSION['istituzione'] != 'istituzioneBase') { ?>
             <p class="text-center">Istituzione di appartenenza: <strong><?php echo $_SESSION['istituzione'] ?></strong></p>
          <?php } ?> -->
-
+         <div class="divServizi">
+           <?php require("../src/istituzione_detail.php") ?>
+         </div>
          <div id="addUser">
             <h6>Aggiungi un utente</h6>
             <?php include("add-user.php"); ?>
@@ -57,13 +88,29 @@ if ($_SESSION['role'] != 'admin_istituzione') {
             <div class="row">
 
                <?php if (empty($tesiServizioAttivo) || empty($tesiAll)) { ?>
-                  <div class="col-md-3"><input style="background: cadetblue;" name="gotosignupTesiDottorato" type="button" value="Tesi di Dottorato" class="col-md-12 mt-3 float-left" onclick="openInsertModal('td')"/></div>
+                  <div class="col-md-3">
+                   <button style="background: cadetblue; height: 85px;" name="gotosignupTesiDottorato" type="button" class="col-md-12 mt-3 float-left" onclick="openInsertModal('td')">
+                    Harvest </br> Tesi di Dottorato
+                  </button>
+                  </div>
                <?php } ?>
                   <!--onclick="location.href='signup-services#eJournal';" -->
-               <div class="col-md-3"><input style="background: cadetblue;" name="gotosignupEJournal" type="button" value="e-Journal" class="col-md-12 mt-3 float-left"  onclick="openInsertModal('ej')"/></div>
+               <div class="col-md-3">         
+                <button style="background: cadetblue; height: 85px;" name="gotosignupEJournal" type="button" class="col-md-12 mt-3 float-left" onclick="openInsertModal('ej')">
+                Harvest </br> e-Journal
+                  </button>
+                </div>
 
-               <div class="col-md-3"><input style="background: cadetblue;" name="gotosignupEBook" type="button" value="e-Book" class="col-md-12 mt-3 float-left" onclick="openInsertModal('eb')" /></div>
-               <div class="col-md-3"><input style="background: cadetblue;" name="gotosignupNbn" type="button" value="NBN" class="col-md-12 mt-3 float-left" onclick="openInsertModal('nbn')" /></div>
+               <div class="col-md-3">
+                <button style="background: cadetblue; height: 85px;" name="gotosignupEBook" type="button" class="col-md-12 mt-3 float-left" onclick="openInsertModal('eb')">
+                e-Book
+                  </button>
+               </div>
+               <div class="col-md-3">
+                <button style="background: cadetblue; height: 85px;" name="gotosignupNbn" type="button" class="col-md-12 mt-3 float-left" onclick="openInsertModal('nbn')">
+                NBN
+                    </button>
+               </div>
 
             </div>
             <!-- <a  href="signup-services#tesiDottorato">Tesi di Dottorato</a>, <a href="signup-services#eJournal">e-Journal</a>, <a href="signup-services#eBook">e-Book</a> -->
@@ -103,9 +150,9 @@ get_footer();
                   <select disabled class="form-control" id="selectionTipoServType" name="selectionTipoServType" style="font-size: 100%;"
                   onchange="onChangeTipoServizio(this)">
                     <option value="">Seleziona Tipo Servizio...</option>
-                    <option value="td">Harvesting Tesi di Dottorato</option>
-                    <option value="ej">Harvesting E-Journal</option>
-                    <option value="eb">Harvesting E-Book</option>
+                    <option value="td">Harvest Tesi di Dottorato</option>
+                    <option value="ej">Harvest E-Journal</option>
+                    <option value="eb">E-Book</option>
                     <option value="nbn">National Bibliography Number</option>
                   </select>
                 </div>

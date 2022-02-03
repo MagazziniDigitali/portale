@@ -148,21 +148,21 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="nome">Nome</label>
+                            <label for="nome">Nome *</label>
                             <input type="text" name="nome" value="<?php echo $nome ?>">
                         </div>
                         <div class="col-md-6">
-                            <label for="cognome">Cognome</label>
+                            <label for="cognome">Cognome *</label>
                             <input type="text" name="cognome" value="<?php echo $cognome ?>">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="email">Email</label>
+                            <label for="email">Email *</label>
                             <input type="text" name="email" value="<?php echo $email ?>">
                         </div>
                         <div class="col-md-6">
-                            <label for="codiceFiscale">Codice Fiscale</label>
+                            <label for="codiceFiscale">Codice Fiscale *</label>
                             <input type="text" name="codiceFiscale" value="<?php echo $codiceFiscale ?>">
                         </div>
                     </div>
@@ -177,7 +177,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label for="ipAutorizzati">IP Autorizzati</label>
+                            <label for="ipAutorizzati">IP Autorizzati *</label>
                             <input type="text" name="ipAutorizzati" value="<?php echo $ipAutorizzati ?>">
                         </div>
                     </div>
@@ -190,7 +190,11 @@
                         </div>
                         <div class="col-md-6"></div>
                     </div>
-
+                    <div class="row">
+                                 <div  id="infoCampiObbblTD" class="col-md-6 margin-top-5">
+                                     <label>I campi segnati da * (asterisco) sono obbligatori</label>
+                                 </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-12 text-right">
                             <input name="removeUser" type="submit" value="Rimuovi utente" class="mt-3 btnRejectSub mr-3"/>
