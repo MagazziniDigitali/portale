@@ -304,7 +304,7 @@ if ($_SESSION['role'] == 'superadmin') {
                             </div>
                             <div class="col-md-6">
                                 <label for="preRegPassword">Password</label>
-                                <input name="preRegPassword" type="password" id="password">
+                                <input name="preRegPassword" type="password" >
                                 <!-- <input type="checkbox" name="showPwd" id="showPwd"> <label for="showPwd">Mostra la password</label> -->
 
                                 <?php if (isset($alertPwd)) { ?>

@@ -230,9 +230,9 @@ foreach ($uniqueIdIst as $key => $results) {
           $ipAutorizzati       = $resultsU->IP_AUTORIZZATI;
         ?>
           <div class="card">
-            <div class="card-header" id="heading<?php echo $key ?>">
+            <div class="card-header" id="headingUser<?php echo $uuid ?>">
 
-              <button class="btn" data-toggle="collapse" data-target="#collapse_utente<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_utente<?php echo $key ?>">
+              <button class="btn" data-toggle="collapse" data-target="#collapse_utente<?php echo $uuid . $login ?>" aria-expanded="false" aria-controls="collapse_utente<?php echo $key ?>">
                 <h5 class="m-0"> <?php if ($admin == 1) { $gestoreIstituzioneUser = $login; ?>
                     <h5 class="mt-0">Gestore d'istituzione: <?php echo $login ?></h5>
                   <?php } else { ?>
@@ -252,7 +252,7 @@ foreach ($uniqueIdIst as $key => $results) {
               <?php } ?>
             </div>
 
-            <div id="collapse_utente<?php echo $key ?>" class="collapse" aria-labelledby="heading<?php echo $key ?>">
+            <div id="collapse_utente<?php echo $uuid . $login ?>" class="collapse" aria-labelledby="headingUser<?php echo $uuid ?>">
               <div class="card-body">
                 <form action="" method="POST" class="mb-4">
 
@@ -284,7 +284,7 @@ foreach ($uniqueIdIst as $key => $results) {
                   <div class="row">
                     <div class="col-md-6">
                       <label for="password">Password</label>
-                      <input type="password" name="password" id="password" placeholder="Inserisci una nuova password">
+                      <input type="password" name="password"  placeholder="Inserisci una nuova password">
                       <?php if (isset($alert)) { ?>
                         <div class='alert alert-warning mt-3'><?php echo $alert ?></div>
                       <?php } ?>
@@ -304,7 +304,7 @@ foreach ($uniqueIdIst as $key => $results) {
                     <div class="row">
                       <div class="col-md-6">
                         <input type="hidden" name="gestoreIstituzione" value="0">
-                        <input name="gestoreIstituzione" id="gestoreIstituzione" type="checkbox" value="1">
+                        <input name="gestoreIstituzione" type="checkbox" value="1">
                         <label for="gestoreIstituzione">Rendi gestore dell'istituzione</label>
                       </div>
                       <div class="col-md-6"></div>
@@ -804,6 +804,8 @@ foreach ($uniqueIdIst as $key => $results) {
       </div>
     </div>
   </div>
+<?php } // End foreach($uniqueIdIst 
+?>
 
 
 
@@ -883,7 +885,7 @@ foreach ($uniqueIdIst as $key => $results) {
             </div>
             <div class="row">
             <div class="col-md-6" id="tsNbnApi">
-                <label for="userNBN">User per API NBN </label>
+                <label for="userNBN">User per API NBN *</label>
                 <input name="userNBN" value="" type="text">
               </div>
             </div>
@@ -1014,15 +1016,6 @@ foreach ($uniqueIdIst as $key => $results) {
           </div>
       </div>
   </div>
-
-
-
-
-
-
-<?php } // End foreach($uniqueIdIst 
-?>
-
 
 <script>
  var passwordToggle = document.getElementById('newUserPasswordShow');

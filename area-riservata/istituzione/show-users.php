@@ -170,7 +170,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <label for="password">Password</label>
-                            <input type="password" name="password" id="password" placeholder="Inserisci una nuova password">
+                            <input type="password" name="password"  placeholder="Inserisci una nuova password">
                             <?php if(isset($alert)) { ?>
                                 <div class='alert alert-warning mt-3'><?php echo $alert ?></div>
                             <?php } ?>
@@ -185,7 +185,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <input type="hidden" name="gestoreIstituzione" value="0">
-                            <input name="gestoreIstituzione" id="gestoreIstituzione" type="checkbox" value="1">
+                            <input name="gestoreIstituzione" type="checkbox" value="1">
                             <label for="gestoreIstituzione">Rendi gestore dell'istituzione</label>
                         </div>
                         <div class="col-md-6"></div>
