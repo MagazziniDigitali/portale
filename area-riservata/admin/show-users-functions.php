@@ -147,13 +147,17 @@ function inserisciServizio($dbMD, $dbNBN, $dbHarvest, $isSuperAdmin)
           $contatti = $_POST['contatti'];
         else
           $missingFields[] = "Contatti";
-
-        if (isset($_POST['format'])&& $_POST['format'] != '')
+    
+        if (isset($_POST['format']) && $_POST['format'] != '')
           $format = $_POST['format'];
+        else if ($servizioAbilitato == 'eb')
+          $format = "";
         else
           $missingFields[] = "Format dei metadati";
         if (isset($_POST['set']) && $_POST['set'] != '')
           $set = $_POST['set'];
+        else if ($servizioAbilitato == 'eb')
+          $set = "";
         else
           $missingFields[] = "Set dei metadati";
         
