@@ -2,13 +2,21 @@
  * 
  */
 
-function showHidden(myDiv) {
-    var x = document.getElementById(myDiv);
+function showHidden(id) {
+    var x = document.getElementById(id);
     if (x.style.display === 'none') {
-        x.style.display = 'block';
+        show(id);
     } else {
-        x.style.display = 'none';
+      hide(id);
     }
+}
+function hide(id){
+  var x = document.getElementById(id);
+  x.style.display = 'none';
+}
+function show(id){
+  var x = document.getElementById(id);
+  x.style.display = 'block';
 }
 
 function addRicercaAvanzata() {
@@ -95,6 +103,14 @@ function addRicercaAvanzata() {
   } 
 
   $('.chosen-select').trigger('chosen:updated');
+  
+  hide("recupFiltriAvanzatiSelezionati");
+  if(raFiltri.length > 0) {
+    show("recupFiltriAvanzatiSelezionati");
+  } else {
+    hide("recupFiltriAvanzatiSelezionati");
+  }
+  
 }
 
 function analizzaTesto(operatore, campo, valore){

@@ -7,7 +7,7 @@
             </table>
         </xsl:if>
         <xsl:if test="not(//response/result/doc)">
-            <h1>Non risultano oggetti da visualizzare</h1>
+            <h5>Non risultano oggetti da visualizzare</h5>
         </xsl:if>
     </xsl:template>
     <xsl:template match="//response/result/doc">
@@ -20,7 +20,7 @@
             	tipoOggetto_show: <xsl:copy-of
                     select="arr[@name='tipoOggetto_show']/str"/><br/>
 -->
-                <a title="breve">
+                <a title="Clicca qui per visualizzare il dettaglio">
                     <xsl:for-each select="str[@name='id']">
                         <xsl:attribute name="onclick"
                             >
@@ -77,7 +77,7 @@
                             <xsl:apply-templates select="arr[@name='originalFileName_show']"/>
                         </xsl:otherwise>
                     </xsl:choose>
-                    
+                    <span class="margin-top-5 btn-dettaglio-scheda float-right">Dettaglio scheda</span>
                 </a>
             </td>
         </tr>
@@ -109,7 +109,7 @@
     </xsl:template>
     
     <xsl:template match="arr[@name='originalFileName_show']">
-        Nome file Originale: <b>
+        File trovato: <b>
             <xsl:copy-of select="str"/>
         </b>
     </xsl:template>

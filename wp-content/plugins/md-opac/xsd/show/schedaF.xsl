@@ -3,8 +3,8 @@
     version="1.0">
     <xsl:variable name="apos">'</xsl:variable>  
     <xsl:template match="//scheda">
-        <table id="schedaF">
-            <tr>
+       <table class="table table-border">
+           <tr class="table-border">
                 <td colspan="2" id="viewerImg">
                     <a title="Visualizza Oggetti digitali" id="viewImg">
                         <xsl:attribute name="onclick">showImg('<xsl:copy-of select="id/child::text()" />');</xsl:attribute>
@@ -33,7 +33,7 @@
             <xsl:apply-templates select="CM"/>
             <xsl:apply-templates select="MC"/>
             <xsl:apply-templates select="MM"/>
-            <tr>
+           <tr class="table-border">
                 <td colspan="2" id="viewerImg">
                     <a title="Visualizza Oggetti digitali" id="viewImg">
                         <xsl:attribute name="onclick">showImg('<xsl:copy-of select="id/child::text()" />');</xsl:attribute>
@@ -51,20 +51,20 @@
     </xsl:template>
     
     <xsl:template match="MM">
-        <tr>
+       <tr class="table-border">
             <td id="titolo" colspan="2">
                 METADATI DATO MULTIMEDIALE
             </td>
         </tr>
         <xsl:if test="MMT">
             <xsl:for-each select="MMT">
-                <tr>
+               <tr class="table-border">
                     <td id="subTitolo" colspan="2">
                         METADATI TECNICI DATO MULTIMEDIALE
                     </td>
                 </tr>
                 <xsl:if test="MMTO">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Nome file originale
                         </td>
@@ -78,7 +78,7 @@
                         </td>
                     </tr>
                 </xsl:if>
-                <tr>
+               <tr class="table-border">
                     <td id="subLineSep" colspan="2"/>
                 </tr>
             </xsl:for-each>
@@ -86,20 +86,20 @@
     </xsl:template>
     
     <xsl:template match="MC">
-        <tr>
+       <tr class="table-border">
             <td id="titolo" colspan="2">
                 METADATI DI CATALOGAZIONE
             </td>
         </tr>
         <xsl:if test="FTA">
             <xsl:for-each select="FTA">
-                <tr>
+               <tr class="table-border">
                     <td id="subTitolo" colspan="2">
                         DOCUMENTAZIONE FOTOGRAFICA
                     </td>
                 </tr>
                 <xsl:if test="FTAP">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Tipo
                         </td>
@@ -114,7 +114,7 @@
                     </tr>
                 </xsl:if>
                 <xsl:if test="FTAN">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Codice identificativo
                         </td>
@@ -128,7 +128,7 @@
                         </td>
                     </tr>
                 </xsl:if>
-                <tr>
+               <tr class="table-border">
                     <td id="subLineSep" colspan="2"/>
                 </tr>
             </xsl:for-each>
@@ -136,20 +136,20 @@
     </xsl:template>
     
     <xsl:template match="CM">
-        <tr>
+       <tr class="table-border">
             <td id="titolo" colspan="2">
                 COMPILAZIONE
             </td>
         </tr>
         <xsl:if test="CMP">
             <xsl:for-each select="CMP">
-                <tr>
+               <tr class="table-border">
                     <td id="subTitolo" colspan="2">
                         COMPILAZIONE
                     </td>
                 </tr>
                 <xsl:if test="CMPD">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Data
                         </td>
@@ -165,7 +165,7 @@
                     </tr>
                 </xsl:if>
                 <xsl:if test="CMPN">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Nome
                         </td>
@@ -180,13 +180,13 @@
                         </td>
                     </tr>
                 </xsl:if>
-                <tr>
+               <tr class="table-border">
                     <td id="subLineSep" colspan="2"/>
                 </tr>
             </xsl:for-each>
         </xsl:if>
         <xsl:if test="RSR">
-            <tr>
+           <tr class="table-border">
                 <td id="testo">
                     Referente scientifico
                 </td>
@@ -202,7 +202,7 @@
             </tr>
         </xsl:if>
         <xsl:if test="FUR">
-            <tr>
+           <tr class="table-border">
                 <td id="testo">
                     Funzionario responsabile
                 </td>
@@ -220,20 +220,20 @@
     </xsl:template>
     
     <xsl:template match="AD">
-        <tr>
+       <tr class="table-border">
             <td id="titolo" colspan="2">
                 ACCESSO AI DATI
             </td>
         </tr>
         <xsl:if test="ADS">
             <xsl:for-each select="ADS">
-                <tr>
+               <tr class="table-border">
                     <td id="subTitolo" colspan="2">
                         SPECIFICHE DI ACCESSO AI DATI
                     </td>
                 </tr>
                 <xsl:if test="ADSP">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Profilo di accesso
                         </td>
@@ -248,7 +248,7 @@
                     </tr>
                 </xsl:if>
                 <xsl:if test="ADSM">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Motivazione
                         </td>
@@ -262,7 +262,7 @@
                         </td>
                     </tr>
                 </xsl:if>
-                <tr>
+               <tr class="table-border">
                     <td id="subLineSep" colspan="2"/>
                 </tr>
             </xsl:for-each>
@@ -270,20 +270,20 @@
     </xsl:template>
     
     <xsl:template match="DO">
-        <tr>
+       <tr class="table-border">
             <td id="titolo" colspan="2">
                 FONTI E DOCUMENTI DI RIFERIMENTO
             </td>
         </tr>
         <xsl:if test="FTA">
             <xsl:for-each select="FTA">
-                <tr>
+               <tr class="table-border">
                     <td id="subTitolo" colspan="2">
                         DOCUMENTAZIONE FOTOGRAFICA
                     </td>
                 </tr>
                 <xsl:if test="FTAX">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Genere
                         </td>
@@ -298,7 +298,7 @@
                     </tr>
                 </xsl:if>
                 <xsl:if test="FTAP">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Tipo
                         </td>
@@ -313,7 +313,7 @@
                     </tr>
                 </xsl:if>
                 <xsl:if test="FTAN">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Codice identificativo
                         </td>
@@ -327,7 +327,7 @@
                         </td>
                     </tr>
                 </xsl:if>
-                <tr>
+               <tr class="table-border">
                     <td id="subLineSep" colspan="2"/>
                 </tr>
             </xsl:for-each>
@@ -335,20 +335,20 @@
     </xsl:template>
     
     <xsl:template match="TU">
-        <tr>
+       <tr class="table-border">
             <td id="titolo" colspan="2">
                 CONDIZIONE GIURIDICA E VINCOLI
             </td>
         </tr>
         <xsl:if test="CDG">
             <xsl:for-each select="CDG">
-                <tr>
+               <tr class="table-border">
                     <td id="subTitolo" colspan="2">
                         CONDIZIONE GIURIDICA
                     </td>
                 </tr>
                 <xsl:if test="CDGG">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Indicazione generica
                         </td>
@@ -363,7 +363,7 @@
                     </tr>
                 </xsl:if>
                 <xsl:if test="CDGS">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Indicazione specifica
                         </td>
@@ -377,7 +377,7 @@
                         </td>
                     </tr>
                 </xsl:if>
-                <tr>
+               <tr class="table-border">
                     <td id="subLineSep" colspan="2"/>
                 </tr>
             </xsl:for-each>
@@ -385,20 +385,20 @@
     </xsl:template>
 
     <xsl:template match="CO">
-        <tr>
+       <tr class="table-border">
             <td id="titolo" colspan="2">
                 CONSERVAZIONE
             </td>
         </tr>
         <xsl:if test="STC">
             <xsl:for-each select="STC">
-                <tr>
+               <tr class="table-border">
                     <td id="subTitolo" colspan="2">
                         STATO DI CONSERVAZIONE
                     </td>
                 </tr>
                 <xsl:if test="STCC">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Stato di conservazione
                         </td>
@@ -413,7 +413,7 @@
                     </tr>
                 </xsl:if>
                 <xsl:if test="STCS">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Indicazioni specifiche
                         </td>
@@ -427,7 +427,7 @@
                         </td>
                     </tr>
                 </xsl:if>
-                <tr>
+               <tr class="table-border">
                     <td id="subLineSep" colspan="2"/>
                 </tr>
             </xsl:for-each>
@@ -435,13 +435,13 @@
     </xsl:template>
     
     <xsl:template match="MT">
-        <tr>
+       <tr class="table-border">
             <td id="titolo" colspan="2">
                 DATI TECNICI
             </td>
         </tr>
         <xsl:if test="MTX">
-            <tr>
+           <tr class="table-border">
                 <td id="testo">
                     Indicazione di colore
                 </td>
@@ -456,7 +456,7 @@
             </tr>
         </xsl:if>
         <xsl:if test="MTC">
-            <tr>
+           <tr class="table-border">
                 <td id="testo">
                     Materia e tecnica
                 </td>
@@ -472,13 +472,13 @@
         </xsl:if>
         <xsl:if test="MIS">
             <xsl:for-each select="MIS">
-                <tr>
+               <tr class="table-border">
                     <td id="subTitolo" colspan="2">
                         MISURE
                     </td>
                 </tr>
                 <xsl:if test="MISO">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Tipo misure
                         </td>
@@ -493,7 +493,7 @@
                     </tr>
                 </xsl:if>
                 <xsl:if test="MISU">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             <xsl:text disable-output-escaping="yes">Unit&amp;agrave; di misura</xsl:text>
                         </td>
@@ -508,7 +508,7 @@
                     </tr>
                 </xsl:if>
                 <xsl:if test="MISA">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Altezza
                         </td>
@@ -523,7 +523,7 @@
                     </tr>
                 </xsl:if>
                 <xsl:if test="MISL">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Larghezza
                         </td>
@@ -537,7 +537,7 @@
                         </td>
                     </tr>
                 </xsl:if>
-                <tr>
+               <tr class="table-border">
                     <td id="subLineSep" colspan="2"/>
                 </tr>
             </xsl:for-each>
@@ -545,7 +545,7 @@
     </xsl:template>
     
     <xsl:template match="AU">
-        <tr>
+       <tr class="table-border">
             <td id="titolo" colspan="2">
                 
                DEFINIZIONE CULTURALE
@@ -553,13 +553,13 @@
         </tr>
         <xsl:if test="AUF">
             <xsl:for-each select="AUF">
-                <tr>
+               <tr class="table-border">
                     <td id="subTitolo" colspan="2">
                         AUTORE DELLA FOTOGRAFIA
                     </td>
                 </tr>
                 <xsl:if test="AUFN">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Nome scelto (persona singola)
                         </td>
@@ -575,7 +575,7 @@
                     </tr>
                 </xsl:if>
                 <xsl:if test="AUFA">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Dati anagrafici/estremi cronologici
                         </td>
@@ -590,7 +590,7 @@
                     </tr>
                 </xsl:if>
                 <xsl:if test="AUFR">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Riferimento all'intervento
                         </td>
@@ -605,7 +605,7 @@
                     </tr>
                 </xsl:if>
                 <xsl:if test="AUFM">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Motivazione dell'attribuzione
                         </td>
@@ -619,7 +619,7 @@
                         </td>
                     </tr>
                 </xsl:if>
-                <tr>
+               <tr class="table-border">
                     <td id="subLineSep" colspan="2"/>
                 </tr>
             </xsl:for-each>
@@ -627,19 +627,19 @@
     </xsl:template>
     
     <xsl:template match="DT">
-        <tr>
+       <tr class="table-border">
             <td id="titolo" colspan="2">
                 CRONOLOGIA
             </td>
         </tr>
         <xsl:if test="DTZ">
-            <tr>
+           <tr class="table-border">
                 <td id="subTitolo" colspan="2">
                     CRONOLOGIA GENERICA
                 </td>
             </tr>
             <xsl:if test="DTZ/DTZG">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         Secolo
                     </td>
@@ -654,18 +654,18 @@
                     </td>
                 </tr>
             </xsl:if>
-            <tr>
+           <tr class="table-border">
                 <td id="subLineSep" colspan="2"/>
             </tr>
         </xsl:if>
         <xsl:if test="DTS">
-            <tr>
+           <tr class="table-border">
                 <td id="subTitolo" colspan="2">
                     CRONOLOGIA SPECIFICA
                 </td>
             </tr>
             <xsl:if test="DTS/DTSI">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         Da
                     </td>
@@ -681,7 +681,7 @@
                 </tr>
             </xsl:if>
             <xsl:if test="DTS/DTSV">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         <xsl:text disable-output-escaping="yes">Validit&amp;agrave;</xsl:text>
                     </td>
@@ -696,7 +696,7 @@
                 </tr>
             </xsl:if>
             <xsl:if test="DTS/DTSF">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         A
                     </td>
@@ -712,7 +712,7 @@
                 </tr>
             </xsl:if>
             <xsl:if test="DTS/DTSL">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         <xsl:text disable-output-escaping="yes">Validit&amp;agrave;</xsl:text>
                     </td>
@@ -726,18 +726,18 @@
                     </td>
                 </tr>
             </xsl:if>
-            <tr>
+           <tr class="table-border">
                 <td id="subLineSep" colspan="2"/>
             </tr>
         </xsl:if>
         <xsl:if test="DTM">
-            <tr>
+           <tr class="table-border">
                 <td id="subTitolo" colspan="2">
                     MOTIVAZIONE CRONOLOGIA
                 </td>
             </tr>
             <xsl:if test="DTM/DTMM">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         Motivazione
                     </td>
@@ -751,26 +751,26 @@
                     </td>
                 </tr>
             </xsl:if>
-            <tr>
+           <tr class="table-border">
                 <td id="subLineSep" colspan="2"/>
             </tr>
         </xsl:if>
     </xsl:template>
     
     <xsl:template match="UB">
-        <tr>
+       <tr class="table-border">
             <td id="titolo" colspan="2">
                 UBICAZIONE E DATI PATRIMONIALI
             </td>
         </tr>
         <xsl:if test="UBF">
-            <tr>
+           <tr class="table-border">
                 <td id="subTitolo" colspan="2">
                     UBICAZIONE FOTO
                 </td>
             </tr>
             <xsl:if test="UBF/UBFP">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         Fondo
                     </td>
@@ -786,7 +786,7 @@
                 </tr>
             </xsl:if>
             <xsl:if test="UBF/UBFQ">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         Specifiche
                     </td>
@@ -802,7 +802,7 @@
                 </tr>
             </xsl:if>
             <xsl:if test="UBF/UBFC">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         Collocazione
                     </td>
@@ -817,26 +817,26 @@
                     </td>
                 </tr>
             </xsl:if>
-            <tr>
+           <tr class="table-border">
                 <td id="subLineSep" colspan="2"/>
             </tr>
         </xsl:if>
     </xsl:template>
 
     <xsl:template match="LC">
-        <tr>
+       <tr class="table-border">
             <td id="titolo" colspan="2">
                 LOCALIZZAZIONE GEOGRAFICO-AMMINISTRATIVA
             </td>
         </tr>
         <xsl:if test="PVC">
-            <tr>
+           <tr class="table-border">
                 <td id="subTitolo" colspan="2">
                     LOCALIZZAZIONE GEOGRAFICO-AMMINISTRATIVA ATTUALE
                 </td>
             </tr>
             <xsl:if test="PVC/PVCS">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         Stato
                     </td>
@@ -852,7 +852,7 @@
                 </tr>
             </xsl:if>
             <xsl:if test="PVC/PVCR">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         Regione
                     </td>
@@ -868,7 +868,7 @@
                 </tr>
             </xsl:if>
             <xsl:if test="PVC/PVCP">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         Provincia
                     </td>
@@ -884,7 +884,7 @@
                 </tr>
             </xsl:if>
             <xsl:if test="PVC/PVCC">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         Comune
                     </td>
@@ -899,18 +899,18 @@
                     </td>
                 </tr>
             </xsl:if>
-            <tr>
+           <tr class="table-border">
                 <td id="subLineSep" colspan="2"/>
             </tr>
         </xsl:if>
         <xsl:if test="LDC">
-            <tr>
+           <tr class="table-border">
                 <td id="subTitolo" colspan="2">
                     COLLOCAZIONE SPECIFICA
                 </td>
             </tr>
             <xsl:if test="LDC/LDCN">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         Denominazione
                     </td>
@@ -932,7 +932,7 @@
                 </tr>
             </xsl:if>
             <xsl:if test="LDC/LDCU">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         Denominazione spazio viabilistico
                     </td>
@@ -948,7 +948,7 @@
                 </tr>
             </xsl:if>
             <xsl:if test="LDC/LDCM">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         Denominazione raccolta
                     </td>
@@ -963,26 +963,26 @@
                     </td>
                 </tr>
             </xsl:if>
-            <tr>
+           <tr class="table-border">
                 <td id="subLineSep" colspan="2"/>
             </tr>
         </xsl:if>
     </xsl:template>
     
     <xsl:template match="SG">
-        <tr>
+       <tr class="table-border">
             <td id="titolo" colspan="2">
                 SOGGETTO
             </td>
         </tr>
         <xsl:if test="SGT">
-            <tr>
+           <tr class="table-border">
                 <td id="subTitolo" colspan="2">
                     SOGGETTO
                 </td>
             </tr>
             <xsl:if test="SGT/SGTI">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         Identificazione
                     </td>
@@ -998,7 +998,7 @@
                 </tr>
             </xsl:if>
             <xsl:if test="SGT/SGTD">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         Indicazioni sul soggetto
                     </td>
@@ -1012,19 +1012,19 @@
                     </td>
                 </tr>
             </xsl:if>
-            <tr>
+           <tr class="table-border">
                 <td id="subLineSep" colspan="2"/>
             </tr>
         </xsl:if>
         <xsl:if test="SGL">
             <xsl:for-each select="SGL">
-                <tr>
+               <tr class="table-border">
                     <td id="subTitolo" colspan="2">
                         TITOLO
                     </td>
                 </tr>
                 <xsl:if test="SGLT">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Titolo proprio
                         </td>
@@ -1040,7 +1040,7 @@
                     </tr>
                 </xsl:if>
                 <xsl:if test="SGLS">
-                    <tr>
+                   <tr class="table-border">
                         <td id="subTesto">
                             Specifiche del titolo
                         </td>
@@ -1054,7 +1054,7 @@
                         </td>
                     </tr>
                 </xsl:if>
-                <tr>
+               <tr class="table-border">
                     <td id="subLineSep" colspan="2"/>
                 </tr>
             </xsl:for-each>
@@ -1062,19 +1062,19 @@
     </xsl:template>
     
     <xsl:template match="OG">
-        <tr>
+       <tr class="table-border">
             <td id="titolo" colspan="2">
                 OGGETTO
             </td>
         </tr>
         <xsl:if test="OGT">
-            <tr>
+           <tr class="table-border">
                 <td id="subTitolo" colspan="2">
                     OGGETTO
                 </td>
             </tr>
             <xsl:if test="OGT/OGTD">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         Definizione dell'oggetto
                     </td>
@@ -1089,7 +1089,7 @@
                 </tr>
             </xsl:if>
             <xsl:if test="OGT/OGTB">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         Natura biblioteconomica dell'oggetto
                     </td>
@@ -1103,18 +1103,18 @@
                     </td>
                 </tr>
             </xsl:if>
-            <tr>
+           <tr class="table-border">
                 <td id="subLineSep" colspan="2"/>
             </tr>
         </xsl:if>
         <xsl:if test="QNT">
-            <tr>
+           <tr class="table-border">
                 <td id="subTitolo" colspan="2">
                     <xsl:text disable-output-escaping="yes">QUANTIT&amp;Agrave;</xsl:text>
                 </td>
             </tr>
             <xsl:if test="QNT/QNTN">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         Numero oggetti/elementi
                     </td>
@@ -1128,20 +1128,20 @@
                     </td>
                 </tr>
             </xsl:if>
-            <tr>
+           <tr class="table-border">
                 <td id="subLineSep" colspan="2"/>
             </tr>
         </xsl:if>
     </xsl:template>
 
     <xsl:template match="CD">
-        <tr>
+       <tr class="table-border">
             <td id="titolo" colspan="2">
                 CODICI
             </td>
         </tr>
         <xsl:if test="TSK">
-            <tr>
+           <tr class="table-border">
                 <td id="testo">
                     Tipo Scheda
                 </td>
@@ -1156,7 +1156,7 @@
             </tr>
         </xsl:if>
         <xsl:if test="LIR">
-            <tr>
+           <tr class="table-border">
                 <td id="testo">
                     Livello ricerca
                 </td>
@@ -1171,13 +1171,13 @@
             </tr>
         </xsl:if>
         <xsl:if test="NCT">
-            <tr>
+           <tr class="table-border">
                 <td id="subTitolo" colspan="2">
                     CODICE UNIVOCO
                 </td>
             </tr>
             <xsl:if test="NCT/NCTR">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         Codice regione
                     </td>
@@ -1192,7 +1192,7 @@
                 </tr>
             </xsl:if>
             <xsl:if test="NCT/NCTN">
-                <tr>
+               <tr class="table-border">
                     <td id="subTesto">
                         Numero catalogo generale
                     </td>
@@ -1206,12 +1206,12 @@
                     </td>
                 </tr>
             </xsl:if>
-            <tr>
+           <tr class="table-border">
                 <td id="subLineSep" colspan="2"/>
             </tr>
         </xsl:if>
         <xsl:if test="ESC">
-            <tr>
+           <tr class="table-border">
                 <td id="testo">
                     Ente schedatore
                 </td>
@@ -1227,7 +1227,7 @@
             </tr>
         </xsl:if>
         <xsl:if test="ECP">
-            <tr>
+           <tr class="table-border">
                 <td id="testo">
                     Ente competente
                 </td>

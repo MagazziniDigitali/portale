@@ -197,6 +197,7 @@ function cerca(qStart, recPag){
     	tecaSearchForm.elements["recPag"].value = recPag;
     }
     document.forms.tecaSearchForm.submit();
+    hide('ricercaAvanzata')
 }
 
 function toHex(str) {

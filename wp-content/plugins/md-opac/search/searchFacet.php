@@ -4,7 +4,7 @@ function md_Search_Facet($facet) {
 
 	if($facet != ""){
 		echo '<div class="row">';
-		echo '<div class="col-md-4">';
+		echo '<div class="col-md-3">';
 		echo '<div class="tecaSearchFacet">';
 		echo '<form id="tecaSearchFacet" name="tecaSearchFacet">';
 		echo '  <fieldset class="tecaSearchFacet">';
