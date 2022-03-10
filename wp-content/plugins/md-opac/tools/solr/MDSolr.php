@@ -228,7 +228,7 @@ class MDSolr extends MDSolrFacet {
 			$titolo .= " " . $this->facetQueryTitolo;
 		}
 
-		checkMolliche ( $titolo);
+		checkMolliche( $titolo);
 	}
 
 	/**
@@ -294,11 +294,13 @@ class MDSolr extends MDSolrFacet {
 		if (isset ( $_REQUEST ['RA_Fields'] )) {
                         $raFields = $_REQUEST ['RA_Fields'];
 			$xml = simplexml_load_string(hex2bin($raFields));
-			if ($xml->search != '') {
+			if (is_object($xml) && $xml->search != '') {
 				$solrQuery .= ' '.$xml->search;
     			}
-                        $solrQuery = $this->addFilterAdvanzed($solrQuery, $xml);
+            $solrQuery = $this->addFilterAdvanzed($solrQuery, $xml);
                 } else {
+					//Almaviva3 17/02/22 rimossa la ricerca allo startup
+					return;
 					if(!empty($xml))
                       { 
 						   $solrQuery = $this->addFilterAdvanzed($solrQuery, $xml);
@@ -379,7 +381,9 @@ class MDSolr extends MDSolrFacet {
 		}
 
 
-
+		if(!isset($response)){
+			echo "<h2>Errore nella connessione a Solr, Response non definita</h2>";
+		}
 
 		return convertToHtml ( $response, get_option ( 'tecaSolrSearchXsl', 'components/com_tecaricerca/views/search/xsd/solrToSearchResult.xsl' ) );
 	}
@@ -485,9 +489,10 @@ class MDSolr extends MDSolrFacet {
 
 		$response = $query_response->getRawResponse ();
 		$resp = $query_response->getResponse ();
-		if ($resp->offsetGet ( 'response' )->offsetGet ('docs')[0]==''){
-			return "<h1>Scheda non presente</h1>";
+		if (!isset($resp->offsetGet ( 'response' )->offsetGet ('docs')[0]) || $resp->offsetGet ( 'response' )->offsetGet ('docs')[0]==''){
+			return "<h3>Scheda non presente</h3>";
 		} else {
+		/* Almaviva3 21/02/2022 codice commentato, codice morto che va solo in errore
 			if ($resp->offsetGet ( 'response' )->offsetGet ('docs')[0]->offsetGet('tipologiaFile_show')[0]=='ComplessoArchivistico'){
 				checkMolliche("Complesso Archivistico ".$bid);
 			} else if ($resp->offsetGet ( 'response' )->offsetGet ('docs')[0]->offsetGet('tipologiaFile_show')[0]=='SoggettoConservatore'){
@@ -502,7 +507,7 @@ class MDSolr extends MDSolrFacet {
 				checkMolliche("Unità documentale");
 			} else {
 				checkMolliche("Visualizza Scheda");
-			}
+			}*/
 			if ($this->isSchedaF($resp)){
 				$xml = $resp
 				->offsetGet ( 'response' )
@@ -513,7 +518,7 @@ class MDSolr extends MDSolrFacet {
 						get_option('tecaSolrSchedaXsl','components/com_tecaricerca/views/show/xsd/solrToScheda.xsl') );
 			} else {
 				#echo ("NON SCHEDAF");
-                                if ($resp->offsetGet ( 'response' )->offsetGet ('docs')[0]->offsetGet('rights_show')[0]){
+                if (isset($resp->offsetGet ( 'response' )->offsetGet ('docs')[0]->offsetGet('rights_show')[0])){
 					$rights = $this->searchShowRights($resp->offsetGet ( 'response' )->offsetGet ('docs')[0]->offsetGet('rights_show')[0]);
 					if ($rights != ""){
 						$response = str_replace('<doc>','<doc><rights>'.$rights.'</rights>',$response);
@@ -531,11 +536,13 @@ class MDSolr extends MDSolrFacet {
 					}
 					$id = $resp->offsetGet ( 'response' )->offsetGet ('docs')[0]->offsetGet('id');
 					$root = $resp->offsetGet ( 'response' )->offsetGet ('docs')[0]->offsetGet('_root_');
-					if (!isset($root)){
+					if (!isset($root) && isset($resp->offsetGet ( 'response' )->offsetGet ('docs')[0]->offsetGet('padre')[0])){
 						$root = $resp->offsetGet ( 'response' )->offsetGet ('docs')[0]->offsetGet('padre')[0];
 						if (!isset($root)){
 					    	$root="";
 						}
+					} else {
+						$root="";
 					}
 
 					$url = $this->checkShowObject($tipoOggetto, $mimeType, $id, $client, $root);
@@ -657,10 +664,10 @@ class MDSolr extends MDSolrFacet {
 			$resp = $query_response->getResponse ();
 
 
-			if ($resp->offsetGet ( 'response' )->offsetGet ('docs')[0]==''){
+			if (!isset($resp->offsetGet ( 'response' )->offsetGet ('docs')[0]) || $resp->offsetGet ( 'response' )->offsetGet ('docs')[0]==''){
 				return $id;
 			} else {
-				if ($resp->offsetGet ( 'response' )->offsetGet ('docs')[0]->offsetGet ('rightsBasis_show')[0]==''){
+				if (!isset($resp->offsetGet ( 'response' )->offsetGet ('docs')[0]->offsetGet ('rightsBasis_show')[0]) || $resp->offsetGet ( 'response' )->offsetGet ('docs')[0]->offsetGet ('rightsBasis_show')[0]==''){
 					return $id;
 				} else {
 					return $resp->offsetGet ( 'response' )->offsetGet ('docs')[0]->offsetGet ('rightsBasis_show')[0];
@@ -690,8 +697,9 @@ class MDSolr extends MDSolrFacet {
 		if ($id !== ''){
 			$solrQuery='_root_:'.$id;
 		}
-
-                $solrQuery = $this->addFilterAdvanzed($solrQuery, $xml);
+		if(!isset($xml))
+		 $xml = "";
+        $solrQuery = $this->addFilterAdvanzed($solrQuery, $xml);
 
 		$tecaSolrSearchExclude = get_option ( 'tecaSolrSearchExclude' );
                 if (isset($tecaSolrSearchExclude) && $tecaSolrSearchExclude != ''){
@@ -723,7 +731,7 @@ class MDSolr extends MDSolrFacet {
 
 		$response = $query_response->getRawResponse ();
 		$resp = $query_response->getResponse ();
-		if ($resp->offsetGet ( 'response' )->offsetGet ('docs')[0]==''){
+		if (!isset($resp->offsetGet ( 'response' )->offsetGet ('docs')[0]) || $resp->offsetGet ( 'response' )->offsetGet ('docs')[0]==''){
 			return "";
 		} else {
 			return convertToHtml ( $response,
@@ -766,6 +774,8 @@ class MDSolr extends MDSolrFacet {
 	 */
 	private function isSchedaF($response){
 		$tag_response = $response->offsetGet ( 'response' );
+		if(!isset($tag_response->offsetGet ('docs')[0]->offsetGet('tipologiaFile_show')[0]))
+			return false;
 		return ($tag_response->offsetGet ('docs')[0]->offsetGet('tipologiaFile_show')[0] =='SchedaF');
 	}
 

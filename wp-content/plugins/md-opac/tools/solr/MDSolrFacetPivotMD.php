@@ -36,15 +36,15 @@ class MDSolrFacetPivotMD extends MDSolrFacetPivotSast {
 		if ($isSubLevel) {
 			$facet .= "<p class=\"plus\">&#9547;</p>";
 		} else {
-			$facet .= '<input type="checkbox" name="' . $cbName . '" value="' . $cbValue . '" onchange="cerca(0);"';
+			$facet .= '<input title="seleziona/deseleziona per raffinare la ricerca" type="checkbox" name="' . $cbName . '" value="' . $cbValue . '" onchange="cerca(0);"';
 			$pos = strrpos ( str_replace ( '\"', '"', $facetQuery), "+" . $cbName . ':"' . $cbValue2 . '"' );
 			if (! ($pos === FALSE)) {
 				$facet .= ' checked';
 			}
 			$facet .= '/>';
 		}
-		$facet .= '&nbsp;' . $count . '&nbsp;:&nbsp;' . $value;
-		
+		//$facet .= '&nbsp;' . $count . '&nbsp;:&nbsp;' . $value;
+		$facet .= '   ' . $value .' ('. $count . ')' ;
 		return $facet;
 	}
 }

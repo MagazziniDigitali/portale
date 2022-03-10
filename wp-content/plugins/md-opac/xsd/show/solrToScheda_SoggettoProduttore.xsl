@@ -4,15 +4,15 @@
     <xsl:include href="solrToScheda_Md.xsl"/>
     
     <xsl:template match="arr[@name='altreDenominazioni_show']">
-        <tr>
-            <td id="testo">
+         <tr class="table-border">
+            <td class="col-md-3 label-dettaglio label-dettaglio-border">
                 Altre Denominazioni
             </td>
-            <td id="value">
+            <td class="col-md-9 label-dettaglio-border">
                 <xsl:for-each select="str">
-                        <b>
+                       
                             <xsl:copy-of select="child::text()"/>
-                        </b>
+                       
                         <br/>
                 </xsl:for-each>
             </td>
@@ -20,15 +20,15 @@
     </xsl:template>
 
     <xsl:template match="arr[@name='dataEsistenza_show']">
-        <tr>
-            <td id="testo">
+         <tr class="table-border">
+            <td class="col-md-3 label-dettaglio label-dettaglio-border">
                 Data di esistenza
             </td>
-            <td id="value">
+            <td class="col-md-9 label-dettaglio-border">
                 <xsl:for-each select="str">
-                        <b>
+                       
                             <xsl:copy-of select="child::text()"/>
-                        </b>
+                       
                         <br/>
                 </xsl:for-each>
             </td>
@@ -36,15 +36,15 @@
     </xsl:template>
 
     <xsl:template match="arr[@name='dataMorte_show']">
-        <tr>
-            <td id="testo">
+         <tr class="table-border">
+            <td class="col-md-3 label-dettaglio label-dettaglio-border">
                 Data di Morte
             </td>
-            <td id="value">
+            <td class="col-md-9 label-dettaglio-border">
                 <xsl:for-each select="str">
-                        <b>
+                       
                             <xsl:copy-of select="child::text()"/>
-                        </b>
+                       
                         <br/>
                 </xsl:for-each>
             </td>
@@ -52,15 +52,15 @@
     </xsl:template>
 
     <xsl:template match="arr[@name='luogoNascita_show']">
-        <tr>
-            <td id="testo">
+         <tr class="table-border">
+            <td class="col-md-3 label-dettaglio label-dettaglio-border">
                 Luogo di Nascita
             </td>
-            <td id="value">
+            <td class="col-md-9 label-dettaglio-border">
                 <xsl:for-each select="str">
-                        <b>
+                       
                             <xsl:copy-of select="child::text()"/>
-                        </b>
+                       
                         <br/>
                 </xsl:for-each>
             </td>
@@ -68,15 +68,15 @@
     </xsl:template>
 
     <xsl:template match="arr[@name='luogoMorte_show']">
-        <tr>
-            <td id="testo">
+         <tr class="table-border">
+            <td class="col-md-3 label-dettaglio label-dettaglio-border">
                 Luogo di Morte
             </td>
-            <td id="value">
+            <td class="col-md-9 label-dettaglio-border">
                 <xsl:for-each select="str">
-                        <b>
+                       
                             <xsl:copy-of select="child::text()"/>
-                        </b>
+                       
                         <br/>
                 </xsl:for-each>
             </td>
@@ -84,15 +84,15 @@
     </xsl:template>
 
     <xsl:template match="arr[@name='sede_show']">
-        <tr>
-            <td id="testo">
+         <tr class="table-border">
+            <td class="col-md-3 label-dettaglio label-dettaglio-border">
                 Sede
             </td>
-            <td id="value">
+            <td class="col-md-9 label-dettaglio-border">
                 <xsl:for-each select="str">
-                        <b>
+                       
                             <xsl:copy-of select="child::text()"/>
-                        </b>
+                       
                         <br/>
                 </xsl:for-each>
             </td>
@@ -100,15 +100,15 @@
     </xsl:template>
 
     <xsl:template match="arr[@name='naturaGiuridica_show']">
-        <tr>
-            <td id="testo">
+         <tr class="table-border">
+            <td class="col-md-3 label-dettaglio label-dettaglio-border">
                 Natura Giuridica
             </td>
-            <td id="value">
+            <td class="col-md-9 label-dettaglio-border">
                 <xsl:for-each select="str">
-                        <b>
+                       
                             <xsl:copy-of select="child::text()"/>
-                        </b>
+                       
                         <br/>
                 </xsl:for-each>
             </td>
@@ -116,15 +116,15 @@
     </xsl:template>
 
     <xsl:template match="arr[@name='tipoEnte_show']">
-        <tr>
-            <td id="testo">
+         <tr class="table-border">
+            <td class="col-md-3 label-dettaglio label-dettaglio-border">
                 Tipo Ente
             </td>
-            <td id="value">
+            <td class="col-md-9 label-dettaglio-border">
                 <xsl:for-each select="str">
-                        <b>
+                       
                             <xsl:copy-of select="child::text()"/>
-                        </b>
+                       
                         <br/>
                 </xsl:for-each>
             </td>
@@ -132,15 +132,15 @@
     </xsl:template>
 
     <xsl:template match="arr[@name='ambitoTerritoriale_show']">
-        <tr>
-            <td id="testo">
+         <tr class="table-border">
+            <td class="col-md-3 label-dettaglio label-dettaglio-border">
                 Ambito territoriale
             </td>
-            <td id="value">
+            <td class="col-md-9 label-dettaglio-border">
                 <xsl:for-each select="str">
-                        <b>
+                       
                             <xsl:copy-of select="child::text()"/>
-                        </b>
+                       
                         <br/>
                 </xsl:for-each>
             </td>
@@ -148,15 +148,15 @@
     </xsl:template>
 
     <xsl:template match="arr[@name='titoloSP_show']">
-        <tr>
-            <td id="testo">
+         <tr class="table-border">
+            <td class="col-md-3 label-dettaglio label-dettaglio-border">
                 Titolo
             </td>
-            <td id="value">
+            <td class="col-md-9 label-dettaglio-border">
                 <xsl:for-each select="str">
-                        <b>
+                       
                             <xsl:copy-of select="child::text()"/>
-                        </b>
+                       
                         <br/>
                 </xsl:for-each>
             </td>

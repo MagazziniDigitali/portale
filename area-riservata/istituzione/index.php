@@ -193,11 +193,11 @@ get_footer();
             </div>
             <div class="row">
             <div class="col-md-6" id="tsEmbargo">
-                <label for="userEmbargo">Utenza per accesso embargo *</label>
+                <label for="userEmbargo">Utenza per accesso embargo</label>
                 <input name="userEmbargo" value="" type="text">
               </div>
               <div class="col-md-6"  id="tsPwdEmbargo">
-                <label for="pwdEmbargo">Password per accesso embargo *</label>
+                <label for="pwdEmbargo">Password per accesso embargo</label>
                 <input name="pwdEmbargo" value="" type="text">
               </div>
             </div>

@@ -107,7 +107,7 @@
             </div>
             <div class="col-md-6">
               <label for="password">Password</label>
-              <input type="password" name="password" id="password" placeholder="Inserisci una nuova password">
+              <input type="password" name="password"  placeholder="Inserisci una nuova password">
               <?php if(isset($alert)) { ?>
                  <div class='alert alert-warning mt-3'><?php echo $alert ?></div>
               <?php } ?>

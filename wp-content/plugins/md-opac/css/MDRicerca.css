@@ -42,13 +42,13 @@ table.mdResultFacet tr.title td {
 /*    background-color: #003F92;*/
     border-top: 2px solid #6492CE;
     text-transform: uppercase;
-    color: white;
+    color: #6492CE;
     width: 1000px;
 }
 
 table.mdResultFacet tr.value td {
-	padding-left: 5px;
-	padding: 9px;
+    padding: 10px 5px;
+
 }
 
 table.tecaSearchNavigator {
@@ -213,4 +213,31 @@ input.defaultText {
 
 div.campiBottoni{
     float: right;
+}
+.margin-top-5 {
+    margin-top: 5px;
+}
+.btn-dettaglio-scheda {
+    color: #6492CE;
+}
+.table-border {
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: #0099DC !important;
+}
+.no-vertical-margin {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+.label-dettaglio {
+    font-weight: bold;
+}
+.label-dettaglio::after {
+    content: ": ";
+}
+.label-dettaglio-border {
+    border-bottom: none !important;
+    border-left: none !important;
+    border-right: none !important;
 }

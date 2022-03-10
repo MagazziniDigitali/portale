@@ -10,7 +10,7 @@ function md_Search_Result() {
 	if ($result!= ''){
 		md_Search_Facet($mdSolr->getFacet());
 		
-    echo '<div class="col-md-8">';
+    echo '<div class="col-md-9">';
 		echo '<div class="tecaSearchResult">';
 		md_Search_Result_Navigator ($mdSolr->getStart(), $mdSolr->getEnd(), $mdSolr->getNumFound(), $mdSolr->getQTime(), $mdSolr->getIndietro(), $mdSolr->getAvanti(),
 			$mdSolr->getFine(), $mdSolr->getRecPag(), MD_PLUGIN_URL);
@@ -41,17 +41,18 @@ function md_Search($mdSolr){
           <input type="hidden" name="facetQuery" value="" />
           <input type="hidden" name="RA_Fields" value="" />
           <input type="hidden" name="recPag" value="<?php echo ($mdSolr->getRecPag()) ?>" />
-          <label class="primary-navigation">Cerca nel Catalogo:</label>
+          <label class="">Ricerca libera:</label> <!--primary-navigation -->
           <div class="campiRicerca">
             <input class="defaultText" placeholder="Ricerca per parola" type="text" name="keyword" id="keyword" value=""/>
             <a class="btn btn-lg btn-outline-primary mt-3 rounded-0" onclick="showHidden('ricercaAvanzata');">Ricerca Avanzata</a>
-            <?php
+            <div class="mt-5 divServizi" id="ricercaAvanzata" style="display: none; ">
+          <!--  <?php
               if (isset($raFields) && $raFields!=''){
-                echo('<div class="mt-5" id="ricercaAvanzata" style="display: block;">');
+                echo('<div class="mt-5 divServizi" id="ricercaAvanzata" style="display: block;">');
               } else {
-                echo('<div class="mt-5" id="ricercaAvanzata" style="display: none;">');
+                echo('<div class="mt-5 divServizi" id="ricercaAvanzata" style="display: none;">');
               }
-              ?>
+              ?>  -->
               <label>Operatore</label>
               <select id="RA_operatore">
                 <option value="and">AND</option>
@@ -64,10 +65,39 @@ function md_Search($mdSolr){
                   <label>Aggiungi campo</label>
                   <select class="w-100" id="RA_campoName">
                     <option value=""></option>
-                    <optgroup label="Scheda Agente">
+                    <!-- almaviva3 17/02/2022 cambio posizione stabilito in riunione -->
+                    <optgroup label="Campi Bibliografici - Bibliografica">
+                      <option value="tipoDocumento">Tipo Documento</option>
+                      <option value="bid">Identificativo SBN</option>
+                      <option value="bni">Codice BNI</option>
+                      <option value="titolo">Titolo</option>
+                      <option value="autore">Autore</option>
+                      <option value="pubblicazione">Pubblicazione</option>
+                      <option value="soggetto">Soggetto</option>
+                      <option value="descrizione">Descrizione</option>
+                      <option value="contributo">Contributo</option>
+                      <option value="tiporisorsa">Tipo Risorsa</option>
+                      <option value="formato">Formato</option>
+                      <option value="fonte">Fonte</option>
+                      <option value="lingua">Lingua</option>
+                      <option value="relazione">Relazione</option>
+                      <option value="copertura">Copertura</option>
+                      <option value="gestionediritti">Diritti</option>
+                    </optgroup>
+                    <optgroup label="Campi Bibliografici - Gestionale">
+                      <option value="biblioteca">Biblioteca</option>
+                      <option value="inventario">Inventario</option>
+                      <option value="collocazione">Colocazione</option>
+                    </optgroup>
+                    <optgroup label="Campi Bibliografici- Oggetto">
+                      <option value="piecegr">Piece GR</option>
+                      <option value="piecedt">Piece DT</option>
+                      <option value="piecein">Piece IN</option>
+                    </optgroup>
+                    <optgroup label="Campi tecnici - Scheda Agente">
                       <option value="agentName">Nome Agente</option>
                     </optgroup>
-                    <optgroup label="Scheda Contenitore">
+                    <optgroup label="Campi tecnici - Scheda Contenitore">
                       <option value="provenienzaOggetto">Provenienza Oggetto</option>
                       <option value="objectIdentifier">Identificatore Oggetto</option>
                       <option value="actualFileName">Nome File Attuale</option>
@@ -77,39 +107,11 @@ function md_Search($mdSolr){
                       <option value="promon">Codice Promon</option>
                       <option value="originaFileName">Nome del File Originale</option>
                     </optgroup>
-                    <optgroup label="Scheda Evento">
+                    <optgroup label="Campi tecnici - Scheda Evento">
                       <option value="eventID">Identificativo Evento</option>
                       <option value="eventType">Tipo di Evento</option>
                       <option value="eventOutCome">Evento Out Come</option>
                       <option value="agentDepositante">Codice Agente Destinatario</option>
-                    </optgroup>
-                    <optgroup label="Scheda Bibliografica">
-                      <option value="tipoDocumento">Tipo Documento</option>
-                      <option value="bid">Bid dell'opera</option>
-                      <option value="bni">Codice Bni dell'opera</option>
-                      <option value="titolo">Titolo dell'opera</option>
-                      <option value="autore">Autore dell'opera</option>
-                      <option value="pubblicazione">Pubblicazione dell'opera</option>
-                      <option value="soggetto">Soggetto dell'opera</option>
-                      <option value="descrizione">Descrizione dell'opera</option>
-                      <option value="contributo">Contributo dell'opera</option>
-                      <option value="tiporisorsa">Tipo Risorsa dell'opera</option>
-                      <option value="formato">Formato dell'opera</option>
-                      <option value="fonte">Fonte dell'opera</option>
-                      <option value="lingua">Lingua dell'opera</option>
-                      <option value="relazione">Relazione dell'opera</option>
-                      <option value="copertura">Copertura dell'opera</option>
-                      <option value="gestionediritti">Diritti dell'opera</option>
-                    <optgroup label="Scheda Bibliografica - Gestionale">
-                      <option value="biblioteca">Biblioteca dell'opera</option>
-                      <option value="inventario">Inventario dell'opera</option>
-                      <option value="collocazione">Colocazione dell'opera</option>
-                    </optgroup>
-                    <optgroup label="Scheda Bibliografica - Oggetto">
-                      <option value="piecegr">Piece GR dell'opera</option>
-                      <option value="piecedt">Piece DT dell'opera</option>
-                      <option value="piecein">Piece IN dell'opera</option>
-                    </optgroup>
                     </optgroup>
                   </select>
                 </div>
@@ -140,28 +142,21 @@ function md_Search($mdSolr){
                   <input type="text" id="RA_depositatoA" size="10" maxLength="10" pattern="\d{1,2}/\d{1,2}/\d{4}" placeholder="dd/mm/yyyy">
                 </div>
               </div>
-            
-              <input class="mt-4 float-right" type="button" value="Aggiungi" onclick="addRicercaAvanzata();"/>
-              
-              <select data-placeholder="Lista filtri applicati" class="mb-5 chosen-select" multiple tabindex="4" id="RA_filtri">
-                <?php
-                  if (isset($raFields)){
-                    for ($x =0; $x<count($xml->RA_filtri); ++$x){
-                      echo('<option value="');
-                      echo(htmlentities($xml->RA_filtri[$x]->value, ENT_QUOTES));
-                      echo('"');
-                      if ($xml->RA_filtri[$x]->selected=='true'){
-                        echo(' selected="selected"');	
-                      }
-                      echo('>');
-                      echo($xml->RA_filtri[$x]->text);
-                      echo('</option>');
-                    }
-                  }
-                ?>
-              </select>
-
-              <table width="100%">
+              <div class="row">
+              <div class="col-md-12">
+                <input class="mt-4 float-right margin-top-5" type="button" value="Aggiungi Filtro avanzato" onclick="addRicercaAvanzata();"/>
+                </div>
+              </div>
+              <!-- qui c'erano i filtri avanzati -->
+              <div class="card margin-top-5">
+                  <div class="card-header" id="tabellaFiltriSpecificiExtraHeader">
+                      <button type="button" class="btn" data-toggle="collapse" data-target="#tabellaFiltriSpecificiExtra" aria-expanded="false" aria-controls="tabellaFiltriSpecificiExtraHeader">
+                      <h6 class="m-0">Altri filtri specifici</h6>
+                      </button>
+                  </div>
+                  <div id="tabellaFiltriSpecificiExtra" class="collapse" aria-labelledby="tabellaFiltriSpecificiExtraHeader">
+                      <div class="card-body ">
+                      <table width="100%">
                 <tr>
                   <th>Oggetto</th>
                   <th>Agente</th>
@@ -201,20 +196,48 @@ function md_Search($mdSolr){
                   </td>
                 </tr>
               </table>
+                      </div>
+                  </div>
+              </div>
+              
 
             </div>
             <div class="campiBottoni mt-5">
               <input type="button" value="Cerca" onclick="cerca(0);"/>
             </div>
+            <!-- almaviva 3 resoconto filtri avanzati 17/02/22 -->
+            <div id="recupFiltriAvanzatiSelezionati" style="max-width: 50%">
+             <select data-placeholder="Lista filtri avanzati e impostati" class="mb-5 chosen-select" multiple tabindex="4" id="RA_filtri">
+                <?php
+                  if (isset($raFields)){
+                    for ($x =0; $x<count($xml->RA_filtri); ++$x){
+                      echo('<option value="');
+                      echo(htmlentities($xml->RA_filtri[$x]->value, ENT_QUOTES));
+                      echo('"');
+                      if ($xml->RA_filtri[$x]->selected=='true'){
+                        echo(' selected="selected"');	
+                      }
+                      echo('>');
+                      echo($xml->RA_filtri[$x]->text);
+                      echo('</option>');
+                    }
+                  }
+                ?>
+              </select>
+              </div>
           </div>
 
           <script type="text/javascript">
             var keyword = "<?php echo ($mdSolr->getKeyword()) ?>";
             document.getElementById("keyword").value = keyword;
+            function goBack() {
+              history.back();
+            }
           </script>
         </fieldset>
       </form>
     </div>
+
   </div>
 </div>
 <?php
@@ -224,8 +247,8 @@ function md_Search_Result_Navigator($start, $end, $numFound, $QTime, $indietro, 
 	echo '<table class="tecaSearchNavigator">';
 	echo '  <tbody>'; 
 	echo '    <tr>';
-	echo '      <td class="lStatus">';
-	echo '        Record: ' . $start . '-' . $end . '/' . $numFound . ' Tempo: ' . $QTime;
+	echo '      <td class="lStatus">';      
+	echo '        Risultati visualizzati: ' . $start . '-' . $end . ' di ' . $numFound . ' Record trovati'; // Tempo: ' . $QTime .'s'
 	echo '      </td>';
 	echo '      <td class="navigator">';
 	if ($indietro > -1) {

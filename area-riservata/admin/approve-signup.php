@@ -188,7 +188,7 @@
 
                 <div class="card-body">
                     <form action="" method="POST">
-                        <input type="hidden" id="" name="preRegUuid" value="<?php echo $preRegID?>">
+                        <input type="hidden" name="preRegUuid" value="<?php echo $preRegID?>">
                         <!-- Anagrafica Istituzione -->
                         <div class="row">
                             <div class="col-md-12">
@@ -326,7 +326,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="preRegPassword">Password</label>
-                                <input name="preRegPassword" type="password" id="password">
+                                <input name="preRegPassword" type="password" >
                                 <!-- <input type="checkbox" name="showPwd" id="showPwd"> <label for="showPwd">Mostra la password</label> -->
 
                                 <?php if(isset($alertPwd)) { ?>
