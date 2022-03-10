@@ -6,7 +6,7 @@
 /** Nome Ambiente */
 
 define( 'AMBIENTE_APPLICATIVO', 'esercizio' );
-$db_server=192.168.7.83
+$db_server='192.168.7.83';
 
 
 // WORDPRESS
@@ -52,15 +52,12 @@ define( 'DB_NAME_HARVEST', 'harvest' );
 define( 'DB_USER_HARVEST', 'md_ese' );
 define( 'DB_PASSWORD_HARVEST', 'md_ese_pwd_2021' );
 
-<<<<<<< HEAD
 define('SOAP_CLIENT_AUTH_SW_ESERCIZIO','http://localhost:8080/MagazziniDigitaliServices/services/AuthenticationSoftwarePort?wsdl');
-=======
 
 /** Web Services **/
-define('SOAP_CLIENT_AUTH_SW_ESERCIZIO','http://localhost:8080/MagazziniDigitaliServices/services/AuthenticationSoftwarePort?wsdl')
->>>>>>> d33fa28f8924c2b2e1f686683a6897405370f2a7
+define('SOAP_CLIENT_AUTH_SW_ESERCIZIO','http://localhost:8080/MagazziniDigitaliServices/services/AuthenticationSoftwarePort?wsdl');
 define('SOAP_CLIENT_AUTH_CHK_ESERCIZIO','http://localhost:8080/MagazziniDigitaliServices/services/CheckMDPort?wsdl');
-define('SOAP_CLIENT_INI_S_ESERCIZIO','http://localhost/MagazziniDigitaliServices/services/InitSendMDPort?wsdl');
-define('SOAP_CLIENT_END_S_ESERCIZIO','http://localhost/MagazziniDigitaliServices/services/EndSendMDPort?wsdl');
+define('SOAP_CLIENT_INI_S_ESERCIZIO','http://localhost:8080/MagazziniDigitaliServices/services/InitSendMDPort?wsdl');
+define('SOAP_CLIENT_END_S_ESERCIZIO','http://localhost:8080/MagazziniDigitaliServices/services/EndSendMDPort?wsdl');
 
 ?>
