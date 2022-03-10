@@ -1,6 +1,6 @@
 <?php
 
-/**28/05/2021 */
+/** 28/05/2021 */
 
 /** file di configurazione Maggazini digitali per ambiente di esercizio **/
 /** Nome Ambiente */
