@@ -52,7 +52,6 @@ define( 'DB_NAME_HARVEST', 'harvest' );
 define( 'DB_USER_HARVEST', 'md_ese' );
 define( 'DB_PASSWORD_HARVEST', 'md_ese_pwd_2021' );
 
-define('SOAP_CLIENT_AUTH_SW_ESERCIZIO','http://localhost:8080/MagazziniDigitaliServices/services/AuthenticationSoftwarePort?wsdl');
 
 /** Web Services **/
 define('SOAP_CLIENT_AUTH_SW_ESERCIZIO','http://localhost:8080/MagazziniDigitaliServices/services/AuthenticationSoftwarePort?wsdl');
