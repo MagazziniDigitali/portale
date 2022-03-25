@@ -3,6 +3,7 @@
 
 if(!isset($isEditEnabled))
     $isEditEnabled = true;
+
     $istituzioneDetail = select_istituzione_by_id($dbMD, $idIst);
     $istNome =  $istituzioneDetail -> NOME;
     $istIndirizzo = $istituzioneDetail -> INDIRIZZO;
@@ -16,7 +17,7 @@ if(!isset($isEditEnabled))
 
 <div class="card">
     <div class="card-header" id="heading<?php echo $idIst ?>">
-        <button class="btn" data-toggle="collapse" data-target="#collapse_ist_info<?php echo $idIst ?>" aria-expanded="false" aria-controls="collapse_ist_info<?php echo $idIst ?>">
+        <button class="btn" type="button" data-toggle="collapse" data-target="#collapse_ist_info<?php echo $idIst ?>" aria-expanded="false" aria-controls="collapse_ist_info<?php echo $idIst ?>">
          <h6 class="m-0">Dettaglio istituzione<!--<?php echo $loginIstName ?> --></h6>
         </button>
     </div>

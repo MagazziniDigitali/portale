@@ -170,7 +170,7 @@
         <div class="card">            
             <div class="card-header" id="heading<?php echo $key ?>">
                 
-                <button class="btn" data-toggle="collapse" data-target="#collapse<?php echo $key ?>" aria-expanded="false" aria-controls="collapse<?php echo $key ?>">
+                <button class="btn" type="button" data-toggle="collapse" data-target="#collapse<?php echo $key ?>" aria-expanded="false" aria-controls="collapse<?php echo $key ?>">
                     <h5 class="m-0">Istituzione: <?php echo $preRegIstituzioneNome ?></h5>
                 </button>
                 

@@ -13,6 +13,7 @@ if (!isset($_SESSION)) {
 }
 
 redirect_if_not_logged_in();
+$filtroNomeIstituzione = (isset($_POST['fIstName']) && ($_POST['fIstName'] != '')) ? $_POST['fIstName'] : '';
 
 if ($_SESSION['role'] == 'superadmin') {
 
@@ -148,8 +149,24 @@ if ($_SESSION['role'] == 'superadmin') {
          <!--   <p class="text-center">Benvenuto <strong><?php echo ($_SESSION['name'] . ' ' . $_SESSION['surname']); ?></strong> (SuperAdmin)</p>
             <?php if ($_SESSION['istituzione'] != 'istituzioneBase') { ?>
                 <p class="text-center">Istituzione di appartenenza: <?php echo $_SESSION['istituzione'] ?></p>
-            <?php } ?> -->
+            <?php } else { ?> -->
 
+                <form name="filtroIstituzioni" method="POST">
+                <div class="row margin-top-15 padding-search-filtro-ist">
+                    <div class="col-md-7">
+                            <label for="fIstName">Cerca istituzione</label>
+                            <input type="text" placeholder="Nome istituzione" name="fIstName" value="<?php echo $filtroNomeIstituzione ?>" id="fIstName">
+
+                        </div>
+                        <div class="col-md-1">
+                       
+                        <input type="submit" class="btn-search-filtro-ist" value ="Cerca" name="fIstNameSubmit" value="" id="fIstNameSubmit">
+
+                        </div>
+                     </div>
+                 </from>
+
+            <?php } ?>
             <div id="accordionRichiesteSignup">
                 <!-- Controllo richieste da approvare -->
                 <?php

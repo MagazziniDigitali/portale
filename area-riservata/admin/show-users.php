@@ -114,17 +114,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 } // End if POST
 
-
-$allRegions = retrieve_regions($dbMD);
-
-if (isset($isImport) && $isImport == 1) {
-  $uniqueIdIst = $dbMD->get_results("SELECT ID_ISTITUZIONE FROM MDUtenti WHERE SUPERADMIN <> 1 AND SUPERADMIN <> 2 and ID_ISTITUZIONE in (SELECT `ID_Istituto` FROM   `MDIstituzioneImport` where `Inviato`=0 and `Approvato`=0  GROUP BY `ID_Istituto`) GROUP BY ID_ISTITUZIONE");
-} else {
-  $uniqueIdIst = $dbMD->get_results("SELECT ID_ISTITUZIONE FROM MDUtenti WHERE SUPERADMIN <> 1 AND SUPERADMIN <> 2 and ID_ISTITUZIONE not in (SELECT `ID_Istituto` FROM   `MDIstituzioneImport` where `Inviato`=0 and `Approvato`=0  GROUP BY `ID_Istituto`) GROUP BY ID_ISTITUZIONE");
+function compareName($a, $b) {
+  return strcmp($a->NOME, $b->NOME);
 }
-
-
-foreach ($uniqueIdIst as $key => $results) {
+$fNomeIst = '';
+$like = '';
+if(isset($_POST['fIstName']) && ($_POST['fIstName'] != '') ) {
+    //TODO: query cerca by nome ist
+    $fNomeIst = strtolower($_POST['fIstName']);
+    echo "Risultato filtrato per Nome Istituto = " . $fNomeIst;
+    $like = "AND lower(MDIstituzione.NOME) like '%" . strtolower($fNomeIst) . "%'";
+}
+$allRegions = retrieve_regions($dbMD);
+if (isset($isImport) && $isImport == 1) {
+  $listaIstituti = $dbMD->get_results("SELECT ID_ISTITUZIONE, MDIstituzione.NOME FROM MDUtenti, MDIstituzione WHERE MDUtenti.ID_ISTITUZIONE = MDIstituzione.ID AND SUPERADMIN <> 1 AND SUPERADMIN <> 2 ".$like." and ID_ISTITUZIONE in (SELECT `ID_Istituto` FROM   `MDIstituzioneImport` where `Inviato`=0 and `Approvato`=0  GROUP BY `ID_Istituto`) GROUP BY ID_ISTITUZIONE");
+} else {
+  $listaIstituti = $dbMD->get_results("SELECT ID_ISTITUZIONE, MDIstituzione.NOME FROM MDUtenti, MDIstituzione WHERE MDUtenti.ID_ISTITUZIONE = MDIstituzione.ID AND SUPERADMIN <> 1 AND SUPERADMIN <> 2 ".$like." and ID_ISTITUZIONE not in (SELECT `ID_Istituto` FROM   `MDIstituzioneImport` where `Inviato`=0 and `Approvato`=0  GROUP BY `ID_Istituto`) GROUP BY ID_ISTITUZIONE");
+}
+usort($listaIstituti, "compareName");
+foreach ($listaIstituti as $key => $results) {
   //3cf0f778-4c73-11ec-ad53-0800277090c0
   $idIst = $results->ID_ISTITUZIONE;
   $loginIst = retrieve_login_istituzione($dbMD, $idIst);
@@ -180,7 +188,7 @@ foreach ($uniqueIdIst as $key => $results) {
       <?php if (isset($isImport) && $isImport == 1) { ?>
         <input class="form-check-input" type="checkbox" value="" id="<?php echo $idIst ?>">
       <?php } ?>
-      <button class="btn" data-toggle="collapse" data-target="#collapse_ist<?php echo $idIst ?>" aria-expanded="false" aria-controls="collapse_ist<?php echo $idIst ?>">
+      <button class="btn" type="button" data-toggle="collapse" data-target="#collapse_ist<?php echo $idIst ?>" aria-expanded="false" aria-controls="collapse_ist<?php echo $idIst ?>">
         <?php if ($loginIstLogin == 'istituzioneBase') { ?>
           <h5 class="m-0">Utenti non appartenenti a un'istituzione</h5>
         <?php } else { ?>
@@ -232,7 +240,7 @@ foreach ($uniqueIdIst as $key => $results) {
           <div class="card">
             <div class="card-header" id="headingUser<?php echo $uuid ?>">
 
-              <button class="btn" data-toggle="collapse" data-target="#collapse_utente<?php echo $uuid . $login ?>" aria-expanded="false" aria-controls="collapse_utente<?php echo $key ?>">
+              <button class="btn" type="button" data-toggle="collapse" data-target="#collapse_utente<?php echo $uuid . $login ?>" aria-expanded="false" aria-controls="collapse_utente<?php echo $key ?>">
                 <h5 class="m-0"> <?php if ($admin == 1) { $gestoreIstituzioneUser = $login; ?>
                     <h5 class="mt-0">Gestore d'istituzione: <?php echo $login ?></h5>
                   <?php } else { ?>
@@ -366,7 +374,7 @@ foreach ($uniqueIdIst as $key => $results) {
               <div class="card">
                 <div class="card-header" id="heading<?php echo $key ?>">
 
-                  <button class="btn" data-toggle="collapse" data-target="#collapse_tesi<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_tesi<?php echo $key ?>">
+                  <button class="btn" type="button" data-toggle="collapse" data-target="#collapse_tesi<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_tesi<?php echo $key ?>">
                     <h5 class="m-0"><?php echo $nomeDatasource_td ?></h5>
                   </button>
 
@@ -495,7 +503,7 @@ foreach ($uniqueIdIst as $key => $results) {
               <div class="card">
                 <div class="card-header" id="heading<?php echo $key ?>">
 
-                  <button class="btn" data-toggle="collapse" data-target="#collapse_nbn<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_tesi<?php echo $key ?>">
+                  <button class="btn" type="button" data-toggle="collapse" data-target="#collapse_nbn<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_tesi<?php echo $key ?>">
                     <h5 class="m-0"><?php echo $nomeDatasource_nbn ?></h5>
                   </button>
 
@@ -609,7 +617,7 @@ foreach ($uniqueIdIst as $key => $results) {
               <div class="card">
                 <div class="card-header" id="heading<?php echo $key ?>">
 
-                  <button class="btn" data-toggle="collapse" data-target="#collapse_journal<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_journal<?php echo $key ?>">
+                  <button class="btn" type="button" data-toggle="collapse" data-target="#collapse_journal<?php echo $key ?>" aria-expanded="false" aria-controls="collapse_journal<?php echo $key ?>">
                     <h5 class="m-0"><?php echo $nomeDatasource_ej ?></h5>
                   </button>
 
@@ -723,7 +731,7 @@ foreach ($uniqueIdIst as $key => $results) {
 
               <div class="card">
                 <div class="card-header" id="heading<?php echo $keyBook ?>">
-                  <button class="btn" data-toggle="collapse" data-target="#collapse_Book<?php echo $keyBook ?>" aria-expanded="false" aria-controls="collapse_Book<?php echo $keyBook ?>">
+                  <button class="btn" type="button" data-toggle="collapse" data-target="#collapse_Book<?php echo $keyBook ?>" aria-expanded="false" aria-controls="collapse_Book<?php echo $keyBook ?>">
                     <h5 class="m-0"><?php echo $nomeDatasource_eb ?></h5>
                   </button>
                 </div>
@@ -804,7 +812,7 @@ foreach ($uniqueIdIst as $key => $results) {
       </div>
     </div>
   </div>
-<?php } // End foreach($uniqueIdIst 
+<?php } // End foreach($listaIstituti 
 ?>
 
 

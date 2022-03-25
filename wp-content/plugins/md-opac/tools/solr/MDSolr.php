@@ -383,6 +383,7 @@ class MDSolr extends MDSolrFacet {
 
 		if(!isset($response)){
 			echo "<h2>Errore nella connessione a Solr, Response non definita</h2>";
+			return null;
 		}
 
 		return convertToHtml ( $response, get_option ( 'tecaSolrSearchXsl', 'components/com_tecaricerca/views/search/xsd/solrToSearchResult.xsl' ) );
@@ -758,12 +759,12 @@ class MDSolr extends MDSolrFacet {
 			$this->avanti = $this->end;
 		}
 		$this->numFound = $tag_response->offsetGet ( 'numFound' );
-
+		if( $this->numFound  > 0) {
 		$div = $this->numFound / $this->recPag;
 		$pos = strpos ( $div, '.' );
 		$div = substr ( $div, 0, $pos );
 		$this->fine = ($div * $this->recPag);
-
+		}
 		$this->QTime = $response->offsetGet ( 'responseHeader' )->offsetGet ( 'QTime' );
 	}
 
