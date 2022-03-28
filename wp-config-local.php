@@ -47,10 +47,17 @@ define( 'DB_PASSWORD_MD', 'md_pwd' );
 
 
 /** Database NBN locale**/
+// define( 'DB_HOST_NBN', 'localhost' );
+// define( 'DB_NAME_NBN', 'nbn' );
+// define( 'DB_USER_NBN', 'md' );
+// define( 'DB_PASSWORD_NBN', 'md_pwd' );
+
+/** Database NBN locale**/
 define( 'DB_HOST_NBN', 'localhost' );
 define( 'DB_NAME_NBN', 'nbn' );
-define( 'DB_USER_NBN', 'md' );
-define( 'DB_PASSWORD_NBN', 'md_pwd' );
+define( 'DB_USER_NBN', 'nbn' );
+define( 'DB_PASSWORD_NBN', 'AeTh0poo' );
+
 
 
 

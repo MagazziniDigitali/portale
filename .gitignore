@@ -9,4 +9,4 @@ area-riservata/passwd/
 wp-content/uploads/
 wp-config-collaudo.php
 wp-config-esercizio.php
-wp-config-local.template.php
+wp-config-local.php
