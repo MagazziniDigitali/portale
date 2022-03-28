@@ -11,6 +11,34 @@
 
 define( 'AMBIENTE_APPLICATIVO', 'collaudo' );
 
+
+
+$db_server='192.168.254.159';
+
+
+// WORDPRESS
+// ------------------
+// ** Impostazioni MySQL - È possibile ottenere queste informazioni dal proprio fornitore di hosting ** //
+/** Il nome del database di WordPress */
+define( 'DB_NAME', 'new_bncf' );
+
+/** Nome utente del database MySQL */
+define( 'DB_USER', 'md' );
+
+/** Password del database MySQL */
+define( 'DB_PASSWORD', 'md_pwd' );
+
+/** Hostname MySQL  */
+define( 'DB_HOST', $db_server );
+
+/** Charset del Database da utilizzare nella creazione delle tabelle. */
+define( 'DB_CHARSET', 'utf8mb4' );
+
+/** Il tipo di Collazione del Database. Da non modificare se non si ha idea di cosa sia. */
+define('DB_COLLATE', '');
+
+
+
 /** Database MD Collaudo**/
 define( 'DB_HOST_MD', 'localhost' );
 define( 'DB_NAME_MD', 'MagazziniDigitali3_Collaudo' );

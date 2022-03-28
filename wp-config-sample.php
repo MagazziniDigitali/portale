@@ -20,27 +20,10 @@
 
 // ** Impostazioni MySQL - È possibile ottenere queste informazioni dal proprio fornitore di hosting ** //
 /** Il nome del database di WordPress */
-define('WP_CACHE', true);
-define( 'WPCACHEHOME', '/var/www/html/local/wp-content/plugins/wp-super-cache/' );
-define( 'DB_NAME', 'new_bncf' );
+// define('WP_CACHE', true);
+// define( 'WPCACHEHOME', '/var/www/html/local/wp-content/plugins/wp-super-cache/' );
 
-/** Nome utente del database MySQL */
-define( 'DB_USER', 'newuser' );
-
-/** Password del database MySQL */
-define( 'DB_PASSWORD', 'password' );
-
-/** Hostname MySQL  */
-define( 'DB_HOST', 'localhost' );
-
-/** Charset del Database da utilizzare nella creazione delle tabelle. */
-define( 'DB_CHARSET', 'utf8mb4' );
-
-/** Il tipo di Collazione del Database. Da non modificare se non si ha idea di cosa sia. */
-define('DB_COLLATE', '');
-
-
-
+// Variabile AMBIENTE_APPLICATIVO settata in virual host .conf
 $ambiente = getenv('AMBIENTE_APPLICATIVO'); // Get Il Nome Del AMBIENTE  \r\n"
 if($ambiente =="local")
 	require("wp-config-local.php");

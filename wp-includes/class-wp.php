@@ -626,6 +626,7 @@ class WP {
 	public function query_posts() {
 		global $wp_the_query;
 		$this->build_query_string();
+// var_dump($this->query_vars)
 		$wp_the_query->query( $this->query_vars );
 	}
 
